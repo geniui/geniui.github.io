@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module Datalist">
+    <h2 class="aigis-module__heading" id="Datalist">Datalist</h2>
+    <div class="aigis-module__filepath">/scss/components/datalist.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+        
+      <a class="js-guide"><span class="gn-tag is-info">javascript</span></a>
+       
+    </div>
+     <!-- <div id="ComponentTab">
+  <ul>
+    <li><a href="#styleguide">Style</a></li>
+    <li>
+      <a href="#scriptguide"
+        >Script <span class="gn-icon"><i class="fas fa-code"></i></span
+      ></a>
+    </li>
+  </ul>
+</div> -->
+  <h3 id="-">기본 사용</h3>
+<ul>
+<li>데이터 테이블</li>
+</ul>
+<div class="aigis-preview">
+
+<div class="new-list is-border"></div>
+
+<div style="width: 100%; height: 200px; overflow-x: auto">
+  <div class="new-list2 is-border"></div>
+</div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-list is-border<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >100%</span><span class="token punctuation" >;</span> <span class="token property" >height</span><span class="token punctuation" >:</span> <span class="token number" >200</span>px<span class="token punctuation" >;</span> <span class="token property" >overflow-x</span><span class="token punctuation" >:</span> auto</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-list2 is-border<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'datalist'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.new-list'</span><span class="token punctuation" >,</span>
+  headers<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'no'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'number'</span><span class="token punctuation" >,</span>
+      bodyClass<span class="token punctuation" >:</span> <span class="token string" >'has-text-left'</span><span class="token punctuation" >,</span>
+      style<span class="token punctuation" >:</span> {
+        width<span class="token punctuation" >:</span> <span class="token string" >'50px'</span><span class="token punctuation" >,</span>
+        <span class="token string" >'text-align'</span><span class="token punctuation" >:</span> <span class="token string" >'center'</span>
+      }
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'제목'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'title'</span><span class="token punctuation" >,</span>
+      className<span class="token punctuation" >:</span> <span class="token string" >'main-title'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'날짜'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'date'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'설명'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'desc'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'기타'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'etc'</span>
+    }
+  <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+    {
+      number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
+      title<span class="token punctuation" >:</span> <span class="token string" >'오늘'</span><span class="token punctuation" >,</span>
+      date<span class="token punctuation" >:</span> <span class="token string" >'2023-07-28'</span><span class="token punctuation" >,</span>
+      desc<span class="token punctuation" >:</span> <span class="token string" >'hellojj'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      number<span class="token punctuation" >:</span> <span class="token string" >'2'</span><span class="token punctuation" >,</span>
+      title<span class="token punctuation" >:</span> <span class="token string" >'내일'</span><span class="token punctuation" >,</span>
+      date<span class="token punctuation" >:</span> <span class="token string" >'2023-07-29'</span><span class="token punctuation" >,</span>
+      desc<span class="token punctuation" >:</span> <span class="token string" >'chaaaaaa'</span>
+    }
+  <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  onChange<span class="token punctuation" >:</span> updatedData <span class="token operator" >=</span><span class="token operator" >></span> {
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'updatedData'</span><span class="token punctuation" >,</span> updatedData<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  }
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'datalist'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.new-list2'</span><span class="token punctuation" >,</span>
+  headers<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'row-number'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'number'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'제목'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'title'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'날짜'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'date'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'상세설명'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'desc'</span>
+    }<span class="token punctuation" >,</span>
+    {
+      label<span class="token punctuation" >:</span> <span class="token string" >'숨김'</span><span class="token punctuation" >,</span>
+      key<span class="token punctuation" >:</span> <span class="token string" >'ishidden'</span><span class="token punctuation" >,</span>
+      isHidden<span class="token punctuation" >:</span> <span class="token boolean" >true</span>
+    }
+  <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >1</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >'첫 번째'</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-07-28'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 첫 번째 요소입니다.'</span><span class="token punctuation" >,</span> ishidden<span class="token punctuation" >:</span> <span class="token string" >'datalist에 표시되지 않습니다.'</span> }<span class="token punctuation" >,</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >'두 번째'</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-07-29'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 두 번째 요소입니다.'</span><span class="token punctuation" >,</span> ishidden<span class="token punctuation" >:</span> <span class="token string" >'datalist에 표시되지 않습니다.'</span> }<span class="token punctuation" >,</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >3</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >'세 번째'</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-07-30'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >''</span><span class="token punctuation" >,</span> ishidden<span class="token punctuation" >:</span> <span class="token string" >'datalist에 표시되지 않습니다.'</span> }<span class="token punctuation" >,</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >4</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >''</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-07-31'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 네 번째 요소입니다.'</span><span class="token punctuation" >,</span> ishidden<span class="token punctuation" >:</span> <span class="token string" >'datalist에 표시되지 않습니다.'</span> }<span class="token punctuation" >,</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >5</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >'다섯 번째'</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-08-01'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 다섯 번째 요소입니다.'</span> }<span class="token punctuation" >,</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >6</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >'여섯 번째'</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-08-02 ~ 2023-11-02'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 여섯 번째 요소입니다.'</span> }<span class="token punctuation" >,</span>
+    { number<span class="token punctuation" >:</span> <span class="token number" >7</span><span class="token punctuation" >,</span> title<span class="token punctuation" >:</span> <span class="token string" >'일곱 번째 일곱 번째 일곱 번째'</span><span class="token punctuation" >,</span> date<span class="token punctuation" >:</span> <span class="token string" >'2023-08-03'</span><span class="token punctuation" >,</span> desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 일곱 번째 요소입니다.'</span> }<span class="token punctuation" >,</span>
+    {
+      number<span class="token punctuation" >:</span> <span class="token number" >8</span><span class="token punctuation" >,</span>
+      title<span class="token punctuation" >:</span> <span class="token string" >'여덟 번째'</span><span class="token punctuation" >,</span>
+      date<span class="token punctuation" >:</span> <span class="token string" >'2023-08-08'</span><span class="token punctuation" >,</span>
+      desc<span class="token punctuation" >:</span> <span class="token string" >'이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.이것은 여덟 번째 요소입니다.'</span>
+    }
+  <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  hasUpdate<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
+  hasDelete<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
+  onUpdate<span class="token punctuation" >:</span> function <span class="token punctuation" >(</span>row<span class="token punctuation" >,</span> index<span class="token punctuation" >)</span> {
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'row'</span><span class="token punctuation" >,</span> row<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'index'</span><span class="token punctuation" >,</span> index<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  }<span class="token punctuation" >,</span>
+  onChange<span class="token punctuation" >:</span> updatedData <span class="token operator" >=</span><span class="token operator" >></span> {
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'updatedData'</span><span class="token punctuation" >,</span> updatedData<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  }<span class="token punctuation" >,</span>
+  isHiddenEmpty<span class="token punctuation" >:</span> <span class="token boolean" >true</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+
+</code></pre><table class="gn-table is-full is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>default</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>컴포넌트 생성 타겟</td>
+    </tr>
+    <tr>
+      <td rowspan="9">headers</td>
+      <td>label</td>
+      <td>string</td>
+      <td></td>
+      <td>화면에 출력될 헤더 텍스트</td>
+    </tr>
+    <tr>
+      <td>key</td>
+      <td>string</td>
+      <td></td>
+      <td>data의 항목에 매치되는 키값</td>
+    </tr>
+    <tr>
+      <td>isHidden</td>
+      <td>boolean</td>
+      <td></td>
+      <td>컬럼 노출여부 (data에는 있지만 화면에 출력되지 않음)</td>
+    </tr>
+    <tr>
+      <td>className</td>
+      <td>string</td>
+      <td></td>
+      <td>클래스 명</td>
+    </tr>
+    <tr>
+      <td>bodyClass</td>
+      <td>string</td>
+      <td></td>
+      <td>바디에 별개의 스타일을 적용할 경우 클래스 명을 추가한다</td>
+    </tr>
+    <tr>
+      <td>style</td>
+      <td>string</td>
+      <td></td>
+      <td>inline style</td>
+    </tr>
+    <tr>
+      <td>template</td>
+      <td>function(key, row)</td>
+      <td></td>
+      <td>데이터를 표시할 템플릿</td>
+    </tr>
+    <tr>
+      <td>onSelect</td>
+      <td>function(row)</td>
+      <td></td>
+      <td>데이터 셀 클릭 이벤트</td>
+    </tr>
+    <tr>
+      <td>onDoubleClick</td>
+      <td>function</td>
+      <td></td>
+      <td>row 더블 클릭 시 수행 이벤트</td>
+    </tr>
+    <tr>
+      <td colspan="2">data</td>
+      <td>array</td>
+      <td>[]</td>
+      <td>key: value로 이루어진 그리드 데이터</td>
+    </tr>
+    <tr>
+      <td rowspan="1">textSets</td>
+      <td>noData</td>
+      <td>string</td>
+      <td>No records available.</td>
+      <td>데이터가 없을 경우 출력 메시지</td>
+    </tr>
+    <tr>
+      <td colspan="2">isHiddenEmpty</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>데이터가 없는 경우 헤더 미출력 여부</td>
+    </tr>
+    <tr>
+      <td colspan="2">hasUpdate</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>수정버튼 생성 여부</td>
+    </tr>
+    <tr>
+      <td colspan="2">hasDelete</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>삭제버튼 생성 여부</td>
+    </tr>
+    <tr>
+      <td colspan="2">readonly</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>읽기전용 여부 - 삭제(hasDelete) 버튼 미생성</td>
+    </tr>
+    <tr>
+      <td colspan="2">disabled</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>Disable 여부</td>
+    </tr>
+    <tr>
+      <td colspan="2">onUpdate</td>
+      <td>function(row, index)</td>
+      <td></td>
+      <td>데이터 수정 버튼을 클릭한 경우, 수정할 데이터를 가져오기 위한 이벤트핸들러</td>
+    </tr>
+    <tr>
+      <td colspan="2">onChange</td>
+      <td>function(updatedData)</td>
+      <td></td>
+      <td>수정, 삭제 등의 데이터 변경이 있는 경우, 변경된 데이터를 가져오기 위한 이벤트핸들러</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 id="-">메소드</h3>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>return</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>reRender({headers: Array<headers>, data: Array<any>})</td>
+      <td>void</td>
+      <td>변경된 값으로 다시 렌더링 한다. 컬럼 헤더까지 바뀌는 경우 사용한다.</td>
+    </tr>
+    <tr>
+      <td>resetData(data: Array<any>)</td>
+      <td>void</td>
+      <td>데이터를 변경한다.</td>
+    </tr>
+    <tr>
+      <td>addChild(index: number, data: Array<any>)</td>
+      <td>void</td>
+      <td>index번째 row의 child로 data를 추가한다.</td>
+    </tr>
+    <tr>
+      <td>addRow(data: Array<any>)</td>
+      <td>void</td>
+      <td>마지막 데이터 하단에 data를 추가한다.</td>
+    </tr>
+    <tr>
+      <td>expand(index: number)</td>
+      <td>void</td>
+      <td>index번째  row의 child를 확장한다. </td>
+    </tr>
+    <tr>
+      <td>collapse(index: number)</td>
+      <td>void</td>
+      <td>index번째 row의 child 데이터를 축소한다. </td>
+    </tr>
+    <tr>
+      <td>getChecked()</td>
+      <td>array</td>
+      <td>체크박스가 있는 경우(hasCheck: true) 체크된 데이터를 리턴한다</td>
+    </tr>
+    <tr>
+      <td>hideCols(keys: Array<string>)</td>
+      <td>void</td>
+      <td>파라메터 배열에 전달된 key에 해당하지 않는 컬럼만 보여준다</td>
+    </tr>
+    <tr>
+      <td>showCols(keys: Array<string>)</td>
+      <td>void</td>
+      <td>파라메터 배열에 전달된 key에 해당하는 컬럼만 보여준다</td>
+    </tr>
+    <tr>
+      <td>showAll()</td>
+      <td>void</td>
+      <td>hideCols, showCols 수행 시 숨김처리된 컬럼을 모두 보여준다</td>
+    </tr>
+    <tr>
+      <td>disable()</td>
+      <td>void</td>
+      <td>Disabled 처리한다.</td>
+    </tr>
+    <tr>
+      <td>enable()</td>
+      <td>void</td>
+      <td>Enabled 처리한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/23 09:41</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>
