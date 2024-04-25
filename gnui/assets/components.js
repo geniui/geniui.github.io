@@ -643,7 +643,8 @@ const components = {
       onClick: function () {
         Gn.create('growl', {
           textSets: { message: '메세지가 생성됩니다!' },
-          duration: 3000
+          duration: 3000,
+          type: 'info'
         });
       }
     });

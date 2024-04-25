@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
     <link href="../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
     <link href="../../assets/okadia.css" rel="stylesheet" />
     <link href="../../assets/theme.css" rel="stylesheet" />
@@ -2776,7 +2777,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
       <td>dropdown을 생성할 대상의 선택자(selector)</td>
     </tr>
     <tr>
-      <td rowspan="2">textSets</td>
+      <td rowspan="3">textSets</td>
       <td>selectText</td>
       <td>string</td>
       <td></td>
@@ -2787,6 +2788,12 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
       <td>string</td>
       <td>&#39;search item&#39;</td>
       <td></td>
+    </tr>
+    <tr>
+      <td>noData</td>
+      <td>string</td>
+      <td>No records available.</td>
+      <td>&#39;opened&#39; 상태에서 데이터가 없을 경우 출력 메시지</td>
     </tr>
     <tr>
       <td colspan="2">data</td>
@@ -2976,6 +2983,66 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
   Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure.
 <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
 </code></pre>
+<h3 id="-">타입</h3>
+<div class="aigis-preview">
+  <div class="gn-growl has-arrange is-success" style="width: 400px">
+    <span class="gn-icon is-normal">
+        <i class="fas fa-check"></i>
+    </span>
+    <p> Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure. </p>
+</div>
+<div class="gn-growl has-arrange is-warning" style="width: 400px">
+    <span class="gn-icon is-normal">
+        <i class="fas fa-exclamation-triangle"></i>
+    </span>
+    <p> Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure. </p>
+</div>
+<div class="gn-growl has-arrange is-danger" style="width: 400px">
+    <span class="gn-icon is-normal">
+        <i class="fas fa-exclamation-triangle"></i>
+    </span>
+    <p> Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure. </p>
+</div>
+<div class="gn-growl has-arrange is-info" style="width: 400px">
+    <span class="gn-icon is-normal">
+        <i class="fas fa-info-circle"></i>
+    </span>
+    <p> Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure. </p>
+</div></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-growl has-arrange is-success<span class="token punctuation" >"</span></span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >400</span>px</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-normal<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-check<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+    Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure.
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-growl has-arrange is-warning<span class="token punctuation" >"</span></span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >400</span>px</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-normal<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-exclamation-triangle<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+    Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure.
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-growl has-arrange is-danger<span class="token punctuation" >"</span></span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >400</span>px</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-normal<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-exclamation-triangle<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+    Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure.
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-growl has-arrange is-info<span class="token punctuation" >"</span></span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >400</span>px</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-normal<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-info-circle<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+    Non et elit ea Lorem. Sit dolor id irure cillum ad eu velit duis mollit proident ad et. Anim nisi culpa elit deserunt eiusmod. Pariatur anim ipsum sunt exercitation pariatur. Nulla laboris amet minim eu et. Elit aliquip amet anim elit non eu sit duis nulla. Laboris nulla laboris in officia eiusmod irure.
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
 <h3 id="-">생성 옵션</h3>
 <div class="aigis-preview">
 
@@ -3023,6 +3090,12 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
       <td>string</td>
       <td></td>
       <td>&#39;success&#39;,&#39;warning&#39;,&#39;danger&#39;,&#39;info&#39;,&#39;cancel&#39;,&#39;dark&#39;,&#39;link&#39;,&#39;trans&#39;,&#39;secondary&#39;,&#39;mono&#39;</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td></td>
+      <td>메시지 출력 스타일(아이콘이 함께 출력되고, color보다 우선순위가 높다).<br>&#39;error&#39;, &#39;warning&#39;, &#39;success&#39;, &#39;info&#39;, &#39;guide&#39;</td>
     </tr>
     <tr>
       <td colspan="2">size</td>
@@ -7352,7 +7425,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
 </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/04/23 09:41</footer>
+          <footer class="aigis-footer">Last update at 2024/04/25 13:38</footer>
         </div>
       </div>
     </div>

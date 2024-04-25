@@ -17806,6 +17806,9 @@
 	                return createElement("div", null, isArray$1(data) && data.length && isArray$1(data[0]) ? data.map((items) => this._hidden.renderOpts(items)) : this._hidden.renderOpts(data));
 	            },
 	            renderOpts: (items) => {
+	                if (this.$options.type === 'opened' && !items.length) {
+	                    return createElement("div", { className: 'dropdown-nodata' }, this.$options.textSets.noData);
+	                }
 	                return (createElement("ul", null, items.map((option, index) => (createElement("li", { className: 'dropdown-item' +
 	                        (option.text ? '' : ' is-unselectable') +
 	                        (this.$options.value &&
@@ -17874,7 +17877,9 @@
 	                    return { value: option.value, text: option.textContent };
 	                });
 	            })(),
-	            textSets: {},
+	            textSets: {
+	                noData: 'No records available.'
+	            },
 	            hasSearch: false,
 	            scrollHeight: 0,
 	            timer: 0,
@@ -17910,7 +17915,7 @@
 	        if (config.width) {
 	            styles.width = getUnit('width', config.width);
 	        }
-	        if (config.type === 'opened') {
+	        if (config.type === 'opened' && config.data.length) {
 	            styles.height = config.scrollHeight ? getUnit('height', config.scrollHeight) : 'auto';
 	        }
 	        const renderOption = (item) => {
@@ -20198,8 +20203,11 @@
 	        return (createElement("div", { id: this._uid, className: 'gn-growl' +
 	                (config.color ? ' is-' + config.color : '') /* 색상 클래스 추가 */ +
 	                (config.style ? ' is-' + config.style : '') /* 스타일 클래스 추가 */ +
+	                (config.icon ? ' has-arrange' : '') /* 스타일 클래스 추가 */ +
 	                (config.size ? ' is-' + config.size : ''), 
 	            /* 크기 클래스 추가 */ style: styles },
+	            config.icon ? (createElement("span", { className: "gn-icon is-normal" },
+	                createElement("i", { className: 'fas fa-' + config.icon }))) : (''),
 	            createElement("p", { innerHTML: config.textSets.message })));
 	    }
 	    beforeMount() {
@@ -20208,6 +20216,32 @@
 	            !container && append(document.body, $('<div class="gn-growl-container pos-' + this.$options.positionX + '-' + this.$options.positionY + '"></div>'));
 	            append($('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY), $(`<div id="${this._uid}"></div>`));
 	            this.$selector = $(`#${this._uid}`);
+	        }
+	        if (this.$options.type) {
+	            switch (this.$options.type) {
+	                // type이 설정된 경우, 색상과 아이콘을 반영한다.
+	                case 'error':
+	                case 'danger':
+	                    this.$options.color = 'danger';
+	                    this.$options.icon = 'exclamation-triangle';
+	                    break;
+	                case 'warning':
+	                    this.$options.color = 'warning';
+	                    this.$options.icon = 'exclamation-circle';
+	                    break;
+	                case 'success':
+	                    this.$options.color = 'success';
+	                    this.$options.icon = 'check';
+	                    break;
+	                case 'info':
+	                    this.$options.color = 'info';
+	                    this.$options.icon = 'info-circle';
+	                    break;
+	                case 'guide':
+	                    this.$options.color = 'guide';
+	                    this.$options.icon = 'info-circle';
+	                    break;
+	            }
 	        }
 	    }
 	    completed() {
