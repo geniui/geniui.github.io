@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module Chart">
+    <h2 class="aigis-module__heading" id="Chart">Chart</h2>
+    <div class="aigis-module__filepath">/scss/components/chart.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+        
+      <a class="js-guide"><span class="gn-tag is-info">javascript</span></a>
+       
+    </div>
+     <!-- <div id="ComponentTab">
+  <ul>
+    <li><a href="#styleguide">Style</a></li>
+    <li>
+      <a href="#scriptguide"
+        >Script <span class="gn-icon"><i class="fas fa-code"></i></span
+      ></a>
+    </li>
+  </ul>
+</div> -->
+  <div class="aigis-preview">
+
+<div class="lineChart"></div>
+<div class="splineChart"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>lineChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>splineChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>line</td>
+      <td>라인차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>name, data 로 구성된 object array</td>
+    </tr>
+    <tr>
+      <td rowspan="2">xaxis</td>
+      <td>type</td>
+      <td>string</td>
+      <td>&#39;datetime&#39;</td>
+      <td>가로축 분류 데이터 타입</td>
+    </tr>
+    <tr>
+      <td>categories</td>
+      <td>array</td>
+      <td></td>
+      <td>가로축 분류 데이터</td>
+    </tr>
+  </tbody>
+</table>
+<table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>line</td>
+      <td>라인차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>name, data 로 구성된 object array</td>
+    </tr>
+    <tr>
+      <td rowspan="2">xaxis</td>
+      <td>type</td>
+      <td>string</td>
+      <td>&#39;datetime&#39;</td>
+      <td>데이터 분류 타입</td>
+    </tr>
+    <tr>
+      <td>categories</td>
+      <td>array</td>
+      <td></td>
+      <td>데이터 분류</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.lineChart'</span><span class="token punctuation" >,</span>
+  type<span class="token punctuation" >:</span> <span class="token string" >'line'</span><span class="token punctuation" >,</span>
+  series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>{
+    name<span class="token punctuation" >:</span> <span class="token string" >'data1'</span><span class="token punctuation" >,</span>
+    data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >,</span> <span class="token number" >200</span><span class="token punctuation" >,</span> <span class="token number" >100</span><span class="token punctuation" >,</span> <span class="token number" >400</span><span class="token punctuation" >,</span> <span class="token number" >150</span><span class="token punctuation" >,</span> <span class="token number" >250</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  }<span class="token punctuation" >,</span>{
+    name<span class="token punctuation" >:</span> <span class="token string" >'data2'</span><span class="token punctuation" >,</span>
+    data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >50</span><span class="token punctuation" >,</span> <span class="token number" >20</span><span class="token punctuation" >,</span> <span class="token number" >10</span><span class="token punctuation" >,</span> <span class="token number" >40</span><span class="token punctuation" >,</span> <span class="token number" >15</span><span class="token punctuation" >,</span> <span class="token number" >25</span><span class="token punctuation" >]</span>
+  }<span class="token punctuation" >]</span><span class="token punctuation" >,</span>      
+  xaxis<span class="token punctuation" >:</span> {
+    type<span class="token punctuation" >:</span> <span class="token string" >'datetime'</span><span class="token punctuation" >,</span>
+    categories<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'2018-09-19T00:00:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T01:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T02:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T03:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T04:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T05:30:00.000Z'</span><span class="token punctuation" >]</span>
+  }
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.splineChart'</span><span class="token punctuation" >,</span>
+  type<span class="token punctuation" >:</span> <span class="token string" >'spline'</span><span class="token punctuation" >,</span>
+  series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>{
+    name<span class="token punctuation" >:</span> <span class="token string" >'data1'</span><span class="token punctuation" >,</span>
+    data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >,</span> <span class="token number" >200</span><span class="token punctuation" >,</span> <span class="token number" >100</span><span class="token punctuation" >,</span> <span class="token number" >400</span><span class="token punctuation" >,</span> <span class="token number" >150</span><span class="token punctuation" >,</span> <span class="token number" >250</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  }<span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  xaxis<span class="token punctuation" >:</span> {
+    type<span class="token punctuation" >:</span> <span class="token string" >'datetime'</span><span class="token punctuation" >,</span>
+    categories<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'2018-09-19T00:00:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T01:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T02:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T03:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T04:30:00.000Z'</span><span class="token punctuation" >,</span> <span class="token string" >'2018-09-19T05:30:00.000Z'</span><span class="token punctuation" >]</span>
+  }
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><div class="aigis-preview">
+
+<div class="columnChart"></div>
+<div class="barChart"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>columnChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>barChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>column</td>
+      <td>컬럼차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>name, data 로 구성된 object array</td>
+    </tr>
+    <tr>
+      <td>chart</td>
+      <td>stacked</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>그래프 누적 여부</td>
+    </tr>
+  </tbody>
+</table>
+<table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>bar</td>
+      <td>바 차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>name, data 로 구성된 object array</td>
+    </tr>
+    <tr>
+      <td>xaxis</td>
+      <td>categories</td>
+      <td>array</td>
+      <td></td>
+      <td>데이터 분류</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code> Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+    target<span class="token punctuation" >:</span> <span class="token string" >'.columnChart'</span><span class="token punctuation" >,</span>
+    type<span class="token punctuation" >:</span> <span class="token string" >'column'</span><span class="token punctuation" >,</span>
+    chart<span class="token punctuation" >:</span> {
+      stacked<span class="token punctuation" >:</span> <span class="token boolean" >true</span>
+    }<span class="token punctuation" >,</span>
+    series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>{
+      name<span class="token punctuation" >:</span> <span class="token string" >'data1'</span><span class="token punctuation" >,</span>
+      data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >,</span> <span class="token number" >200</span><span class="token punctuation" >,</span> <span class="token number" >100</span><span class="token punctuation" >,</span> <span class="token number" >400</span><span class="token punctuation" >,</span> <span class="token number" >150</span><span class="token punctuation" >,</span> <span class="token number" >250</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+    }<span class="token punctuation" >,</span>{
+      name<span class="token punctuation" >:</span> <span class="token string" >'data2'</span><span class="token punctuation" >,</span>
+      data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >50</span><span class="token punctuation" >,</span> <span class="token number" >20</span><span class="token punctuation" >,</span> <span class="token number" >10</span><span class="token punctuation" >,</span> <span class="token number" >40</span><span class="token punctuation" >,</span> <span class="token number" >15</span><span class="token punctuation" >,</span> <span class="token number" >25</span><span class="token punctuation" >]</span>
+    }<span class="token punctuation" >]</span>
+  }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+    target<span class="token punctuation" >:</span> <span class="token string" >'.barChart'</span><span class="token punctuation" >,</span>
+    type<span class="token punctuation" >:</span> <span class="token string" >'bar'</span><span class="token punctuation" >,</span>
+    series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>{
+      data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >,</span> <span class="token number" >200</span><span class="token punctuation" >,</span> <span class="token number" >100</span><span class="token punctuation" >,</span> <span class="token number" >400</span><span class="token punctuation" >,</span> <span class="token number" >150</span><span class="token punctuation" >,</span> <span class="token number" >250</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+    }<span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+    xaxis<span class="token punctuation" >:</span> {
+      categories<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'data1'</span><span class="token punctuation" >,</span><span class="token string" >'data2'</span><span class="token punctuation" >,</span><span class="token string" >'data3'</span><span class="token punctuation" >,</span><span class="token string" >'data4'</span><span class="token punctuation" >,</span><span class="token string" >'data5'</span><span class="token punctuation" >,</span><span class="token string" >'data6'</span><span class="token punctuation" >]</span>
+    }
+  }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><div class="aigis-preview">
+
+<div class="pieChart"></div>
+<div class="donutChart"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>pieChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>donutChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<p><table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>pie</td>
+      <td>파이차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>number array</td>
+    </tr>
+    <tr>
+      <td colspan="2">labels</td>
+      <td>Array</td>
+      <td></td>
+      <td>string array</td>
+    </tr>
+  </tbody>
+</table></p>
+<p><table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>donut</td>
+      <td>도넛차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>number array</td>
+    </tr>
+    <tr>
+      <td colspan="2">labels</td>
+      <td>Array</td>
+      <td></td>
+      <td>string array</td>
+    </tr>
+  </tbody>
+</table></p>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.pieChart'</span><span class="token punctuation" >,</span>
+  type<span class="token punctuation" >:</span> <span class="token string" >'pie'</span><span class="token punctuation" >,</span>
+  series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >,</span> <span class="token number" >200</span><span class="token punctuation" >,</span> <span class="token number" >100</span><span class="token punctuation" >,</span> <span class="token number" >400</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  labels<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'data1'</span><span class="token punctuation" >,</span><span class="token string" >'data2'</span><span class="token punctuation" >,</span><span class="token string" >'data3'</span><span class="token punctuation" >,</span><span class="token string" >'data4'</span><span class="token punctuation" >]</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.donutChart'</span><span class="token punctuation" >,</span>
+  type<span class="token punctuation" >:</span> <span class="token string" >'donut'</span><span class="token punctuation" >,</span>
+  series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >,</span> <span class="token number" >200</span><span class="token punctuation" >,</span> <span class="token number" >100</span><span class="token punctuation" >,</span> <span class="token number" >400</span><span class="token punctuation" >,</span> <span class="token number" >150</span><span class="token punctuation" >,</span> <span class="token number" >250</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  labels<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'data1'</span><span class="token punctuation" >,</span><span class="token string" >'data2'</span><span class="token punctuation" >,</span><span class="token string" >'data3'</span><span class="token punctuation" >,</span><span class="token string" >'data4'</span><span class="token punctuation" >,</span><span class="token string" >'data5'</span><span class="token punctuation" >,</span><span class="token string" >'data6'</span><span class="token punctuation" >]</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><div class="aigis-preview">
+
+<div class="radialChart"></div>
+<div class="gaugeChart"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>radialChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gaugeChart<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<p><table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>gauge</td>
+      <td>게이지차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>number array</td>
+    </tr>
+    <tr>
+      <td colspan="2">labels</td>
+      <td>Array</td>
+      <td></td>
+      <td>string array</td>
+    </tr>
+  </tbody>
+</table></p>
+<p><table class="gn-table is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>value</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>차트를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>radial</td>
+      <td>래디얼차트</td>
+    </tr>
+    <tr>
+      <td colspan="2">series</td>
+      <td>Array</td>
+      <td></td>
+      <td>number array</td>
+    </tr>
+    <tr>
+      <td colspan="2">labels</td>
+      <td>Array</td>
+      <td></td>
+      <td>string array</td>
+    </tr>
+  </tbody>
+</table></p>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.gaugeChart'</span><span class="token punctuation" >,</span>
+  type<span class="token punctuation" >:</span> <span class="token string" >'gauge'</span><span class="token punctuation" >,</span>
+  series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  labels<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'data1'</span><span class="token punctuation" >]</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'chart'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.radialChart'</span><span class="token punctuation" >,</span>
+  type<span class="token punctuation" >:</span> <span class="token string" >'radial'</span><span class="token punctuation" >,</span>
+  series<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >30</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  labels<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'data1'</span><span class="token punctuation" >]</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre>
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/25 14:47</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>

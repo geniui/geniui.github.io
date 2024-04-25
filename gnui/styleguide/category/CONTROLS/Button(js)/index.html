@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module Button">
+    <h2 class="aigis-module__heading" id="Button">Button</h2>
+    <div class="aigis-module__filepath">/scss/controls/button.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+        
+      <a class="js-guide"><span class="gn-tag is-info">javascript</span></a>
+       
+    </div>
+     <!-- <div id="ComponentTab">
+  <ul>
+    <li><a href="#styleguide">Style</a></li>
+    <li>
+      <a href="#scriptguide"
+        >Script <span class="gn-icon"><i class="fas fa-code"></i></span
+      ></a>
+    </li>
+  </ul>
+</div> -->
+  <h3 id="-">기본 사용</h3>
+<ul>
+<li>사용 태그 :  <code>a</code>, <code>button</code>, <code>input[submit]</code>, <code>input[reset]</code></li>
+</ul>
+<div class="aigis-preview">
+  <button type="button" class="gn-button">확인</button>
+<button type="button" class="gn-button is-dark">확인</button>
+<button type="button" class="gn-button">수정</button>
+<button type="button" class="gn-button is-dark">수정</button>
+<button type="button" class="gn-button">목록</button>
+<button type="button" class="gn-button is-cancel">취소</button>
+<button type="button" class="gn-button is-outline">확인</button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>확인<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-dark<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>확인<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>수정<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-dark<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>수정<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>목록<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-cancel<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>취소<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-outline<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>확인<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="buttons-with-icons">Buttons with icons</h3>
+<ul>
+<li>사용 태그 : </li>
+</ul>
+<div class="aigis-preview">
+  <button type="button" class="gn-button"><i class="fa fa-cog"></i> Settings</button>
+<button type="submit" class="gn-button"><i class="fa fa-shopping-cart fa-lg"></i> Checkout</button>
+<button type="button" class="gn-button is-cancel"><i class="fa fa-cog"></i> Settings</button>
+<button type="button" class="gn-button is-cancel"><i class="fa fa-shopping-cart fa-lg"></i> Checkout</button>
+<button type="button" class="gn-button is-cancel"><i class="fa fa-download" aria-hidden="true"></i></button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fa fa-cog<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span> Settings<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>submit<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fa fa-shopping-cart fa-lg<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span> Checkout<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-cancel<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fa fa-cog<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span> Settings<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-cancel<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fa fa-shopping-cart fa-lg<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span> Checkout<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-cancel<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fa fa-download<span class="token punctuation" >"</span></span> <span class="token attr-name" >aria-hidden</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>true<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">크기</h3>
+<ul>
+<li>small, normal, medium, large, full</li>
+</ul>
+<div class="aigis-preview">
+  <p>
+    <button type="button" class="gn-button is-small">Small</button>
+    <button type="button" class="gn-button is-normal">Normal</button>
+    <button type="button" class="gn-button is-medium">Medium</button>
+    <button type="button" class="gn-button is-large">Large</button>
+</p>
+<p>
+    <button type="button" class="gn-button is-full">Full</button>
+</p>
+<p>
+    <button type="button" class="gn-button is-full is-large">Large Full</button>
+</p></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-small<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Small<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-normal<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Normal<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-medium<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Medium<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-large<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Large<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-full<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Full<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-full is-large<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Large Full<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">색상</h3>
+<ul>
+<li>success,warning,danger,info,cancel,dark,link,trans,secondary,mono</li>
+</ul>
+<div class="aigis-preview">
+  <button type="button" class="gn-button is-success">Success</button>
+<button type="button" class="gn-button is-warning">Warning</button>
+<button type="button" class="gn-button is-danger">Danger</button>
+<button type="button" class="gn-button is-info">Info</button>
+<button type="button" class="gn-button is-cancel">Cancel</button>
+<button type="button" class="gn-button is-dark">Dark</button>
+<button type="button" class="gn-button is-link">Link</button>
+<button type="button" class="gn-button is-trans">Trans</button>
+<button type="button" class="gn-button is-secondary">Secondary</button>
+<button type="button" class="gn-button is-mono">Mono</button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-success<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Success<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-warning<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Warning<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-danger<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Danger<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-info<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Info<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-cancel<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Cancel<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-dark<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Dark<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-link<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Link<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-trans<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Trans<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-secondary<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Secondary<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-mono<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Mono<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">스타일</h3>
+<ul>
+<li>outline, invert </li>
+</ul>
+<div class="aigis-preview">
+  <button type="button" class="gn-button is-outline is-success">Success</button>
+<button type="button" class="gn-button is-outline is-warning">Warning</button>
+<button type="button" class="gn-button is-outline is-danger">Danger</button>
+<button type="button" class="gn-button is-outline is-info">Info</button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-outline is-success<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Success<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-outline is-warning<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Warning<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-outline is-danger<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Danger<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-outline is-info<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Info<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<div class="aigis-preview">
+  <button type="button" class="gn-button is-invert is-success">Success</button>
+<button type="button" class="gn-button is-invert is-warning">Warning</button>
+<button type="button" class="gn-button is-invert is-danger">Danger</button>
+<button type="button" class="gn-button is-invert is-info">Info</button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-invert is-success<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Success<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-invert is-warning<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Warning<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-invert is-danger<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Danger<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-invert is-info<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Info<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">상태</h3>
+<ul>
+<li>hover, focus, active, disabled</li>
+</ul>
+<div class="aigis-preview">
+  <button type="button" class="gn-button is-hover">Hover</button>
+<button type="button" class="gn-button is-focus">Focus</button>
+<button type="button" class="gn-button is-active">Active</button>
+<button type="button" class="gn-button is-disabled">Disabled</button>
+<button type="button" class="gn-button is-invalid">Invalid</button>
+<button type="button" class="gn-button is-loading">Loading</button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-hover<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Hover<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-focus<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Focus<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-active<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Active<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-disabled<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Disabled<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-invalid<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Invalid<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-loading<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>Loading<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">확장</h3>
+<ul>
+<li>with icon</li>
+</ul>
+<div class="aigis-preview">
+  <button type="button" class="gn-button">
+    <span class="gn-icon is-small">
+        <i class="fas fa-bold"></i>
+    </span>
+</button>
+<button type="button" class="gn-button is-info">
+    <span class="gn-icon is-small">
+        <i class="fas fa-home"></i>
+    </span> HOME </button></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-small<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-bold<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button is-info<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-small<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-home<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  HOME
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<ul>
+<li>button arrange</li>
+</ul>
+<div class="aigis-preview">
+  <div class="gn-control has-arrange">
+    <button type="button" class="gn-button">
+        <span class="gn-icon">
+            <i class="fas fa-align-left"></i>
+        </span> Left </button>
+    <button type="button" class="gn-button">
+        <span class="gn-icon">
+            <i class="fas fa-align-center"></i>
+        </span> Center </button>
+    <button type="button" class="gn-button">
+        <span class="gn-icon">
+            <i class="fas fa-align-right"></i>
+        </span> Right </button>
+</div></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-control has-arrange<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-align-left<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+    Left
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-align-center<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+    Center
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>button<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-align-right<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+    Right
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">생성 옵션</h3>
+<div class="aigis-preview">
+
+  <button class="gn-button" name="new-button">new button</button>
+</div>
+
+<pre><code class="language-ejs">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>button</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-button<span class="token punctuation" >"</span></span> <span class="token attr-name" >name</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-button<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>new button<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>button</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>  Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'button'</span><span class="token punctuation" >,</span> {
+    target<span class="token punctuation" >:</span> <span class="token string" >'button[name=new-button]'</span><span class="token punctuation" >,</span> 
+    size<span class="token punctuation" >:</span> <span class="token string" >'medium'</span><span class="token punctuation" >,</span>
+    icon<span class="token punctuation" >:</span> <span class="token string" >'home'</span><span class="token punctuation" >,</span>
+    onClick<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span><span class="token punctuation" >)</span>{
+      console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'버튼을 클릭했습니다.'</span><span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    }
+  }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><table class="gn-table is-full is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>default</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>버튼을 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td>textSets</td>
+      <td>buttonText</td>
+      <td>string</td>
+      <td></td>
+      <td>버튼에 표기할 문구</td>
+    </tr>
+    <tr>
+      <td colspan="2">disabled</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>버튼 비활성화 여부</td>
+    </tr>
+    <tr>
+      <td colspan="2">color</td>
+      <td>string</td>
+      <td></td>
+      <td>&#39;success&#39;,&#39;warning&#39;,&#39;danger&#39;,&#39;info&#39;,&#39;cancel&#39;,&#39;dark&#39;,&#39;link&#39;,&#39;trans&#39;,&#39;secondary&#39;,&#39;mono&#39;</td>
+    </tr>
+    <tr>
+      <td colspan="2">size</td>
+      <td>string</td>
+      <td></td>
+      <td>&#39;small&#39;,&#39;normal&#39;,&#39;medium&#39;,&#39;large&#39;</td>
+    </tr>
+    <tr>
+      <td colspan="2">icon</td>
+      <td>string</td>
+      <td></td>
+      <td><a href="https://fontawesome.com/cheatsheet?from=io" target="_blank">font awesome <span class="gn-icon is-small"><i class="fas fa-external-link-alt"></i></span></a> solid icon name</td>
+    </tr>
+    <tr>
+      <td colspan="2">onClick</td>
+      <td>function</td>
+      <td></td>
+      <td>버튼 클릭 시 수행될 이벤트</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-">메소드</h3>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>return</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>click()</td>
+      <td>void</td>
+      <td>버튼을 클릭을 동작한다.</td>
+    </tr>
+    <tr>
+      <td>disable()</td>
+      <td>void</td>
+      <td>Disabled 처리한다.</td>
+    </tr>
+    <tr>
+      <td>enable()</td>
+      <td>void</td>
+      <td>Enabled 처리한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/25 14:47</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>

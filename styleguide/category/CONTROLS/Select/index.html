@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module Select">
+    <h2 class="aigis-module__heading" id="Select">Select</h2>
+    <div class="aigis-module__filepath">/scss/controls/select.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+       
+    </div>
+     <h3 id="-">기본 사용</h3>
+<ul>
+<li>사용 태그 :  <code>select</code></li>
+</ul>
+<div class="aigis-preview">
+  <div class="gn-select">
+    <select>
+        <option>Lorem</option>
+        <option>voluptate</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Lorem<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>voluptate<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">크기</h3>
+<div class="aigis-preview">
+  <div class="gn-select is-small">
+    <select>
+        <option>Small</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div>
+<div class="gn-select is-normal">
+    <select>
+        <option>Normal</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div>
+<div class="gn-select is-medium">
+    <select>
+        <option>Medium</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div>
+<div class="gn-select is-large">
+    <select>
+        <option>Large</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div>
+<div class="gn-select is-full">
+    <select>
+        <option>Full</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-small<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Small<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-normal<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Normal<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-medium<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Medium<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-large<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Large<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-full<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Full<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">색상</h3>
+<div class="aigis-preview">
+  <div class="gn-select is-success">
+    <select>
+        <option>success</option>
+    </select>
+</div>
+<div class="gn-select is-warning">
+    <select>
+        <option>warning</option>
+    </select>
+</div>
+<div class="gn-select is-danger">
+    <select>
+        <option>danger</option>
+    </select>
+</div>
+<div class="gn-select is-info">
+    <select>
+        <option>info</option>
+    </select>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-success<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>success<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-warning<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>warning<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-danger<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>danger<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-info<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>info<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">스타일</h3>
+<div class="aigis-preview">
+  <div class="gn-select is-borderless">
+    <select>
+        <option>borderless</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div>
+<div class="gn-select is-multiple">
+    <select multiple>
+        <option>multiple</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-borderless<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>borderless<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-multiple<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span> <span class="token attr-name" >multiple</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>multiple<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">상태</h3>
+<div class="aigis-preview">
+  <div class="gn-select is-focus">
+    <select>
+        <option>focus</option>
+    </select>
+</div>
+<div class="gn-select is-hover">
+    <select>
+        <option>hover</option>
+    </select>
+</div>
+<div class="gn-select">
+    <select disabled>
+        <option>disabled</option>
+    </select>
+</div>
+<div class="gn-select is-invalid">
+    <select>
+        <option>invalid</option>
+    </select>
+</div>
+<div class="gn-select is-loading">
+    <select>
+        <option>loading...</option>
+    </select>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-focus<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>focus<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-hover<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>hover<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span> <span class="token attr-name" >disabled</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>disabled<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-invalid<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>invalid<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-loading<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>loading...<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">확장</h3>
+<div class="aigis-preview">
+  <div class="gn-control has-arrange">
+    <div class="gn-plain">
+        <span class="gn-icon is-small">
+            <i class="fas fa-weight-hanging"></i>
+        </span>
+    </div>
+    <div class="gn-select">
+        <select>
+            <option>with label</option>
+        </select>
+    </div>
+    <div class="gn-plain"> Kg </div>
+</div>
+<div class="gn-control has-icon-left">
+    <span class="gn-icon is-left">
+        <i class="fas fa-wifi"></i>
+    </span>
+    <div class="gn-select">
+        <select>
+            <option>with label</option>
+        </select>
+    </div>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-control has-arrange<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-plain<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-small<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+        <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-weight-hanging<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+        <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>with label<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-plain<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      Kg
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-control has-icon-left<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-left<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-wifi<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+        <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>with label<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/25 14:47</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>

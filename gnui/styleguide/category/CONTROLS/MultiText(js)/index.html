@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module MultiText">
+    <h2 class="aigis-module__heading" id="MultiText">MultiText</h2>
+    <div class="aigis-module__filepath">/scss/controls/multitext.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+        
+      <a class="js-guide"><span class="gn-tag is-info">javascript</span></a>
+       
+    </div>
+     <!-- <div id="ComponentTab">
+  <ul>
+    <li><a href="#styleguide">Style</a></li>
+    <li>
+      <a href="#scriptguide"
+        >Script <span class="gn-icon"><i class="fas fa-code"></i></span
+      ></a>
+    </li>
+  </ul>
+</div> -->
+  <h3 id="-">생성 옵션</h3>
+<div class="aigis-preview">
+
+<div class="default-multitext">
+</div>
+<div class="new-multitext">
+</div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>default-multitext<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-multitext<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'multitext'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.default-multitext'</span>
+}<span class="token punctuation" >)</span>
+
+Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'multitext'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.new-multitext'</span><span class="token punctuation" >,</span>
+  lang<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'en'</span><span class="token punctuation" >,</span><span class="token string" >'ko'</span><span class="token punctuation" >,</span><span class="token string" >'cn'</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  value<span class="token punctuation" >:</span> {
+    en<span class="token punctuation" >:</span> <span class="token string" >'hello'</span><span class="token punctuation" >,</span>
+    ko<span class="token punctuation" >:</span> <span class="token string" >'안녕하세요'</span><span class="token punctuation" >,</span>
+    cn<span class="token punctuation" >:</span> <span class="token string" >'HELLO'</span>
+  }<span class="token punctuation" >,</span>
+  maxlength<span class="token punctuation" >:</span> <span class="token number" >300</span>
+}<span class="token punctuation" >)</span>
+</code></pre><table class="gn-table is-full is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>default</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>multitext 생성 타겟</td>
+    </tr>
+    <tr>
+      <td colspan="2">lang</td>
+      <td>Array<string></td>
+      <td>[&#39;en&#39;,&#39;ko&#39;]</td>
+      <td>사용할 언어 배열</td>
+    </tr>
+    <tr>
+      <td colspan="2">value</td>
+      <td>Object</td>
+      <td></td>
+      <td>언어별 초기 값</td>
+    </tr>
+    <tr>
+      <td colspan="2">size</td>
+      <td>string</td>
+      <td>&#39;normal&#39;</td>
+      <td>사이즈</td>
+    </tr>
+    <tr>
+      <td colspan="2">width</td>
+      <td>string</td>
+      <td>100%</td>
+      <td>넓이</td>
+    </tr>
+    <tr>
+      <td colspan="2">rows</td>
+      <td>number</td>
+      <td>2</td>
+      <td>textarea 라인 수</td>
+    </tr>
+    <tr>
+      <td colspan="2">maxlength</td>
+      <td>number</td>
+      <td>524288</td>
+      <td>최대 입력 글자길이</td>
+    </tr>
+    <tr>
+      <td colspan="2">onChange(value)</td>
+      <td>function</td>
+      <td></td>
+      <td>값 변경 시 발생 이벤트</td>
+    </tr>
+    <tr>
+      <td colspan="2">disabled</td>
+      <td>boolean</td>
+      <td>false</td>
+      <td>비활성화 여부</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 id="-">메소드</h3>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>return</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>getValue()</td>
+      <td>String</td>
+      <td>값을 반환한다. </td>
+    </tr>
+    <tr>
+      <td>disable()</td>
+      <td>void</td>
+      <td>Disabled 처리한다.</td>
+    </tr>
+    <tr>
+      <td>enable()</td>
+      <td>void</td>
+      <td>Enabled 처리한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/25 14:47</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>

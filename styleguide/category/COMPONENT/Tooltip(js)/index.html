@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module Tooltip">
+    <h2 class="aigis-module__heading" id="Tooltip">Tooltip</h2>
+    <div class="aigis-module__filepath">/scss/components/tooltip.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+        
+      <a class="js-guide"><span class="gn-tag is-info">javascript</span></a>
+       
+    </div>
+     <!-- <div id="ComponentTab">
+  <ul>
+    <li><a href="#styleguide">Style</a></li>
+    <li>
+      <a href="#scriptguide"
+        >Script <span class="gn-icon"><i class="fas fa-code"></i></span
+      ></a>
+    </li>
+  </ul>
+</div> -->
+  <h3 id="-">기본사용</h3>
+<div class="aigis-preview">
+  <div class="gn-tooltip is-left is-relative">
+    <span>Popper!!!</span>
+</div>
+<div class="gn-tooltip is-top is-relative">
+    <span>Popper again</span>
+</div>
+<div class="gn-tooltip is-bottom is-relative">
+    <span>Long Text Popper!!!</span>
+</div>
+<div class="gn-tooltip is-right is-relative"> Where is my <span class="gn-icon is-small"><i class="fas fa-home"></i></span> HOME </div>
+<div class="new-contents">
+    <div class="gn-panel" style="width: 250px; height: 600px">
+        <div class="panel-header"> Panel Header </div>
+        <div class="panel-body">
+            <ul class="gn-list">
+                <li>Id eiusmod veniam aute elit nulla qui ullamco dolore cillum est veniam sunt velit. Tempor anim eiusmod ut laborum esse sint velit occaecat consequat aliqua elit duis ea. Ullamco officia ullamco excepteur consectetur est deserunt velit fugiat. Voluptate proident mollit exercitation tempor culpa reprehenderit duis incididunt voluptate cillum do ad laboris veniam.</li>
+                <li>Eu pariatur exercitation commodo amet occaecat non magna ea. Laboris reprehenderit nostrud labore anim Lorem Lorem quis. Tempor officia dolor enim incididunt ut cupidatat sunt.</li>
+                <li>Incididunt ipsum nostrud quis qui esse est aute anim velit aliqua ipsum. Ipsum mollit nulla ipsum Lorem cillum laboris. Proident nostrud magna consequat elit duis culpa deserunt voluptate. Ullamco commodo ad ea nostrud. Qui ullamco tempor non est adipisicing duis ullamco id ex. Nostrud fugiat mollit commodo veniam id et labore cillum adipisicing adipisicing qui dolor.</li>
+            </ul>
+        </div>
+        <div class="panel-footer"> Panel footer </div>
+    </div>
+</div></div>
+
+<pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-left is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Popper!!!<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-top is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Popper again<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-bottom is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Long Text Popper!!!<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-right is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    Where is my <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-small<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-home<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span> HOME
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-contents<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-panel<span class="token punctuation" >"</span></span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >250</span>px<span class="token punctuation" >;</span> <span class="token property" >height</span><span class="token punctuation" >:</span> <span class="token number" >600</span>px</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>panel-header<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+        Panel Header
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>panel-body<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+        <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>ul</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-list<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+          <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span><span class="token punctuation" >></span></span>Id eiusmod veniam aute elit nulla qui ullamco dolore cillum est veniam sunt velit. Tempor anim eiusmod ut laborum esse sint velit occaecat consequat aliqua elit duis ea. Ullamco officia ullamco excepteur consectetur est deserunt velit fugiat. Voluptate proident mollit exercitation tempor culpa reprehenderit duis incididunt voluptate cillum do ad laboris veniam.<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+          <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span><span class="token punctuation" >></span></span>Eu pariatur exercitation commodo amet occaecat non magna ea. Laboris reprehenderit nostrud labore anim Lorem Lorem quis. Tempor officia dolor enim incididunt ut cupidatat sunt.<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+          <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span><span class="token punctuation" >></span></span>Incididunt ipsum nostrud quis qui esse est aute anim velit aliqua ipsum. Ipsum mollit nulla ipsum Lorem cillum laboris. Proident nostrud magna consequat elit duis culpa deserunt voluptate. Ullamco commodo ad ea nostrud. Qui ullamco tempor non est adipisicing duis ullamco id ex. Nostrud fugiat mollit commodo veniam id et labore cillum adipisicing adipisicing qui dolor.<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+        <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>ul</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>panel-footer<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+        Panel footer
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">색상</h3>
+<div class="aigis-preview">
+  <div class="gn-tooltip is-success is-left is-relative">
+    <span>Success</span>
+</div>
+<div class="gn-tooltip is-warning is-bottom is-relative">
+    <span>Warning</span>
+</div>
+<div class="gn-tooltip is-danger is-top is-relative">
+    <span>Danger</span>
+</div>
+<div class="gn-tooltip is-info is-right is-relative">
+    <span>Info</span>
+</div>
+<div class="gn-tooltip is-cancel is-left-bottom is-relative">
+    <span>Cancel</span>
+</div>
+<div class="gn-tooltip is-dark is-right-top is-relative">
+    <span>Dark</span>
+</div>
+<div class="gn-tooltip is-link is-top is-relative">
+    <span>Link</span>
+</div>
+<div class="gn-tooltip is-secondary is-bottom is-relative">
+    <span>Secondary</span>
+</div>
+<div class="gn-tooltip is-mono is-right is-relative">
+    <span>Mono</span>
+</div></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-success is-left is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Success<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-warning is-bottom is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Warning<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-danger is-top is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Danger<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-info is-right is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Info<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-cancel is-left-bottom is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Cancel<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-dark is-right-top is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Dark<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-link is-top is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Link<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-secondary is-bottom is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Secondary<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tooltip is-mono is-right is-relative<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span><span class="token punctuation" >></span></span>Mono<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h3 id="-">생성 옵션</h3>
+<div class="aigis-preview">
+
+  <span class="gn-tag is-large is-info has-tooltip1">tooltip left</span>
+  <span class="gn-tag is-large is-info-light has-tooltip2">tooltip bottom</span>
+  <span class="gn-tag is-large is-info-light is-outline has-tooltip3">tooltip top</span>
+  <span class="gn-tag is-large is-info is-outline has-tooltip4">tooltip right</span>
+  <br>
+  <span class="gn-tag is-large is-info has-tooltip5">tooltip left top</span>
+  <span class="gn-tag is-large is-info-light has-tooltip6">tooltip left bottom</span>
+  <span class="gn-tag is-large is-info-light is-outline has-tooltip7">tooltip right top</span>
+  <span class="gn-tag is-large is-info is-outline has-tooltip8">tooltip right bottom</span>
+</div>
+
+<pre><code class="language-ejs">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info has-tooltip1<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip left<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info-light has-tooltip2<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip bottom<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info-light is-outline has-tooltip3<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip top<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info is-outline has-tooltip4<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip right<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>br</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info has-tooltip5<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip left top<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info-light has-tooltip6<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip left bottom<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info-light is-outline has-tooltip7<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip right top<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-large is-info is-outline has-tooltip8<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>tooltip right bottom<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip1'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'.new-contents'</span><span class="token punctuation" >,</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'left'</span><span class="token punctuation" >,</span>
+      type<span class="token punctuation" >:</span> <span class="token string" >'click'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip2'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'기본값 bottom 툴팁'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip3'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'top 툴팁'</span><span class="token punctuation" >,</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'top'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip4'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'right 툴팁'</span><span class="token punctuation" >,</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'right'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip5'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'left top 툴팁'</span><span class="token punctuation" >,</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'left-top'</span><span class="token punctuation" >,</span>
+      width<span class="token punctuation" >:</span> <span class="token string" >'200px'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip6'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'left bottom 툴팁'</span><span class="token punctuation" >,</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'left-bottom'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip7'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span>
+        '<span class="token operator" >&lt;</span><span class="token operator" >/</span>b<span class="token operator" >></span>자주 사용되는 정규식 특수문자<span class="token operator" >&lt;</span><span class="token operator" >/</span>b<span class="token operator" >></span><span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token punctuation" >.</span> 임의의 한 문자 예<span class="token punctuation" >)</span> <span class="token punctuation" >.</span><span class="token operator" >*</span> 모든문자열<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token operator" >^</span> 문자열 시작 예<span class="token punctuation" >)</span> <span class="token operator" >^</span>Genians Genians으로 시작하는 문자열<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span>$ 문자열 끝 예<span class="token punctuation" >)</span> Genians$ Genians로 끝나는 문자열<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token punctuation" >[</span> 문자집합 시작 표시 예<span class="token punctuation" >)</span> <span class="token punctuation" >[</span>ab<span class="token punctuation" >]</span> a 또는 b문자가 포함되는 문자열<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token punctuation" >]</span> 문자집합 끝 표시<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token punctuation" >(</span> 문자열 집합 시작 예<span class="token punctuation" >)</span> <span class="token function" >a</span><span class="token punctuation" >(</span>b<span class="token punctuation" >)</span>|<span class="token punctuation" >(</span>c<span class="token punctuation" >)</span>d abd 또는 acd를 의미<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span> 문자열 집합 끝<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span>| 또는<span class="token punctuation" >(</span><span class="token operator" >OR</span><span class="token punctuation" >)</span><span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span> 특수한 기능을 하는 다음 문자표시 예<span class="token punctuation" >)</span> <span class="token punctuation" >.</span> Period 문자표시<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span>n<span class="token operator" >*</span> <span class="token number" >0</span>개 이상의 n문자<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span>n<span class="token operator" >+</span> <span class="token number" >1</span>개 이상의 n문자<span class="token operator" >&lt;</span>br<span class="token operator" >/</span><span class="token operator" >></span><span class="token operator" >&amp;</span>#<span class="token number" >123</span><span class="token comment" spellcheck="true">;n&amp;#125; 앞문자가 n개 예) ab&amp;#123;2&amp;#125;c abbc를 의미&lt;br/>&amp;#123;n,&amp;#125; 앞문자가 n개 이상&lt;br/>&amp;#123;,m&amp;#125; 앞문자가 m개 이하&lt;br/>&amp;#123;n,m&amp;#125; 앞문자가 n개 이상 m개 이하&lt;br/>',</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'right-top'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'tooltip'</span><span class="token punctuation" >,</span> {
+      target<span class="token punctuation" >:</span> <span class="token string" >'.has-tooltip8'</span><span class="token punctuation" >,</span>
+      contents<span class="token punctuation" >:</span> <span class="token string" >'&lt;br/>right bottom 툴팁&lt;br/>'</span><span class="token punctuation" >,</span>
+      direction<span class="token punctuation" >:</span> <span class="token string" >'right-bottom'</span>
+    }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><table class="gn-table is-full is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>default</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>툴팁을 표시할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">type</td>
+      <td>string</td>
+      <td>hover</td>
+      <td>툴팁 표시 트리거타입(&#39;hover&#39;,&#39;click&#39;)</td>
+    </tr>
+    <tr>
+      <td colspan="2">direction</td>
+      <td>string</td>
+      <td>bottom</td>
+      <td>툴팁 표시 방향(top,bottom,right,left,left-top,left-bottom,right-top,right-bottom)</td>
+    </tr>
+    <tr>
+      <td colspan="2">contents</td>
+      <td>string</td>
+      <td></td>
+      <td>툴팁에 표시할 문구 또는 html 텍스트</td>
+    </tr>
+    <tr>
+      <td colspan="2">color</td>
+      <td>string</td>
+      <td></td>
+      <td>&#39;success&#39;,&#39;warning&#39;,&#39;danger&#39;,&#39;info&#39;,&#39;cancel&#39;,&#39;dark&#39;,&#39;link&#39;,&#39;trans&#39;,&#39;secondary&#39;,&#39;mono&#39;</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-">메소드</h3>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>return</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>show()</td>
+      <td>void</td>
+      <td>툴팁을 표시한다.</td>
+    </tr>
+    <tr>
+      <td>hide()</td>
+      <td>void</td>
+      <td>툴팁을 숨김처리한다.</td>
+    </tr>
+    <tr>
+      <td>setContents(newContents: string)</td>
+      <td>void</td>
+      <td>툴팁 컨텐츠를 변경한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/25 14:47</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="./assets/favicon.ico">
+    <link href="../../../assets/styles/default.css" rel="stylesheet" id="ThemeFile" />
+    <link href="../../../assets/okadia.css" rel="stylesheet" />
+    <link href="../../../assets/theme.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Squada+One&display=swap" rel="stylesheet" />
+    <script src="../../../assets/components.js"></script>
+    <script src="../../../assets/js/gnui.js"></script>
+  </head>
+  <body>
+    <div class="aigis-container">
+      <header class="aigis-header gn-gcolor is-primary">
+        <span><a href="../../../index.html" class="main-link" style="font-family: 'Squada One', cursive">GNUI</a></span>
+        <span class="has-text-invert" style="font-size: 1em; padding-left: 10px">Start your next web project with GNUI.</span>
+        <div class="gn-select is-medium">
+          <select id="ThemeSelector">
+            
+            <option value="default">default</option>
+            
+            <option value="nac">nac</option>
+            
+            <option value="insights">insights</option>
+            
+            <option value="gpi">gpi</option>
+            
+            <option value="ztnac">ztnac</option>
+            
+            <option value="green24">green24</option>
+            
+          </select>
+        </div>
+        <div>
+          <a class="gn-button is-primary util-link" href="../../../category/Utils/index.html">
+            <span class="gn-icon is-small">
+              <i class="fas fa-tools"></i>
+            </span>
+            Gn.util
+          </a>
+        </div>
+      </header>
+      <div class="aigis-sidemenu">
+  <nav class="gn-tree is-borderless is-large left-menu"></nav>
+</div>
+
+<script>
+  window.Gn = window.gnui;
+
+  Gn.ready(function () {
+    var leftMenu = setTree('COLOR,COMPONENT/Alert(js),COMPONENT/Bignumber,COMPONENT/Breadcrumb,COMPONENT/Calendar(js),COMPONENT/Card,COMPONENT/Chart(js),COMPONENT/Datagrid(js),COMPONENT/Datalist(js),COMPONENT/Growl(js),COMPONENT/JsonView(js),COMPONENT/Loader(js),COMPONENT/MenuButton(js),COMPONENT/Message(js),COMPONENT/Modal(js),COMPONENT/Pagination,COMPONENT/Panel,COMPONENT/Progressbar(js),COMPONENT/Tab(js),COMPONENT/Tagcloud(js),COMPONENT/Tooltip(js),COMPONENT/Tree(js),CONTROLS/Button(js),CONTROLS/Checkbox,CONTROLS/Colorpicker(js),CONTROLS/Datepicker(js),CONTROLS/Dropdown(js),CONTROLS/File,CONTROLS/Form/Control,CONTROLS/Form/Field,CONTROLS/Form/Plain,CONTROLS/Input,CONTROLS/MultiText(js),CONTROLS/Picklist(js),CONTROLS/Radio,CONTROLS/Select,CONTROLS/SelectButton(js),CONTROLS/Slider,CONTROLS/Switch(js),CONTROLS/SyntaxInput(js),CONTROLS/Textarea,CONTROLS/Time(js),ELEMENTS/Box,ELEMENTS/Icon,ELEMENTS/Image,ELEMENTS/List,ELEMENTS/Table,ELEMENTS/Tag,ELEMENTS/Title,LAYOUT/Container,LAYOUT/Grid,LAYOUT/Splitter(js),UTILITY,Utils'.split(','));
+    var jsComps = ''.split(',');
+    delete leftMenu.Utils;
+    Gn.util.append('.left-menu', renderTree(leftMenu));
+    Gn.util.scrollIntoView(Gn.util.$('.tree-item.is-active'), 300);
+
+    function renderTree(menus) {
+      var $depths = Gn.util.$('<ul></ul>');
+      Gn.util.each(menus, function (child, menu) {
+        if (Gn.util.isString(child)) {
+          Gn.util.append($depths, renderMenu(menu, '../../../category/' + child + '/index.html', location.href.indexOf(child + '/') > -1));
+        } else {
+          var $_depth = renderMenu(menu, '');
+          Gn.util.append($_depth, renderTree(child));
+          Gn.util.append($depths, $_depth);
+        }
+      });
+      return $depths;
+    }
+
+    function renderMenu(name, link, isActive) {
+      var $_menu;
+      if (link === '') {
+        $_menu = Gn.util.$('<li>' + name + '</li>');
+      } else {
+        var menuClass = isActive ? ' is-active' : '';
+        $_menu = Gn.util.$('<li><a href="' + link + '"><div class="tree-item' + menuClass + '">' + name.split('(js)').join('') + '</a></div></li>');
+      }
+      if (name.indexOf('(js)') > 0) {
+        Gn.util.append(Gn.util.find('.tree-item', $_menu), Gn.util.$('<span class="gn-tag is-small is-info-light">JS</span>'));
+      }
+      return $_menu;
+    }
+
+    function setTree(categorys) {
+      var menus = {};
+
+      categorys.forEach(function (category) {
+        parseTree(menus, category.split('/'), category);
+      });
+      return menus;
+    }
+
+    function parseTree(parents, child, catgry) {
+      var _depth = child.shift();
+      if (parents[_depth] === undefined) {
+        parents[_depth] = {};
+      }
+      if (child.length === 1) {
+        parents[_depth][child] = catgry;
+      } else if (child.length > 1) {
+        parseTree(parents[_depth], child, catgry);
+      } else {
+        parents[_depth] = catgry;
+      }
+    }
+  });
+</script>
+
+      <div class="aigis-contents">
+        <div class="aigis-contents__body">
+           
+<div>
+  
+  <div class="aigis-module JsonView">
+    <h2 class="aigis-module__heading" id="JsonView">JsonView</h2>
+    <div class="aigis-module__filepath">/scss/components/jsonview.scss</div>
+    <div class="aigis-tags">
+       
+      <span class="gn-tag">v.0.1.0</span>
+       
+    </div>
+     <!-- <div id="ComponentTab">
+  <ul>
+    <li><a href="#styleguide">Style</a></li>
+    <li>
+      <a href="#scriptguide"
+        >Script <span class="gn-icon"><i class="fas fa-code"></i></span
+      ></a>
+    </li>
+  </ul>
+</div> -->
+  <h3 id="-">기본 사용</h3>
+<ul>
+<li>Json 데이터를 화면에 표시하기 위한 컴포넌트</li>
+<li>Object : key-value 형식으로 출력</li>
+<li>Array(Object) : 테이블 그리드 형식으로 출력</li>
+<li>Array(string,number) : 배열 항목을 텍스트로 병합(,)하여 출력</li>
+</ul>
+<h3 id="-">생성 옵션</h3>
+<div class="aigis-preview">
+
+<div class="new-jsonview"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-jsonview<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'jsonview'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.new-jsonview'</span><span class="token punctuation" >,</span>
+  schema<span class="token punctuation" >:</span> {
+    Type<span class="token punctuation" >:</span> <span class="token string" >'array'</span><span class="token punctuation" >,</span>
+    Disp<span class="token punctuation" >:</span> <span class="token string" >'aws sample 정보'</span><span class="token punctuation" >,</span>
+    Description<span class="token punctuation" >:</span> <span class="token string" >'aws sample 정보 설명'</span><span class="token punctuation" >,</span>
+    Items<span class="token punctuation" >:</span> {
+      Type<span class="token punctuation" >:</span> <span class="token string" >'object'</span><span class="token punctuation" >,</span>
+      Properties<span class="token punctuation" >:</span> {
+        index<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'checkbox'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >''</span>
+        }<span class="token punctuation" >,</span>
+        _id<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'string'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >'인스턴스ID'</span><span class="token punctuation" >,</span>
+          Description<span class="token punctuation" >:</span> <span class="token string" >'인스턴스ID입니다.'</span>
+        }<span class="token punctuation" >,</span>
+        _type<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'string'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >'수집기타입'</span>
+        }<span class="token punctuation" >,</span>
+        test1<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'number'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >'Test1 Value'</span>
+        }<span class="token punctuation" >,</span>
+        test2<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'number'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >'Test2 Value'</span>
+        }<span class="token punctuation" >,</span>
+        updated<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'datetime'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >'마지막 업데이트'</span><span class="token punctuation" >,</span>
+          <span class="token variable" >$ref</span><span class="token punctuation" >:</span> <span class="token string" >'#/$defs/Datas'</span>
+        }<span class="token punctuation" >,</span>
+        nodes<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'object'</span><span class="token punctuation" >,</span>
+          Disp<span class="token punctuation" >:</span> <span class="token string" >'노드정보'</span><span class="token punctuation" >,</span>
+          Properties<span class="token punctuation" >:</span> {
+            obj1<span class="token punctuation" >:</span> {
+              Type<span class="token punctuation" >:</span> <span class="token string" >'string'</span><span class="token punctuation" >,</span>
+              Disp<span class="token punctuation" >:</span> <span class="token string" >'obj1'</span>
+            }<span class="token punctuation" >,</span>
+            obj2<span class="token punctuation" >:</span> {
+              Type<span class="token punctuation" >:</span> <span class="token string" >'integer'</span><span class="token punctuation" >,</span>
+              Disp<span class="token punctuation" >:</span> <span class="token string" >'obj2'</span>
+            }
+          }
+        }
+      }<span class="token punctuation" >,</span>
+      Required<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'_type'</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+      Hidden<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'test1'</span><span class="token punctuation" >,</span> <span class="token string" >'test2'</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+      SortItems<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'_id'</span><span class="token punctuation" >]</span>
+    }<span class="token punctuation" >,</span>
+    <span class="token variable" >$defs</span><span class="token punctuation" >:</span> {
+      Datas<span class="token punctuation" >:</span> {
+        Type<span class="token punctuation" >:</span> <span class="token string" >'array'</span><span class="token punctuation" >,</span>
+        Disp<span class="token punctuation" >:</span> <span class="token string" >'추가 데이터 정보'</span><span class="token punctuation" >,</span>
+        Items<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >'object'</span><span class="token punctuation" >,</span>
+          Properties<span class="token punctuation" >:</span> {
+            field1<span class="token punctuation" >:</span> {
+              Type<span class="token punctuation" >:</span> <span class="token string" >'string'</span><span class="token punctuation" >,</span>
+              Disp<span class="token punctuation" >:</span> <span class="token string" >'필드 1'</span>
+            }<span class="token punctuation" >,</span>
+            field2<span class="token punctuation" >:</span> {
+              Type<span class="token punctuation" >:</span> <span class="token string" >'number'</span>
+            }<span class="token punctuation" >,</span>
+            datas<span class="token punctuation" >:</span> {
+              Type<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token string" >'array'</span><span class="token punctuation" >,</span> <span class="token string" >'string'</span><span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+              Items<span class="token punctuation" >:</span> {
+                Type<span class="token punctuation" >:</span> <span class="token string" >'object'</span><span class="token punctuation" >,</span>
+                Properties<span class="token punctuation" >:</span> {
+                  id<span class="token punctuation" >:</span> {
+                    Type<span class="token punctuation" >:</span> <span class="token string" >'number'</span><span class="token punctuation" >,</span>
+                    Disp<span class="token punctuation" >:</span> <span class="token keyword" >null</span>
+                  }<span class="token punctuation" >,</span>
+                  text<span class="token punctuation" >:</span> {
+                    Type<span class="token punctuation" >:</span> <span class="token string" >'string'</span><span class="token punctuation" >,</span>
+                    Disp<span class="token punctuation" >:</span> <span class="token keyword" >null</span>
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }<span class="token punctuation" >,</span>
+  data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+    {
+      index<span class="token punctuation" >:</span> <span class="token number" >0</span><span class="token punctuation" >,</span>
+      _id<span class="token punctuation" >:</span> <span class="token string" >'d3185f78-7221-103a-8002-0272452c0706'</span><span class="token punctuation" >,</span>
+      _type<span class="token punctuation" >:</span> <span class="token string" >'aws'</span><span class="token punctuation" >,</span>
+      test1<span class="token punctuation" >:</span> <span class="token number" >1234</span><span class="token punctuation" >,</span>
+      test2<span class="token punctuation" >:</span> <span class="token number" >1231.23</span><span class="token punctuation" >,</span>
+      updated<span class="token punctuation" >:</span> <span class="token number" >1603427314109</span><span class="token punctuation" >,</span>
+      nodes<span class="token punctuation" >:</span> {
+        obj1<span class="token punctuation" >:</span> <span class="token string" >'value'</span><span class="token punctuation" >,</span>
+        obj2<span class="token punctuation" >:</span> <span class="token number" >123</span>
+      }<span class="token punctuation" >,</span>
+      Datas<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+        {
+          field1<span class="token punctuation" >:</span> <span class="token string" >'test1'</span><span class="token punctuation" >,</span>
+          field2<span class="token punctuation" >:</span> <span class="token number" >123</span><span class="token punctuation" >,</span>
+          datas<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >1</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data1'</span>
+            }<span class="token punctuation" >,</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data2'</span>
+            }
+          <span class="token punctuation" >]</span>
+        }<span class="token punctuation" >,</span>
+        {
+          field1<span class="token punctuation" >:</span> <span class="token string" >'test2'</span><span class="token punctuation" >,</span>
+          field2<span class="token punctuation" >:</span> <span class="token number" >321</span><span class="token punctuation" >,</span>
+          datas<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >1</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data3'</span>
+            }<span class="token punctuation" >,</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data4'</span>
+            }
+          <span class="token punctuation" >]</span>
+        }<span class="token punctuation" >,</span>
+        {
+          field1<span class="token punctuation" >:</span> <span class="token string" >'test2'</span><span class="token punctuation" >,</span>
+          field2<span class="token punctuation" >:</span> <span class="token number" >321</span><span class="token punctuation" >,</span>
+          datas<span class="token punctuation" >:</span> <span class="token string" >'just text'</span>
+        }
+      <span class="token punctuation" >]</span>
+    }<span class="token punctuation" >,</span>{
+      index<span class="token punctuation" >:</span> <span class="token number" >1</span><span class="token punctuation" >,</span>
+      _id<span class="token punctuation" >:</span> <span class="token string" >'d3185f78-7221-103a-8002-0125213c0706'</span><span class="token punctuation" >,</span>
+      _type<span class="token punctuation" >:</span> <span class="token string" >'aws'</span><span class="token punctuation" >,</span>
+      test1<span class="token punctuation" >:</span> <span class="token number" >1234</span><span class="token punctuation" >,</span>
+      test2<span class="token punctuation" >:</span> <span class="token number" >1231.23</span><span class="token punctuation" >,</span>
+      updated<span class="token punctuation" >:</span> <span class="token number" >1603427314109</span><span class="token punctuation" >,</span>
+      nodes<span class="token punctuation" >:</span> {
+        obj1<span class="token punctuation" >:</span> <span class="token string" >'value'</span><span class="token punctuation" >,</span>
+        obj2<span class="token punctuation" >:</span> <span class="token number" >123</span>
+      }<span class="token punctuation" >,</span>
+      Datas<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+        {
+          field1<span class="token punctuation" >:</span> <span class="token string" >'test1'</span><span class="token punctuation" >,</span>
+          field2<span class="token punctuation" >:</span> <span class="token number" >123</span><span class="token punctuation" >,</span>
+          datas<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >1</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data1'</span>
+            }<span class="token punctuation" >,</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data2'</span>
+            }
+          <span class="token punctuation" >]</span>
+        }<span class="token punctuation" >,</span>
+        {
+          field1<span class="token punctuation" >:</span> <span class="token string" >'test2'</span><span class="token punctuation" >,</span>
+          field2<span class="token punctuation" >:</span> <span class="token number" >321</span><span class="token punctuation" >,</span>
+          datas<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >1</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data3'</span>
+            }<span class="token punctuation" >,</span>
+            {
+              id<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span>
+              text<span class="token punctuation" >:</span> <span class="token string" >'data4'</span>
+            }
+          <span class="token punctuation" >]</span>
+        }<span class="token punctuation" >,</span>
+        {
+          field1<span class="token punctuation" >:</span> <span class="token string" >'test2'</span><span class="token punctuation" >,</span>
+          field2<span class="token punctuation" >:</span> <span class="token number" >321</span><span class="token punctuation" >,</span>
+          datas<span class="token punctuation" >:</span> <span class="token string" >'just text'</span>
+        }
+      <span class="token punctuation" >]</span>
+    }
+  <span class="token punctuation" >]</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+
+</code></pre><div class="aigis-preview">
+
+<div class="new-rawview"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-rawview<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'jsonview'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.new-rawgrid'</span><span class="token punctuation" >,</span>
+  data<span class="token punctuation" >:</span> <span class="token string" >'{"_id": "d3185f78-7221-103a-8002-0272452c0706","_type": "aws","test1": 1234,"test2": 1231.23,"nodes" : {"obj1":"value","obj2":123},"datas": [{"field1":"test1","field2":123,"datas":["data1","data2"]},{"field1":"test2","field2":321,"datas":["data3","data4"]}]}'</span>
+}<span class="token punctuation" >)</span>
+</code></pre><div class="aigis-preview">
+
+<div class="add-jsonview"></div>
+</div>
+
+<pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>add-jsonview<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
+<pre><code>Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'jsonview'</span><span class="token punctuation" >,</span> {
+  target<span class="token punctuation" >:</span> <span class="token string" >'.add-jsonview'</span><span class="token punctuation" >,</span>
+  schema<span class="token punctuation" >:</span> {
+    Type<span class="token punctuation" >:</span> <span class="token string" >"array"</span><span class="token punctuation" >,</span>
+    Items<span class="token punctuation" >:</span> {
+      Type<span class="token punctuation" >:</span> <span class="token string" >'object'</span><span class="token punctuation" >,</span>
+      Properties<span class="token punctuation" >:</span> {
+        bignum<span class="token punctuation" >:</span> {
+          Type<span class="token punctuation" >:</span> <span class="token string" >"bignumber"</span>
+        }
+      }
+    }
+  }<span class="token punctuation" >,</span>
+  data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>{
+    bignum<span class="token punctuation" >:</span> {
+      CPU<span class="token punctuation" >:</span> <span class="token number" >23.34</span><span class="token punctuation" >,</span>
+      RAM<span class="token punctuation" >:</span> {
+        value<span class="token punctuation" >:</span> <span class="token number" >26</span><span class="token punctuation" >,</span>
+        data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span><span class="token number" >0</span><span class="token punctuation" >,</span> <span class="token number" >23</span><span class="token punctuation" >,</span> <span class="token number" >33</span><span class="token punctuation" >,</span> <span class="token number" >0</span><span class="token punctuation" >]</span>
+      }
+    }
+  }<span class="token punctuation" >]</span>
+}<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+</code></pre><table class="gn-table is-full is-border">
+  <thead>
+    <th colspan="2">name</th>
+    <th>type</th>
+    <th>default</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="2">target</td>
+      <td>string</td>
+      <td></td>
+      <td>jsonview를 생성할 대상의 선택자(selector)</td>
+    </tr>
+    <tr>
+      <td colspan="2">schema</td>
+      <td>Object</td>
+      <td></td>
+      <td>json <super>*</super>gnschema. 생략 시, data를 기준으로 출력된다.</td>
+    </tr>
+    <tr>
+      <td colspan="2">data</td>
+      <td>Array | Object</td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan="2">defWidth</td>
+      <td>string</td>
+      <td>&#39;auto&#39;</td>
+      <td>Object key 값 출력 넓이. &#39;auto&#39;로 설정 시 컨텐츠에 맞춤</td>
+    </tr>
+    <tr>
+      <td colspan="2">onSort</td>
+      <td>Function(key, sort, schema)</td>
+      <td></td>
+      <td>schema의 SortItems에 설정된 항목 정렬 시 수행 이벤트</td>
+    </tr>
+    <tr>
+      <td colspan="2">onSelect</td>
+      <td>Function(value, key, obj, e)</td>
+      <td></td>
+      <td>그리드 형식으로 출력된 항목을 클릭 시 수행 이벤트</td>
+    </tr>
+    <tr>
+      <td colspan="2">convert</td>
+      <td>Function(convertername, type, value): string</td>
+      <td></td>
+      <td>데이터를 컨버팅하는 함수.<br> 스키마에 설정된 Converter가 존재할 시 해당 함수를 실행하여 리턴된 결과를 렌더링한다.<br>text 또는 html 사용 가능.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="-">메소드</h3>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>return</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>reRender(param:{data, schema?))</td>
+      <td>void</td>
+      <td>전달된 데이트로 그리드를 다시 렌더링한다</td>
+    </tr>
+    <tr>
+      <td>getChecked()</td>
+      <td>Array<string></td>
+      <td>checkbox 타입이 존재하는 경우, 체크된 항목의 데이터를 배열로 리턴한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 id="-gnschema">*gnschema</h3>
+<h4 id="attributes">Attributes</h4>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>attribute</th>
+    <th>description</th>
+    <th></th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Type</td>
+      <td>데이터 타입</td>
+      <td>아래 단일타입, 복합타입 참조</td>
+    </tr>
+    <tr>
+      <td>Disp</td>
+      <td>항목명</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Description</td>
+      <td>항목설명</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>RefURL</td>
+      <td>링크</td>
+      <td>아래 RefURL 사용법 참조</td>
+    </tr>
+    <tr>
+      <td>Target</td>
+      <td>링크(RefURL) 타겟</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Items</td>
+      <td>Array의 항목 기술</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Properties</td>
+      <td>Object의 항목 기술</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Hidden</td>
+      <td>화면에 출력하지 않을 항목의 배열</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>SortItems</td>
+      <td>정렬아이콘 출력 필드(Object Array 타입에서만 동작)의 배열</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Required</td>
+      <td>필수 항목 필드의 배열</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Disabled</td>
+      <td>클릭 이벤트 비활성화 필드의 배열</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Style</td>
+      <td>inline 스타일</td>
+      <td>ex. &#39;font-size: 12px; display: block; width: 200px&#39;</td>
+    </tr>
+    <tr>
+      <td>StyleClass</td>
+      <td>스타일 클래스명</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Converter</td>
+      <td>데이터를 컨버팅할 컨버터 convertername, type, <em>value</em>를 배열로 넣음<br><em>value</em>에 {{mustache}} 구문 사용가능(<em>RefURL 참조) 생략 시 해당 항목의 데이터 바인딩</td>
+      <td> <span class="has-text-danger"></em> jsonview 컴포넌트 생성 시 convert 메서드를 정의해주어야 사용가능</span></td>
+    </tr>
+    <tr>
+      <td>$ref - $defs</td>
+      <td>참조 데이터</td>
+      <td>아래 $ref-$defs 항목 참조</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="-">단일타입</h4>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>type</th>
+    <th>schema</th>
+    <th>data</th>
+    <th>output</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>string</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;string&quot;,
+  &quot;RefURL&quot;: &quot;<a href="http://www.genians.com&quot;" title="null">http://www.genians.com&quot;</a>,
+  &quot;Target&quot;: &quot;_blank&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+&quot;다람쥐 헌 쳇바퀴&quot;
+        </pre>
+      </td>
+      <td>
+        <div class="type-string"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>number</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;number&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+10001
+        </pre>
+      </td>
+      <td>
+        <div class="type-number"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>byte</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;byte&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+100000000
+        </pre>
+      </td>
+      <td>
+        <div class="type-byte"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>datetime</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;datetime&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+1603427314109
+        </pre>
+      </td>
+      <td>
+        <div class="type-datetime"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>html</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;html&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+&#39;&lt;img
+  src=&quot;/styleguide/assets/image.png&quot;
+  alt=&quot;asset&quot;
+/&gt;&#39;
+        </pre>
+      </td>
+      <td>
+        <div class="type-html"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>checkbox</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;checkbox&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+{
+  value: &#39;100&#39;,
+  checked: true,
+  // hidden: true
+  // 화면에 표시하지 않으려면 true
+  // {{mustache}} 구문을 사용하여 조건문을 설정할 수 있다.
+}
+        </pre>
+        <pre>
+100
+        </pre>
+      </td>
+      <td>
+        <div class="type-checkbox"></div>
+        <div class="type-checkbox2"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>array</td>
+      <td>
+        <pre>
+{
+  Type: &#39;array&#39;,
+  Items: {
+    Type: [&#39;string&#39;,&#39;number&#39;],
+    RefURL: &#39;<a href="https://search.naver.com/search.naver?query={{data}}&#39;" title="null">https://search.naver.com/search.naver?query={{data}}&#39;</a>
+  }
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+[&quot;빨강&quot;,&quot;주황&quot;,&quot;노랑&quot;,&quot;초록&quot;,&quot;파랑&quot;]
+        </pre>
+      </td>
+      <td>
+        <div class="type-array1"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>percent</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;percent&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+52
+        </pre>
+      </td>
+      <td>
+        <div class="type-percent"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>bignumber</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;bignumber&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+{
+  온도: 24,
+  습도: {
+    value: 60,
+    data: [0,10,21,5,18]
+  }
+}
+        </pre>
+      </td>
+      <td>
+        <div class="type-bignumber"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>chart</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;chart&quot;
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+{
+  type: &#39;donut&#39;,
+  series: [30, 200, 100],
+  labels: [&#39;data1&#39;,&#39;data2&#39;,&#39;data3&#39;]
+}
+        </pre>
+      </td>
+      <td>
+        <div class="type-chart"></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h4 id="-">복합 타입</h4>
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>type</th>
+    <th>schema</th>
+    <th>data</th>
+    <th>output</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>object</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;object&quot;,
+  &quot;Disp&quot;: &quot;&quot;,
+  &quot;Description&quot;: &quot;&quot;,
+  &quot;Properties&quot;: {
+    &quot;data-string&quot;: {
+      &quot;Type&quot;: &quot;string&quot;,
+      &quot;Disp&quot;: &quot;물품명&quot;,
+      &quot;Description&quot;: &quot;product name&quot;
+    },
+    &quot;data-number&quot;: {
+      &quot;Type&quot;: &quot;number&quot;,
+      &quot;Disp&quot;: &quot;재고&quot;
+    },
+    &#39;data-reorder&#39;: {
+      Type: &#39;string&#39;,
+      Disp: &#39;재주문가능&#39;
+    }
+  },
+  Hidden: [&#39;data-reorder&#39;] // 화면에 나타내지 않을 프로퍼티명 배열
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+{
+  &#39;data-string&#39;: &#39;부뚜막&#39;,
+  &#39;data-number&#39;: 1489,
+  &#39;data-reorder&#39;: &#39;false&#39;
+}
+        </pre>
+      </td>
+      <td>
+        <div class="type-object"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>array</td>
+      <td>
+        <pre>
+{
+  &quot;Type&quot;: &quot;array&quot;,
+  &quot;Items&quot;: {
+    &quot;Type&quot;: &quot;object&quot;,
+    &quot;Properties&quot;: {
+      &quot;data-string&quot;: {
+        &quot;Type&quot;: &#39;string&#39;,
+        &quot;Disp&quot;: &#39;물품명&#39;,
+        &quot;Description&quot;: &quot;product name&quot;
+      },
+      &quot;data-number&quot;: {
+        &quot;Type&quot;: &#39;number&#39;,
+        &quot;Disp&quot;: &#39;재고&#39;
+      }
+    }
+  }
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+[{
+  &#39;data-string&#39;: &#39;부뚜막&#39;,
+  &#39;data-number&#39;: 1489
+},{
+  &#39;data-string&#39;: &#39;솥뚜껑&#39;,
+  &#39;data-number&#39;: 34
+}]
+        </pre>
+      </td>
+      <td>
+        <div class="type-array2"></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 id="refurl-">RefURL 사용법</h3>
+<h4 id="-mustache-">링크 파라메터에 {{mustache}} 구문을 사용할 수 있다.</h4>
+<div class="gn-box-no-line">
+  <i><a href="https://www.google.com/search?q={{data}}" title="null">https://www.google.com/search?q={{data}}</a></i>
+</div>
+
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>data</td>
+      <td>해당 항목에 대한 데이터를 반환한다.</td>
+    </tr>
+    <tr>
+      <td>schema</td>
+      <td>해당 항목에 대한 스키마를 반환한다.</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>전체 데이터 루트를 나타낸다.<br/>루트로부터 <a href="https://github.com/dchester/jsonpath#jsonpath-syntax" target="_blank">jsonpath 문법<span class="gn-icon is-small"><i class="fas fa-external-link-alt"></i></span></a>을 사용할 수 있다.<br/>*property key에 특수문자가 포함되는 경우 $[&#39;property-key&#39;] 와 같이 사용한다.</td>
+    </tr>
+    <tr>
+      <td>parent</td>
+      <td>해당 항목의 상위 데이터를 반환한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 id="jsonpath-key-">jsonpath key 사용</h3>
+<ul>
+<li>object properties의 key 값으로 jsonpath를 사용할 수 있다.</li>
+</ul>
+<h3 id="style-styleclass-">Style, StyleClass 사용</h3>
+<h4 id="-mustache-">{{mustache}} 구문을 사용하여 조건문을 설정할 수 있다.</h4>
+<div class="gn-box-no-line">
+  <i>{{parent.test1 == &quot;1234&quot; ? &quot;color: red; font-weight: 900&quot; : &quot;color: blue;&quot;}}</i>
+</div>
+
+<table class="gn-table is-full is-border">
+  <thead>
+    <th>name</th>
+    <th>description</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>data</td>
+      <td>해당 항목에 대한 데이터를 반환한다.</td>
+    </tr>
+    <tr>
+      <td>parent</td>
+      <td>해당 항목의 상위 데이터를 반환한다.</td>
+    </tr>
+    <tr>
+      <td>$</td>
+      <td>전체 데이터를 반환한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="defs-ref-">defs - ref 사용</h3>
+<ul>
+<li>schema에 미리 정의된 defs 객체를 ref로 지정하는 경우, 해당 데이터는 tooltip 형태로 출력된다.</li>
+</ul>
+<p><table class="gn-table is-full is-border">
+  <thead>
+    <th>schema</th>
+    <th>data</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <pre>
+{
+  Type: &#39;array&#39;,
+  Items: {
+    Type: &#39;object&#39;,
+    Properties: {
+      &#39;$.COLLECTOR._id&#39;: {
+        Type: &#39;string&#39;,
+        Disp: &#39;인스턴스ID&#39;
+      },
+      &#39;$.COLLECTOR._type&#39;: {
+        Type: &#39;string&#39;,
+        Disp: &#39;타입&#39;,
+        $ref: &#39;#/$defs/Datas&#39;
+      },
+      &#39;$.COLLECTOR.nodes.obj2&#39;: {
+        Type: &#39;number&#39;,
+        Disp: &#39;No&#39;
+      }
+    }
+  },
+  $defs: {
+    Datas: {
+      Type: &#39;array&#39;,
+      Disp: &#39;Datas&#39;,
+      Items: {
+        Type: &#39;object&#39;,
+        Properties: {
+          field1: {
+            Type: &#39;string&#39;,
+            Disp: &#39;필드1&#39;
+          },
+          field2: {
+            Type: &#39;number&#39;,
+            Disp: &#39;필드2&#39;
+          },
+          field3: {
+            Type: &#39;string&#39;,
+            Disp: &#39;필드3&#39;
+          }
+        }
+      }
+    }
+  }
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+[
+  {
+    COLLECTOR: {
+      _id: &#39;data-1-id&#39;,
+      _type: &#39;collector&#39;,
+      test1: 0,
+      test2: 0,
+      nodes: {
+        obj1: &#39;&#39;,
+        obj2: 0
+      },
+      datas: {
+        field1: &#39;data-1&#39;,
+        field2: 0,
+        datas: [
+          {
+            field1: &#39;data-1&#39;,
+            field2: 0,
+            field3: &#39;data-1&#39;
+          },
+          {
+            field1: &#39;data-1&#39;,
+            field2: 0,
+            field3: &#39;data-1&#39;
+          }
+        ]
+      }
+    }
+  },
+  {
+    COLLECTOR: {
+      _id: &#39;data-2-id&#39;,
+      _type: &#39;collector&#39;,
+      test1: 1,
+      test2: 1,
+      nodes: {
+        obj1: &#39;&#39;,
+        obj2: 1
+      },
+      datas: {
+        field1: &#39;data-2&#39;,
+        field2: 1,
+        datas: [
+          {
+            field1: &#39;data-2&#39;,
+            field2: 1,
+            field3: &#39;data-2&#39;
+          },
+          {
+            field1: &#39;data-2&#39;,
+            field2: 1,
+            field3: &#39;data-2&#39;
+          }
+        ]
+      }
+    }
+  }
+]
+        </pre>
+      </td>
+    </tr>
+  </tbody>
+</table></p>
+<div class="path-key"></div>
+
+
+
+
+<h3 id="converter-">Converter 사용</h3>
+<ul>
+<li>schema Converter 항목을 추가하여 데이터를 변환출력 할 수 있다.</li>
+<li>생성옵션의 convert Function을 정의하여 사용할 수 있다.</li>
+</ul>
+<p><table class="gn-table is-full is-border">
+  <thead>
+    <th>schema</th>
+    <th>data</th>
+    <th>Converter</th>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <pre>
+{
+    Type: &#39;array&#39;,
+    Items: {
+        Type: &#39;object&#39;,
+        Properties: {
+            name: {
+                Type: &#39;string&#39;,
+                Disp: &#39;스위치명&#39;
+            },
+            status: {
+                Type: &#39;number&#39;,
+                Disp: &#39;동작상태&#39;,
+                Converter: [&#39;CodeImageConverter&#39;, &#39;OperStatus&#39;]
+            }
+        }
+    }
+}
+        </pre>
+      </td>
+      <td>
+        <pre>
+[
+    {
+        name: &#39;부뚜막&#39;,
+        status: 1
+    },
+    {
+        name: &#39;솥뚜껑&#39;,
+        status: 0
+    }
+]
+        </pre>
+      </td>
+      <td>
+        <pre>
+(name, type, value) =&gt; {
+    // name : &#39;CodeImageConverter&#39;
+    // type : &#39;OperStatus&#39;
+    // value : {data.status 값}
+    if (value === &#39;1&#39;) {
+        return &#39;미동작&#39;;
+    } else {
+        return &#39;동작&#39;;
+    }
+}
+        </pre>
+      </td>
+    </tr>
+  </tbody>
+</table></p>
+<div class="converter-view"></div>
+
+  </div>
+  
+</div>
+
+ 
+          <footer class="aigis-footer">Last update at 2024/04/25 14:47</footer>
+        </div>
+      </div>
+    </div>
+    <script src="../../../assets/guide.js"></script>
+  </body>
+</html>
