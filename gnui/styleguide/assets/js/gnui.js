@@ -52,22 +52,30 @@
 	  return typeof it === 'object' ? it !== null : typeof it === 'function';
 	};
 
-	var isObject$r = _isObject;
+	var isObject$q = _isObject;
 	var _anObject = function (it) {
-	  if (!isObject$r(it)) throw TypeError(it + ' is not an object!');
+	  if (!isObject$q(it)) throw TypeError(it + ' is not an object!');
 	  return it;
 	};
 
-	var isObject$q = _isObject;
-	var document$2 = _globalExports.document;
-	// typeof document.createElement is 'object' in old IE
-	var is = isObject$q(document$2) && isObject$q(document$2.createElement);
-	var _domCreate = function (it) {
-	  return is ? document$2.createElement(it) : {};
-	};
+	var _domCreate;
+	var hasRequired_domCreate;
+
+	function require_domCreate () {
+		if (hasRequired_domCreate) return _domCreate;
+		hasRequired_domCreate = 1;
+		var isObject = _isObject;
+		var document = _globalExports.document;
+		// typeof document.createElement is 'object' in old IE
+		var is = isObject(document) && isObject(document.createElement);
+		_domCreate = function (it) {
+		  return is ? document.createElement(it) : {};
+		};
+		return _domCreate;
+	}
 
 	var _ie8DomDefine = !_descriptors && !_fails(function () {
-	  return Object.defineProperty(_domCreate('div'), 'a', { get: function () { return 7; } }).a != 7;
+	  return Object.defineProperty(require_domCreate()('div'), 'a', { get: function () { return 7; } }).a != 7;
 	});
 
 	// 7.1.1 ToPrimitive(input [, PreferredType])
@@ -86,14 +94,14 @@
 	var anObject$q = _anObject;
 	var IE8_DOM_DEFINE$1 = _ie8DomDefine;
 	var toPrimitive$6 = _toPrimitive;
-	var dP$a = Object.defineProperty;
+	var dP$9 = Object.defineProperty;
 
 	_objectDp.f = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
 	  anObject$q(O);
 	  P = toPrimitive$6(P, true);
 	  anObject$q(Attributes);
 	  if (IE8_DOM_DEFINE$1) try {
-	    return dP$a(O, P, Attributes);
+	    return dP$9(O, P, Attributes);
 	  } catch (e) { /* empty */ }
 	  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
 	  if ('value' in Attributes) O[P] = Attributes.value;
@@ -109,14 +117,22 @@
 	  };
 	};
 
-	var dP$9 = _objectDp;
-	var createDesc$4 = _propertyDesc;
-	var _hide = _descriptors ? function (object, key, value) {
-	  return dP$9.f(object, key, createDesc$4(1, value));
-	} : function (object, key, value) {
-	  object[key] = value;
-	  return object;
-	};
+	var _hide;
+	var hasRequired_hide;
+
+	function require_hide () {
+		if (hasRequired_hide) return _hide;
+		hasRequired_hide = 1;
+		var dP = _objectDp;
+		var createDesc = _propertyDesc;
+		_hide = _descriptors ? function (object, key, value) {
+		  return dP.f(object, key, createDesc(1, value));
+		} : function (object, key, value) {
+		  object[key] = value;
+		  return object;
+		};
+		return _hide;
+	}
 
 	var _redefine = {exports: {}};
 
@@ -156,7 +172,7 @@
 	var _functionToString = _sharedExports('native-function-to-string', Function.toString);
 
 	var global$h = _globalExports;
-	var hide$4 = _hide;
+	var hide$4 = require_hide();
 	var has$a = _has;
 	var SRC = _uid('src');
 	var $toString$2 = _functionToString;
@@ -217,7 +233,7 @@
 
 	var global$g = _globalExports;
 	var core$2 = _coreExports;
-	var hide$3 = _hide;
+	var hide$3 = require_hide();
 	var redefine$3 = _redefineExports;
 	var ctx$8 = _ctx;
 	var PROTOTYPE$3 = 'prototype';
@@ -551,7 +567,7 @@
 	// Create object with fake `null` prototype: use iframe Object with cleared prototype
 	var createDict = function () {
 	  // Thrash, waste and sodomy: IE GC bug
-	  var iframe = _domCreate('iframe');
+	  var iframe = require_domCreate()('iframe');
 	  var i = enumBugKeys.length;
 	  var lt = '<';
 	  var gt = '>';
@@ -871,7 +887,7 @@
 	});
 
 	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-	$Symbol[PROTOTYPE$1][TO_PRIMITIVE$1] || _hide($Symbol[PROTOTYPE$1], TO_PRIMITIVE$1, $Symbol[PROTOTYPE$1].valueOf);
+	$Symbol[PROTOTYPE$1][TO_PRIMITIVE$1] || require_hide()($Symbol[PROTOTYPE$1], TO_PRIMITIVE$1, $Symbol[PROTOTYPE$1].valueOf);
 	// 19.4.3.5 Symbol.prototype[@@toStringTag]
 	setToStringTag($Symbol, 'Symbol');
 	// 20.2.1.9 Math[@@toStringTag]
@@ -1157,22 +1173,30 @@
 	  }, true);
 	}
 
-	// fast apply, http://jsperf.lnkit.com/fast-apply/5
-	var _invoke = function (fn, args, that) {
-	  var un = that === undefined;
-	  switch (args.length) {
-	    case 0: return un ? fn()
-	                      : fn.call(that);
-	    case 1: return un ? fn(args[0])
-	                      : fn.call(that, args[0]);
-	    case 2: return un ? fn(args[0], args[1])
-	                      : fn.call(that, args[0], args[1]);
-	    case 3: return un ? fn(args[0], args[1], args[2])
-	                      : fn.call(that, args[0], args[1], args[2]);
-	    case 4: return un ? fn(args[0], args[1], args[2], args[3])
-	                      : fn.call(that, args[0], args[1], args[2], args[3]);
-	  } return fn.apply(that, args);
-	};
+	var _invoke;
+	var hasRequired_invoke;
+
+	function require_invoke () {
+		if (hasRequired_invoke) return _invoke;
+		hasRequired_invoke = 1;
+		// fast apply, http://jsperf.lnkit.com/fast-apply/5
+		_invoke = function (fn, args, that) {
+		  var un = that === undefined;
+		  switch (args.length) {
+		    case 0: return un ? fn()
+		                      : fn.call(that);
+		    case 1: return un ? fn(args[0])
+		                      : fn.call(that, args[0]);
+		    case 2: return un ? fn(args[0], args[1])
+		                      : fn.call(that, args[0], args[1]);
+		    case 3: return un ? fn(args[0], args[1], args[2])
+		                      : fn.call(that, args[0], args[1], args[2]);
+		    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+		                      : fn.call(that, args[0], args[1], args[2], args[3]);
+		  } return fn.apply(that, args);
+		};
+		return _invoke;
+	}
 
 	var _bind;
 	var hasRequired_bind;
@@ -1182,7 +1206,7 @@
 		hasRequired_bind = 1;
 		var aFunction = _aFunction;
 		var isObject = _isObject;
-		var invoke = _invoke;
+		var invoke = require_invoke();
 		var arraySlice = [].slice;
 		var factories = {};
 
@@ -1929,7 +1953,7 @@
 		var IteratorPrototype = {};
 
 		// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-		_hide(IteratorPrototype, _wksExports('iterator'), function () { return this; });
+		require_hide()(IteratorPrototype, _wksExports('iterator'), function () { return this; });
 
 		_iterCreate = function (Constructor, NAME, next) {
 		  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -1947,7 +1971,7 @@
 		var LIBRARY = require_library();
 		var $export = _export;
 		var redefine = _redefineExports;
-		var hide = _hide;
+		var hide = require_hide();
 		var Iterators = _iterators;
 		var $iterCreate = require_iterCreate();
 		var setToStringTag = _setToStringTag;
@@ -2342,7 +2366,7 @@
 	var TO_PRIMITIVE = _wksExports('toPrimitive');
 	var proto$3 = Date.prototype;
 
-	if (!(TO_PRIMITIVE in proto$3)) _hide(proto$3, TO_PRIMITIVE, require_dateToPrimitive());
+	if (!(TO_PRIMITIVE in proto$3)) require_hide()(proto$3, TO_PRIMITIVE, require_dateToPrimitive());
 
 	// 22.1.2.2 / 15.4.3.2 Array.isArray(arg)
 	var $export$K = _export;
@@ -2789,7 +2813,7 @@
 	// 22.1.3.31 Array.prototype[@@unscopables]
 	var UNSCOPABLES = _wksExports('unscopables');
 	var ArrayProto$1 = Array.prototype;
-	if (ArrayProto$1[UNSCOPABLES] == undefined) _hide(ArrayProto$1, UNSCOPABLES, {});
+	if (ArrayProto$1[UNSCOPABLES] == undefined) require_hide()(ArrayProto$1, UNSCOPABLES, {});
 	var _addToUnscopables = function (key) {
 	  ArrayProto$1[UNSCOPABLES][key] = true;
 	};
@@ -3100,7 +3124,7 @@
 		hasRequired_fixReWks = 1;
 
 		var redefine = _redefineExports;
-		var hide = _hide;
+		var hide = require_hide();
 		var fails = _fails;
 		var defined = _defined;
 		var wks = _wksExports;
@@ -3562,9 +3586,9 @@
 	var _forOfExports = _forOf.exports;
 
 	var ctx$4 = _ctx;
-	var invoke = _invoke;
+	var invoke = require_invoke();
 	var html$1 = _html;
-	var cel = _domCreate;
+	var cel = require_domCreate();
 	var global$a = _globalExports;
 	var process$2 = global$a.process;
 	var setTask = global$a.setImmediate;
@@ -4498,7 +4522,7 @@
 	}, weak, false, true);
 
 	var global$5 = _globalExports;
-	var hide$2 = _hide;
+	var hide$2 = require_hide();
 	var uid$1 = _uid;
 	var TYPED = uid$1('typed_array');
 	var VIEW$2 = uid$1('view');
@@ -4544,7 +4568,7 @@
 		var DESCRIPTORS = _descriptors;
 		var LIBRARY = require_library();
 		var $typed = _typed;
-		var hide = _hide;
+		var hide = require_hide();
 		var redefineAll = require_redefineAll();
 		var fails = _fails;
 		var anInstance = _anInstance;
@@ -4880,7 +4904,7 @@
 	  var ctx$1 = _ctx;
 	  var anInstance = _anInstance;
 	  var propertyDesc = _propertyDesc;
-	  var hide$1 = _hide;
+	  var hide$1 = require_hide();
 	  var redefineAll = require_redefineAll();
 	  var toInteger$1 = _toInteger;
 	  var toLength$3 = _toLength;
@@ -5953,7 +5977,7 @@
 	var getKeys = _objectKeys;
 	var redefine = _redefineExports;
 	var global$1 = _globalExports;
-	var hide = _hide;
+	var hide = require_hide();
 	var Iterators = _iterators;
 	var wks = _wksExports;
 	var ITERATOR = wks('iterator');
@@ -17893,6 +17917,7 @@
 	        }
 	        if (config.type === 'opened' && config.data.length) {
 	            styles.height = config.scrollHeight ? getUnit('height', config.scrollHeight) : 'auto';
+	            styles['max-height'] = config.maxHeight ? getUnit('height', config.maxHeight) : 'auto';
 	        }
 	        const renderOption = (item) => {
 	            return createElement("option", { value: item.value }, item.text);
