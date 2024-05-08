@@ -17917,6 +17917,7 @@
 	        }
 	        if (config.type === 'opened' && config.data.length) {
 	            styles.height = config.scrollHeight ? getUnit('height', config.scrollHeight) : 'auto';
+	            styles['max-height'] = config.maxHeight ? getUnit('height', config.maxHeight) : 'auto';
 	        }
 	        const renderOption = (item) => {
 	            return createElement("option", { value: item.value }, item.text);
