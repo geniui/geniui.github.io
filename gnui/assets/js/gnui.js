@@ -20256,6 +20256,7 @@
 	    }
 	}
 
+	let modal_index = 990;
 	class Modal extends GNCoreInstance {
 	    constructor(name, selector, options = {}) {
 	        super(name, selector, options);
@@ -20382,6 +20383,7 @@
 	        if (config.draggable) {
 	            const modal = find('.modal-content', this.$el);
 	            attr(modal, 'tabindex', '-1');
+	            css(modal, 'z-index', modal_index);
 	            drag(modal, {
 	                dragStart: () => {
 	                    modal.focus();
@@ -20405,6 +20407,7 @@
 	            resize(find('.modal-body', this.$el), [100, 160, window.screen.availHeight, window.screen.availWidth]);
 	        }
 	        this.$options.autoShow && this._hidden.show();
+	        modal_index++;
 	    }
 	}
 
