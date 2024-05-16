@@ -275,12 +275,14 @@ const components = {
         { value: 'item1', icon: 'home', text: '항목1' },
         { value: 'item2', icon: 'star', text: '항목2' },
         { value: 'item3', icon: 'heart', text: '항목3' },
-        { value: 'item4', text: '항목4' },
-        { value: 'item5', text: '&lt;항목5&gt;', html: '<p><strong>text</strong>가 있는 항목은 선택 시 <u>text</u>로 대체됩니다.</p>' },
-        { value: 'item6', html: '<p><strong>text</strong>가 없는 항목은 <u>선택</u>할 수 없습니다.</p>' }
+        { value: 'item4', icon: 'apple', text: 'apple' },
+        { value: 'item5', icon: 'linux', text: 'linux' },
+        { value: 'item6', icon: 'windows', text: 'windows' },
+        { value: 'item7', text: '&lt;항목5&gt;', html: '<p><strong>text</strong>가 있는 항목은 선택 시 <u>text</u>로 대체됩니다.</p>' },
+        { value: 'item8', html: '<p><strong>text</strong>가 없는 항목은 <u>선택</u>할 수 없습니다.</p>' }
       ],
       width: 150,
-      scrollHeight: 100
+      scrollHeight: 200
     });
     Gn.create('dropdown', {
       target: '.new-dropdown4',
