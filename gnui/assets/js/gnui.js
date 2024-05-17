@@ -13715,6 +13715,26 @@
 	function isArray$1(obj) {
 	    return Array.isArray(obj);
 	}
+	function toArray$1(value) {
+	    if (isArray$1(value)) {
+	        return value;
+	    }
+	    let parsedValue;
+	    // 만약 입력된 값이 JSON 문자열이라면, 파싱하여 배열로 변환합니다.
+	    if (typeof value === 'string') {
+	        try {
+	            parsedValue = JSON.parse(value);
+	        }
+	        catch (_a) {
+	            parsedValue = value.split(',');
+	        }
+	        if (Array.isArray(parsedValue)) {
+	            return parsedValue;
+	        }
+	    }
+	    // 입력된 값이 배열이 아니라면, 그 값을 하나의 요소로 갖는 배열을 반환합니다.
+	    return [value];
+	}
 	function isPlainObject$1(obj) {
 	    return Object.prototype.toString.call(obj) === '[object Object]';
 	}
@@ -15866,6 +15886,7 @@
 		tempDateByTime: tempDateByTime,
 		text: text$1,
 		textToMultiLangs: textToMultiLangs,
+		toArray: toArray$1,
 		toBoolean: toBoolean,
 		toDate: toDate,
 		toEventTargets: toEventTargets,
@@ -36225,13 +36246,16 @@
 	                let valueNode;
 	                let valueMode = 'string';
 	                if (schema) {
+	                    if (schema.Converter) {
+	                        schema.Converter = toArray$1(schema.Converter);
+	                    }
 	                    if (schema.Converter && isArray$1(schema.Converter) && this.$options.convert && isFunction(this.$options.convert)) {
 	                        const Name = schema.Converter[0];
 	                        const Type = schema.Converter[1] || '';
 	                        const Value = schema.Converter[2] || '{{data}}';
 	                        if (Name) {
 	                            const escapeValue = interpolateURL(Value, { data, schema, parent, root: this.$options.data });
-	                            data = this.$options.convert.call(this, Name, Type, escapeValue);
+	                            data = this.$options.convert(Name, Type, escapeValue);
 	                        }
 	                    }
 	                    if (schema.Type === 'datetime' || (isArray$1(schema.Type) && schema.Type.includes('datetime') && isDate(data))) {
