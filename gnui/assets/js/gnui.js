@@ -36276,8 +36276,7 @@
 	                        const checkIndex = Object.keys(this.subCheckboxs).length;
 	                        this.subCheckboxs[checkIndex] = parent !== null && parent !== void 0 ? parent : data;
 	                        valueNode =
-	                            isPlainObject$1(data) && hiddenChecks ? ('') : (createElement$1("label", { className: "gn-checkbox is-small" },
-	                                createElement$1("input", { type: "checkbox", className: "gn-checkbox-input", name: 'gn-checkbox-' + ((_a = key !== null && key !== void 0 ? key : schema.Disp) !== null && _a !== void 0 ? _a : 'value'), value: isPlainObject$1(data) ? data.value : data, checked: isPlainObject$1(data) ? data.checked : false, "data-check": checkIndex })));
+	                            isPlainObject$1(data) && hiddenChecks ? ('') : (createElement$1("input", { type: "checkbox", className: "gn-checkbox-input", name: 'gn-checkbox-' + ((_a = key !== null && key !== void 0 ? key : schema.Disp) !== null && _a !== void 0 ? _a : 'value'), value: isPlainObject$1(data) ? data.value : data, checked: isPlainObject$1(data) ? data.checked : false, "data-check": checkIndex }));
 	                    }
 	                    else if (schema.Type === 'html' || (isArray$1(schema.Type) && schema.Type.includes('html') && data && data.indexOf('<') > -1 && data.indexOf('>') > -1)) {
 	                        valueMode = 'html';
