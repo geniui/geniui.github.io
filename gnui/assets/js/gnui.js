@@ -36735,6 +36735,19 @@
 	            getValue: () => {
 	                return this.$options.value;
 	            },
+	            setValue: (value) => {
+	                if (!value) {
+	                    return;
+	                }
+	                this.$options.lang.forEach((lang) => {
+	                    if (!value[lang]) {
+	                        value[lang] = '';
+	                    }
+	                    const textInput = find(`[data-lang=${lang}]`, this.$el);
+	                    val(textInput, value[lang]);
+	                    trigger(textInput, 'keyup');
+	                });
+	            },
 	            disable: () => {
 	                this.$options.disabled = true;
 	                this._tab.disable();
@@ -36759,6 +36772,9 @@
 	        this.methods = {
 	            getValue() {
 	                return this._hidden.getValue();
+	            },
+	            setValue(value) {
+	                this._hidden.setValue(value);
 	            },
 	            disable() {
 	                this._hidden.disable();
