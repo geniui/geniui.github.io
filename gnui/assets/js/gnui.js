@@ -34859,7 +34859,7 @@
 	                        return (createElement$1("div", { className: 'gn-datagrid-body-cell btn-container ' + (col.key ? col.key : ''), style: cellStyle, "on-click": (e) => {
 	                                this._hidden.stopRowSelectEvent(e);
 	                            } },
-	                            createElement$1("span", { className: "gn-icon is-small ", "on-click": () => {
+	                            createElement$1("span", { className: "gn-icon is-small is-mono", "on-click": () => {
 	                                    !this.$options.disabled && this._hidden.deleteRow.call(this, _index);
 	                                } },
 	                                createElement$1("i", { className: "fas fa-trash" }))));
