@@ -33324,7 +33324,8 @@
 	                        (this.$options.value &&
 	                            (isArray$1(this.$options.value) ? this.$options.value.find((v) => v.value === option.value) : option.value === this.$options.value.value)
 	                            ? ' is-active'
-	                            : ''), "on-click": isArray$1(option.value) || !option.text ? null : this._hidden.select.bind(this, option), "data-value": isArray$1(option.value) ? '' : option.value },
+	                            : '') +
+	                        (this.$options.multiple ? ' has-checkbox' : ''), "on-click": isArray$1(option.value) || !option.text ? null : this._hidden.select.bind(this, option), "data-value": isArray$1(option.value) ? '' : option.value },
 	                    createElement$1("span", { className: "dropdown-text", innerHTML: option.html ? option.html : '' },
 	                        option.html ? ('') : this.$options.multiple ? (createElement$1("div", { className: "gn-checks is-small is-no-padding" },
 	                            createElement$1("input", { type: "checkbox", id: 'chk_' + index, defaultChecked: this.$options.value &&
