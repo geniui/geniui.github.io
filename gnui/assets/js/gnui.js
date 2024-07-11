@@ -35413,7 +35413,7 @@
 	                            })
 	                            : '',
 	                        !this.$options.readonly && this.$options.hasDelete
-	                            ? this._hidden.renderBtn('trash', 'danger', (_e) => {
+	                            ? this._hidden.renderBtn('trash', 'mono', (_e) => {
 	                                !this.$options.disabled && this._hidden.deleteRow(+index);
 	                            })
 	                            : '')));
