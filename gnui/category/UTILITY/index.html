@@ -347,19 +347,61 @@
 </code></pre>
 <h2 id="display">Display</h2>
 <ul>
-<li>hidden, invisible, block, inline-block, inline</li>
+<li>is-hidden, is-invisible, is-block, is-inline-block, is-inline, is-flex, is-space-between</li>
+</ul>
+<h2 id="less">LESS</h2>
+<ul>
+<li>is-marginless, is-paddingless, is-radiusless, is-shadowless</li>
+</ul>
+<h2 id="has">HAS</h2>
+<ul>
+<li>has-margin-top, has-margin-left, has-margin-bottom, has-margin-right</li>
 </ul>
 <h2 id="position-">Position 정렬</h2>
 <ul>
 <li>is-static, is-relative, is-absolute</li>
 </ul>
+<h2 id="mouse-poninter">Mouse Poninter</h2>
+<ul>
+<li>is-help, is-wait, is-not-allowed, is-pointer</li>
+</ul>
+<div class="aigis-preview">
+  <span class="gn-tag is-help">help</span>
+<span class="gn-tag is-wait">wait</span>
+<span class="gn-tag is-not-allowed">not-allowed</span>
+<span class="gn-tag is-pointer">pointer</span>
+<span class="gn-tag is-move">move</span></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-help<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>help<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-wait<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>wait<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-not-allowed<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>not-allowed<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-pointer<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>pointer<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-tag is-move<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>move<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+</code></pre>
+<h2 id="scroll">Scroll</h2>
+<ul>
+<li>has-min-scroll</li>
+</ul>
+<div class="aigis-preview">
+  <div class="has-min-scroll" style="height: 200px; overflow: scroll;">
+    <p>Content goes here...</p>
+    <p>More content...</p>
+    <p>Even more content...</p>
+</div></div>
+
+<pre><code class="language-html"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>has-min-scroll<span class="token punctuation" >"</span></span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >height</span><span class="token punctuation" >:</span> <span class="token number" >200</span>px<span class="token punctuation" >;</span> <span class="token property" >overflow</span><span class="token punctuation" >:</span> scroll<span class="token punctuation" >;</span></span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>Content goes here...<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>More content...<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>p</span><span class="token punctuation" >></span></span>Even more content...<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>p</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+</code></pre>
 
   </div>
   
 </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/07/12 13:01</footer>
+          <footer class="aigis-footer">Last update at 2024/07/12 15:52</footer>
         </div>
       </div>
     </div>
