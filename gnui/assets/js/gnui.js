@@ -35953,6 +35953,10 @@
 	                hasClass(this.$el, 'is-active') ? this._hidden.hide() : this._hidden.show();
 	            },
 	            setPosition: () => {
+	                if (this.$options.position) {
+	                    css$1(this.$el, this.$options.position);
+	                    return;
+	                }
 	                let _position = {
 	                    top: 0,
 	                    left: 0
