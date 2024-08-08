@@ -2377,7 +2377,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
   <h3 id="-">기본 사용</h3>
 <ul>
 <li>드롭다운은 버튼과 생김새가 거의 동일 합니다. </li>
-<li>용도에 따라 3가지 버전으로 사용 합니다.</li>
+<li>용도에 따라 4가지 버전으로 사용 합니다.</li>
 </ul>
 <div class="aigis-preview">
   <div class="gn-dropdown">
@@ -2417,6 +2417,24 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
     </div>
 </div>
 <div class="gn-dropdown is-primary">
+    <div class="dropdown-label"> 선택하세요 <span class="gn-icon is-small dropdown-icon">
+            <i class="fas fa-angle-down"></i>
+        </span>
+    </div>
+    <div class="dropdown-items">
+        <ul>
+            <li class="dropdown-item">아이템 1</li>
+            <li class="dropdown-item">아이템 2</li>
+            <li class="dropdown-item">아이템 3</li>
+        </ul>
+        <ul>
+            <li class="dropdown-item">아이템 4</li>
+            <li class="dropdown-item is-active">아이템 제목이 길어집니다.4-1</li>
+            <li class="dropdown-item">아이템 4-2</li>
+        </ul>
+    </div>
+</div>
+<div class="gn-dropdown is-header">
     <div class="dropdown-label"> 선택하세요 <span class="gn-icon is-small dropdown-icon">
             <i class="fas fa-angle-down"></i>
         </span>
@@ -2476,6 +2494,26 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
   <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
 <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
 <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-dropdown is-primary<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-label<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    선택하세요
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-small dropdown-icon<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>i</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>fas fa-angle-down<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>i</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>span</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-items<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>ul</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-item<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>아이템 1<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-item<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>아이템 2<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-item<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>아이템 3<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>ul</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>ul</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-item<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>아이템 4<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-item is-active<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>아이템 제목이 길어집니다.4-1<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>li</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-item<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>아이템 4-2<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>li</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>ul</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-dropdown is-header<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
   <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>dropdown-label<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
     선택하세요
     <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>span</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-icon is-small dropdown-icon<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
@@ -9511,9 +9549,27 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
         <option>labore</option>
         <option>consectetur</option>
     </select>
+</div>
+<div class="gn-select is-header">
+    <select>
+        <option>Lorem</option>
+        <option>voluptate</option>
+        <option>proident</option>
+        <option>labore</option>
+        <option>consectetur</option>
+    </select>
 </div></div>
 
 <pre><code class="language-html">  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Lorem<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>voluptate<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>proident<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>labore<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+      <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>consectetur<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
+    <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>select</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
+  <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>gn-select is-header<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
     <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>select</span><span class="token punctuation" >></span></span>
       <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>Lorem<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
       <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>option</span><span class="token punctuation" >></span></span>voluptate<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>option</span><span class="token punctuation" >></span></span>
@@ -12326,7 +12382,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
 </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/08/01 15:54</footer>
+          <footer class="aigis-footer">Last update at 2024/08/08 10:37</footer>
         </div>
       </div>
     </div>
