@@ -13,11 +13,11 @@
 	var _global = {exports: {}};
 
 	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global$j = _global.exports = typeof window != 'undefined' && window.Math == Math
+	var global$i = _global.exports = typeof window != 'undefined' && window.Math == Math
 	  ? window : typeof self != 'undefined' && self.Math == Math ? self
 	  // eslint-disable-next-line no-new-func
 	  : Function('return this')();
-	if (typeof __g == 'number') __g = global$j; // eslint-disable-line no-undef
+	if (typeof __g == 'number') __g = global$i; // eslint-disable-line no-undef
 
 	var _globalExports = _global.exports;
 
@@ -94,14 +94,14 @@
 	var anObject$q = _anObject;
 	var IE8_DOM_DEFINE$1 = _ie8DomDefine;
 	var toPrimitive$6 = _toPrimitive;
-	var dP$9 = Object.defineProperty;
+	var dP$8 = Object.defineProperty;
 
 	_objectDp.f = _descriptors ? Object.defineProperty : function defineProperty(O, P, Attributes) {
 	  anObject$q(O);
 	  P = toPrimitive$6(P, true);
 	  anObject$q(Attributes);
 	  if (IE8_DOM_DEFINE$1) try {
-	    return dP$9(O, P, Attributes);
+	    return dP$8(O, P, Attributes);
 	  } catch (e) { /* empty */ }
 	  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
 	  if ('value' in Attributes) O[P] = Attributes.value;
@@ -155,9 +155,9 @@
 	}
 
 	var core$3 = _coreExports;
-	var global$i = _globalExports;
+	var global$h = _globalExports;
 	var SHARED = '__core-js_shared__';
-	var store$1 = global$i[SHARED] || (global$i[SHARED] = {});
+	var store$1 = global$h[SHARED] || (global$h[SHARED] = {});
 
 	(_shared.exports = function (key, value) {
 	  return store$1[key] || (store$1[key] = value !== undefined ? value : {});
@@ -171,7 +171,7 @@
 
 	var _functionToString = _sharedExports('native-function-to-string', Function.toString);
 
-	var global$h = _globalExports;
+	var global$g = _globalExports;
 	var hide$4 = require_hide();
 	var has$a = _has;
 	var SRC = _uid('src');
@@ -188,7 +188,7 @@
 	  if (isFunction) has$a(val, 'name') || hide$4(val, 'name', key);
 	  if (O[key] === val) return;
 	  if (isFunction) has$a(val, SRC) || hide$4(val, SRC, O[key] ? '' + O[key] : TPL.join(String(key)));
-	  if (O === global$h) {
+	  if (O === global$g) {
 	    O[key] = val;
 	  } else if (!safe) {
 	    delete O[key];
@@ -231,7 +231,7 @@
 	  };
 	};
 
-	var global$g = _globalExports;
+	var global$f = _globalExports;
 	var core$2 = _coreExports;
 	var hide$3 = require_hide();
 	var redefine$3 = _redefineExports;
@@ -244,7 +244,7 @@
 	  var IS_STATIC = type & $export$1w.S;
 	  var IS_PROTO = type & $export$1w.P;
 	  var IS_BIND = type & $export$1w.B;
-	  var target = IS_GLOBAL ? global$g : IS_STATIC ? global$g[name] || (global$g[name] = {}) : (global$g[name] || {})[PROTOTYPE$3];
+	  var target = IS_GLOBAL ? global$f : IS_STATIC ? global$f[name] || (global$f[name] = {}) : (global$f[name] || {})[PROTOTYPE$3];
 	  var exports = IS_GLOBAL ? core$2 : core$2[name] || (core$2[name] = {});
 	  var expProto = exports[PROTOTYPE$3] || (exports[PROTOTYPE$3] = {});
 	  var key, own, out, exp;
@@ -255,7 +255,7 @@
 	    // export native or passed
 	    out = (own ? target : source)[key];
 	    // bind timers to global for call from export context
-	    exp = IS_BIND && own ? ctx$8(out, global$g) : IS_PROTO && typeof out == 'function' ? ctx$8(Function.call, out) : out;
+	    exp = IS_BIND && own ? ctx$8(out, global$f) : IS_PROTO && typeof out == 'function' ? ctx$8(Function.call, out) : out;
 	    // extend global
 	    if (target) redefine$3(target, key, out, type & $export$1w.U);
 	    // export
@@ -263,7 +263,7 @@
 	    if (IS_PROTO && expProto[key] != out) expProto[key] = out;
 	  }
 	};
-	global$g.core = core$2;
+	global$f.core = core$2;
 	// type bitmap
 	$export$1w.F = 1;   // forced
 	$export$1w.G = 2;   // global
@@ -361,13 +361,13 @@
 
 	_wksExt.f = _wksExports;
 
-	var global$f = _globalExports;
+	var global$e = _globalExports;
 	var core$1 = _coreExports;
 	var LIBRARY$2 = require_library();
 	var wksExt$1 = _wksExt;
 	var defineProperty$1 = _objectDp.f;
 	var _wksDefine = function (name) {
-	  var $Symbol = core$1.Symbol || (core$1.Symbol = LIBRARY$2 ? {} : global$f.Symbol || {});
+	  var $Symbol = core$1.Symbol || (core$1.Symbol = LIBRARY$2 ? {} : global$e.Symbol || {});
 	  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty$1($Symbol, name, { value: wksExt$1.f(name) });
 	};
 
@@ -650,9 +650,9 @@
 	};
 
 	// ECMAScript 6 symbols shim
-	var global$e = _globalExports;
+	var global$d = _globalExports;
 	var has$5 = _has;
-	var DESCRIPTORS$4 = _descriptors;
+	var DESCRIPTORS$3 = _descriptors;
 	var $export$1v = _export;
 	var redefine$2 = _redefineExports;
 	var META = _metaExports.KEY;
@@ -678,10 +678,10 @@
 	var $DP$1 = _objectDp;
 	var $keys$1 = _objectKeys;
 	var gOPD$8 = $GOPD$1.f;
-	var dP$8 = $DP$1.f;
+	var dP$7 = $DP$1.f;
 	var gOPN$4 = gOPNExt.f;
-	var $Symbol = global$e.Symbol;
-	var $JSON = global$e.JSON;
+	var $Symbol = global$d.Symbol;
+	var $JSON = global$d.JSON;
 	var _stringify = $JSON && $JSON.stringify;
 	var PROTOTYPE$1 = 'prototype';
 	var HIDDEN = wks$2('_hidden');
@@ -692,21 +692,21 @@
 	var OPSymbols = shared('op-symbols');
 	var ObjectProto$1 = Object[PROTOTYPE$1];
 	var USE_NATIVE$1 = typeof $Symbol == 'function' && !!$GOPS.f;
-	var QObject = global$e.QObject;
+	var QObject = global$d.QObject;
 	// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
 	var setter = !QObject || !QObject[PROTOTYPE$1] || !QObject[PROTOTYPE$1].findChild;
 
 	// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-	var setSymbolDesc = DESCRIPTORS$4 && $fails$1(function () {
-	  return _create(dP$8({}, 'a', {
-	    get: function () { return dP$8(this, 'a', { value: 7 }).a; }
+	var setSymbolDesc = DESCRIPTORS$3 && $fails$1(function () {
+	  return _create(dP$7({}, 'a', {
+	    get: function () { return dP$7(this, 'a', { value: 7 }).a; }
 	  })).a != 7;
 	}) ? function (it, key, D) {
 	  var protoDesc = gOPD$8(ObjectProto$1, key);
 	  if (protoDesc) delete ObjectProto$1[key];
-	  dP$8(it, key, D);
-	  if (protoDesc && it !== ObjectProto$1) dP$8(ObjectProto$1, key, protoDesc);
-	} : dP$8;
+	  dP$7(it, key, D);
+	  if (protoDesc && it !== ObjectProto$1) dP$7(ObjectProto$1, key, protoDesc);
+	} : dP$7;
 
 	var wrap$1 = function (tag) {
 	  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE$1]);
@@ -727,13 +727,13 @@
 	  anObject$o(D);
 	  if (has$5(AllSymbols, key)) {
 	    if (!D.enumerable) {
-	      if (!has$5(it, HIDDEN)) dP$8(it, HIDDEN, createDesc$2(1, {}));
+	      if (!has$5(it, HIDDEN)) dP$7(it, HIDDEN, createDesc$2(1, {}));
 	      it[HIDDEN][key] = true;
 	    } else {
 	      if (has$5(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
 	      D = _create(D, { enumerable: createDesc$2(0, false) });
 	    } return setSymbolDesc(it, key, D);
-	  } return dP$8(it, key, D);
+	  } return dP$7(it, key, D);
 	};
 	var $defineProperties = function defineProperties(it, P) {
 	  anObject$o(it);
@@ -790,7 +790,7 @@
 	      if (has$5(this, HIDDEN) && has$5(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
 	      setSymbolDesc(this, tag, createDesc$2(1, value));
 	    };
-	    if (DESCRIPTORS$4 && setter) setSymbolDesc(ObjectProto$1, tag, { configurable: true, set: $set });
+	    if (DESCRIPTORS$3 && setter) setSymbolDesc(ObjectProto$1, tag, { configurable: true, set: $set });
 	    return wrap$1(tag);
 	  };
 	  redefine$2($Symbol[PROTOTYPE$1], 'toString', function toString() {
@@ -803,7 +803,7 @@
 	  require_objectPie().f = $propertyIsEnumerable;
 	  $GOPS.f = $getOwnPropertySymbols;
 
-	  if (DESCRIPTORS$4 && !require_library()) {
+	  if (DESCRIPTORS$3 && !require_library()) {
 	    redefine$2(ObjectProto$1, 'propertyIsEnumerable', $propertyIsEnumerable, true);
 	  }
 
@@ -893,7 +893,7 @@
 	// 20.2.1.9 Math[@@toStringTag]
 	setToStringTag(Math, 'Math', true);
 	// 24.3.3 JSON[@@toStringTag]
-	setToStringTag(global$e.JSON, 'JSON', true);
+	setToStringTag(global$d.JSON, 'JSON', true);
 
 	var $export$1u = _export;
 	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
@@ -1236,13 +1236,13 @@
 
 	$export$1o($export$1o.P, 'Function', { bind: require_bind() });
 
-	var dP$7 = _objectDp.f;
+	var dP$6 = _objectDp.f;
 	var FProto = Function.prototype;
 	var nameRE = /^\s*function ([^ (]*)/;
 	var NAME$1 = 'name';
 
 	// 19.2.4.2 name
-	NAME$1 in FProto || _descriptors && dP$7(FProto, NAME$1, {
+	NAME$1 in FProto || _descriptors && dP$6(FProto, NAME$1, {
 	  configurable: true,
 	  get: function () {
 	    try {
@@ -1339,7 +1339,7 @@
 	  } return that;
 	};
 
-	var global$d = _globalExports;
+	var global$c = _globalExports;
 	var has$3 = _has;
 	var cof$3 = _cof;
 	var inheritIfRequired$1 = _inheritIfRequired;
@@ -1347,10 +1347,10 @@
 	var fails$6 = _fails;
 	var gOPN$3 = _objectGopn.f;
 	var gOPD$7 = _objectGopd.f;
-	var dP$6 = _objectDp.f;
+	var dP$5 = _objectDp.f;
 	var $trim = _stringTrim.trim;
 	var NUMBER = 'Number';
-	var $Number = global$d[NUMBER];
+	var $Number = global$c[NUMBER];
 	var Base$1 = $Number;
 	var proto$4 = $Number.prototype;
 	// Opera ~12 has broken Object#toString
@@ -1400,12 +1400,12 @@
 	    'MIN_SAFE_INTEGER,parseFloat,parseInt,isInteger'
 	  ).split(','), j = 0, key$1; keys$1.length > j; j++) {
 	    if (has$3(Base$1, key$1 = keys$1[j]) && !has$3($Number, key$1)) {
-	      dP$6($Number, key$1, gOPD$7(Base$1, key$1));
+	      dP$5($Number, key$1, gOPD$7(Base$1, key$1));
 	    }
 	  }
 	  $Number.prototype = proto$4;
 	  proto$4.constructor = $Number;
-	  _redefineExports(global$d, NUMBER, $Number);
+	  _redefineExports(global$c, NUMBER, $Number);
 	}
 
 	var cof$2 = _cof;
@@ -2573,7 +2573,7 @@
 
 	var isObject$c = _isObject;
 	var isArray$3 = _isArray;
-	var SPECIES$2 = _wksExports('species');
+	var SPECIES$1 = _wksExports('species');
 
 	var _arraySpeciesConstructor = function (original) {
 	  var C;
@@ -2582,7 +2582,7 @@
 	    // cross-realm fallback
 	    if (typeof C == 'function' && (C === Array || isArray$3(C.prototype))) C = undefined;
 	    if (isObject$c(C)) {
-	      C = C[SPECIES$2];
+	      C = C[SPECIES$1];
 	      if (C === null) C = undefined;
 	    }
 	  } return C === undefined ? Array : C;
@@ -2882,20 +2882,28 @@
 	});
 	_addToUnscopables(KEY);
 
-	var global$c = _globalExports;
-	var dP$5 = _objectDp;
-	var DESCRIPTORS$3 = _descriptors;
-	var SPECIES$1 = _wksExports('species');
+	var _setSpecies;
+	var hasRequired_setSpecies;
 
-	var _setSpecies = function (KEY) {
-	  var C = global$c[KEY];
-	  if (DESCRIPTORS$3 && C && !C[SPECIES$1]) dP$5.f(C, SPECIES$1, {
-	    configurable: true,
-	    get: function () { return this; }
-	  });
-	};
+	function require_setSpecies () {
+		if (hasRequired_setSpecies) return _setSpecies;
+		hasRequired_setSpecies = 1;
+		var global = _globalExports;
+		var dP = _objectDp;
+		var DESCRIPTORS = _descriptors;
+		var SPECIES = _wksExports('species');
 
-	_setSpecies('Array');
+		_setSpecies = function (KEY) {
+		  var C = global[KEY];
+		  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
+		    configurable: true,
+		    get: function () { return this; }
+		  });
+		};
+		return _setSpecies;
+	}
+
+	require_setSpecies()('Array');
 
 	var _iterStep = function (done, value) {
 	  return { value: value, done: !!done };
@@ -2990,7 +2998,7 @@
 	  _redefineExports(global$b, 'RegExp', $RegExp);
 	}
 
-	_setSpecies('RegExp');
+	require_setSpecies()('RegExp');
 
 	var regexpFlags = _flags;
 
@@ -4022,7 +4030,7 @@
 
 	$export$r($export$r.G + $export$r.W + $export$r.F * !USE_NATIVE, { Promise: $Promise });
 	_setToStringTag($Promise, PROMISE);
-	_setSpecies(PROMISE);
+	require_setSpecies()(PROMISE);
 	Wrapper = _coreExports[PROMISE];
 
 	// statics
@@ -4100,7 +4108,7 @@
 	var forOf$1 = _forOfExports;
 	var $iterDefine = require_iterDefine();
 	var step = _iterStep;
-	var setSpecies$1 = _setSpecies;
+	var setSpecies$1 = require_setSpecies();
 	var DESCRIPTORS$1 = _descriptors;
 	var fastKey = _metaExports.fastKey;
 	var validate$6 = _validateCollection;
@@ -4885,7 +4893,7 @@
 	  }
 	});
 
-	_setSpecies(ARRAY_BUFFER$1);
+	require_setSpecies()(ARRAY_BUFFER$1);
 
 	var $export$p = _export;
 	$export$p($export$p.G + $export$p.W + $export$p.F * !_typed.ABV, {
@@ -4928,7 +4936,7 @@
 	  var ArrayIterators = es6_array_iterator;
 	  var Iterators$1 = _iterators;
 	  var $iterDetect = require_iterDetect();
-	  var setSpecies = _setSpecies;
+	  var setSpecies = require_setSpecies();
 	  var arrayFill = require_arrayFill();
 	  var arrayCopyWithin = require_arrayCopyWithin();
 	  var $DP = _objectDp;
