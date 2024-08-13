@@ -36598,7 +36598,7 @@
 	            },
 	            name: this.$selector.name,
 	            data: [],
-	            align: 'center'
+	            align: 'left'
 	        };
 	        this.events = {
 	            onSelect: true
@@ -36632,9 +36632,9 @@
 	                config.icon && (createElement$1("span", { className: 'gn-icon is-' + (config.size === 'large' ? 'medium' : config.size === 'medium' ? 'normal' : 'small') },
 	                    createElement$1("i", { className: 'fas fa-' + config.icon }),
 	                    ' ')),
-	                createElement$1("span", { className: "menuButton-text" }, config.textSets.buttonText),
 	                createElement$1("span", { className: "gn-icon is-small menuButton-icon" },
-	                    createElement$1("i", { className: "fas fa-angle-down" }))),
+	                    createElement$1("i", { className: "fas fa-caret-down" })),
+	                createElement$1("span", { className: "menuButton-text" }, config.textSets.buttonText)),
 	            createElement$1("div", { className: "menuButton-menus" }, renderSub(config.data))));
 	    }
 	    completed() {
