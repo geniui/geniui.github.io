@@ -17137,14 +17137,18 @@
 	    // Element 받아서 DOM 생성
 	    $mount(component, selector) {
 	        if (component.template) {
+	            let tmpDataset;
+	            if (!isEmpty(selector.dataset)) {
+	                tmpDataset = selector.dataset;
+	            }
 	            // template 가 있는 경우에만
 	            component.$template = new GNCoreView(selector, component.template(component.$options));
 	            const rendered = component.$template.render();
 	            // 객체 엘리먼트를 생성된 엘리먼트로 변경
 	            this.$el = rendered.elm;
 	            // inherit selector dataset
-	            if (!isEmpty(selector.dataset)) {
-	                each(selector.dataset, (value, field) => {
+	            if (tmpDataset) {
+	                each(tmpDataset, (value, field) => {
 	                    attr(this.$el, `data-${field}`, value);
 	                });
 	            }
