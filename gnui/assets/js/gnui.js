@@ -17139,7 +17139,7 @@
 	        if (component.template) {
 	            let tmpDataset;
 	            if (!isEmpty(selector.dataset)) {
-	                tmpDataset = selector.dataset;
+	                tmpDataset = objClone(selector.dataset);
 	            }
 	            // template 가 있는 경우에만
 	            component.$template = new GNCoreView(selector, component.template(component.$options));
