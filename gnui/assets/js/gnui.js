@@ -34889,16 +34889,16 @@
 	                            !this.$options.disabled && this._hidden.hoverCell.call(this, col, row, _index, e);
 	                        }, "on-mouseleave": (e) => {
 	                            this._hidden.blurCell.call(this, col, row, _index, e);
-	                        }, title: col.tipField && row[col.tipField] ? row[col.tipField] : !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild, isCheck)));
+	                        }, title: col.tipField && row[col.tipField] ? row[col.tipField] : !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild, isCheck, _index)));
 	                })));
 	            },
-	            renderCell: (row, col, idx, hasChild, isCheck) => {
+	            renderCell: (row, col, idx, hasChild, isCheck, _index) => {
 	                return [
 	                    idx === 0 && hasChild ? (createElement$1("span", { className: "is-toggler", "on-click": (e) => {
 	                            !this.$options.disabled && this._hidden.toggle.call(this, row, e);
 	                        } })) : (''),
 	                    idx === 0 && this.$options.hasCheck && row.noCheck !== true && row.noCheck !== 'true' ? (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
-	                        createElement$1("input", { type: "checkbox", id: this._uid + '-row-check-' + idx, className: "is-rowChecker", "on-click": (e) => {
+	                        createElement$1("input", { type: "checkbox", id: this._uid + '-row-check-' + _index, className: "is-rowChecker", "on-click": (e) => {
 	                                this._hidden.check.call(this, row, e);
 	                            }, defaultChecked: isCheck, disabled: this.$options.disabled }))) : (''),
 	                    col.template ? createElement$1("span", { className: "gn-grid-cell", innerHTML: col.template(col.key, row) }) : row[col.key] !== undefined ? row[col.key] : ''
