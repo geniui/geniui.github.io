@@ -34791,7 +34791,7 @@
 	                }
 	                const renderCheck = () => {
 	                    return (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
-	                        createElement$1("input", { type: "checkbox", className: "is-allChecker", "on-click": (e) => {
+	                        createElement$1("input", { type: "checkbox", className: "is-allChecker", id: this._uid + '-rows-check', "on-click": (e) => {
 	                                this._hidden.checkAll.call(this, e);
 	                            }, disabled: this.$options.disabled })));
 	                };
@@ -34831,7 +34831,7 @@
 	                        !this.$options.disabled && this._hidden.selectRow.call(this, row, _index, e);
 	                    }, "on-dblclick": (e) => {
 	                        !this.$options.disabled && this._hidden.doubleSelect.call(this, row, _index, e);
-	                    }, className: 'gn-datagrid-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (depth > 0 && !isOpened ? ' is-hidden' : '') + (row.color ? ` ${row.color}` : ''), "data-depth": depth }, columns.map((col, idx) => {
+	                    }, className: 'gn-datagrid-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (depth > 0 && !isOpened ? ' is-hidden' : '') + (row.color ? ` ${row.color}` : ''), id: this._uid + '-row-' + _index, "data-depth": depth }, columns.map((col, idx) => {
 	                    const cellStyle = {};
 	                    if (col.style) {
 	                        each(col.style, (value, key) => {
@@ -34898,7 +34898,7 @@
 	                            !this.$options.disabled && this._hidden.toggle.call(this, row, e);
 	                        } })) : (''),
 	                    idx === 0 && this.$options.hasCheck && row.noCheck !== true && row.noCheck !== 'true' ? (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
-	                        createElement$1("input", { type: "checkbox", className: "is-rowChecker", "on-click": (e) => {
+	                        createElement$1("input", { type: "checkbox", id: this._uid + '-row-check-' + idx, className: "is-rowChecker", "on-click": (e) => {
 	                                this._hidden.check.call(this, row, e);
 	                            }, defaultChecked: isCheck, disabled: this.$options.disabled }))) : (''),
 	                    col.template ? createElement$1("span", { className: "gn-grid-cell", innerHTML: col.template(col.key, row) }) : row[col.key] !== undefined ? row[col.key] : ''
