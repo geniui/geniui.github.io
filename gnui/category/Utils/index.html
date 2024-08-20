@@ -127,6 +127,7 @@
 <li><strong>textToMultiLangs</strong>(text: string): { [key: string]: string } (언어와 표시 라벨을 객체화, Start Date{/default}{ko}사용시작{/ko} -&gt;  {default: &#39;Start Date&#39;, ko: &#39;사용시작&#39;})</li>
 <li><strong>formatString</strong>(str: string, args: string[]): string ({0},{1},, 포함한 문자열 포맷팅)</li>
 <li><strong>getByteSize</strong>(str: string): number (문자열의 바이트 사이즈 리턴)</li>
+<li><strong>highlight</strong>(str: string, target: any = document.body): void (target 영역에 표시되는 컨텐츠 중, str에 해당하는 텍스트 강조처리)</li>
 </ul>
 <pre><code>Gn<span class="token punctuation" >.</span>util<span class="token punctuation" >.</span><span class="token function" >hyphenate</span><span class="token punctuation" >(</span><span class="token string" >'someString'</span><span class="token punctuation" >)</span> <span class="token operator" >/</span><span class="token operator" >/=</span><span class="token operator" >></span> some<span class="token operator" >-</span>string
 Gn<span class="token punctuation" >.</span>util<span class="token punctuation" >.</span><span class="token function" >hyphenate</span><span class="token punctuation" >(</span><span class="token string" >'some-string'</span><span class="token punctuation" >)</span> <span class="token operator" >/</span><span class="token operator" >/=</span><span class="token operator" >></span> someString
@@ -325,7 +326,7 @@ GN<span class="token punctuation" >.</span>util<span class="token punctuation" >
  </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/08/20 10:28</footer>
+          <footer class="aigis-footer">Last update at 2024/08/20 11:19</footer>
         </div>
       </div>
     </div>
