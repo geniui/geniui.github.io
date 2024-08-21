@@ -33242,7 +33242,7 @@
 	                const bodyWidth = scrollParent.offsetWidth;
 	                const { top, bottom, left } = position(this.$el, scrollParent);
 	                const scrollHeight = this._hidden.getScrollHeight(this.$options.scrollHeight);
-	                if (isNumber(bodyHeight) && isNumber(top) && isNumber(scrollHeight) && bodyHeight - top > scrollHeight && bodyHeight - bottom < scrollHeight) {
+	                if (isNumber(bodyHeight) && isNumber(top) && isNumber(scrollHeight) && top > scrollHeight && bodyHeight - bottom < scrollHeight) {
 	                    addClass(this.$el, 'is-top');
 	                }
 	                if (isNumber(bodyWidth) && isNumber(left) && bodyWidth - left < 300) {
