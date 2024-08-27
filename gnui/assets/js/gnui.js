@@ -36681,7 +36681,7 @@
 	            styles.width = getUnit('width', config.width);
 	        }
 	        const renderMenus = (menus) => {
-	            return (createElement$1("ul", null, menus.map((menu) => (createElement$1("li", { className: 'menuButton-menu' + (config.align ? ' has-text-' + config.align : ''), "on-click": (e) => {
+	            return (createElement$1("ul", null, menus.map((menu, index) => (createElement$1("li", { id: this._uid + '-' + index, className: 'menuButton-menu' + (config.align ? ' has-text-' + config.align : ''), "on-click": (e) => {
 	                    this._hidden.select.call(this, menu, e);
 	                }, innerHTML: menu.html ? menu.html : '' }, menu.html ? '' : menu.text)))));
 	        };
