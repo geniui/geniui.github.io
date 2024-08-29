@@ -14403,8 +14403,8 @@
 	            multiLangs[lang] = defaultMatch[1];
 	            continue;
 	        }
-	        const langMatch = text.match(`{${lang}}(.*?)\\{/${lang}}`);
-	        multiLangs[lang] = langMatch[1];
+	        const langMatch = text.match(`\\{${lang}}([\\s\\S]*?)\\{/${lang}}`);
+	        multiLangs[lang] = langMatch ? langMatch[1] : '';
 	    }
 	    return multiLangs;
 	}
