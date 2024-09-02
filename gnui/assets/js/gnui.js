@@ -37073,6 +37073,14 @@
 	                removeAttr(findAll('button', this.$el), 'disabled');
 	                removeClass(find('.gn-dropdown', this.$el), 'is-disabled');
 	                removeClass(this.$el, 'is-disabled');
+	            },
+	            setSource: (data) => {
+	                this.$options.data.source = data;
+	                this._hidden.reRender('source');
+	            },
+	            setTarget: (data) => {
+	                this.$options.data.target = data;
+	                this._hidden.reRender('target');
 	            }
 	        };
 	        this.config = {
@@ -37123,6 +37131,16 @@
 	            },
 	            enable() {
 	                this._hidden.enable();
+	            },
+	            setDatas(datas) {
+	                this.setSource(datas.source);
+	                this.setTarget(datas.target);
+	            },
+	            setSource(sources) {
+	                this._hidden.setSource(sources);
+	            },
+	            setTarget(targets) {
+	                this._hidden.setTarget(targets);
 	            }
 	        };
 	        this.$selector = this.$selector;
