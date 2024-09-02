@@ -37132,7 +37132,7 @@
 	            enable() {
 	                this._hidden.enable();
 	            },
-	            setDatas(datas) {
+	            setData(datas) {
 	                this.setSource(datas.source);
 	                this.setTarget(datas.target);
 	            },
