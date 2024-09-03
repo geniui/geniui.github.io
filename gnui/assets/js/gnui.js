@@ -17081,7 +17081,7 @@
 	// component instance
 	class GNCoreInstance {
 	    constructor(name, selector, options = {}) {
-	        var _a;
+	        var _a, _b;
 	        this.$name = name;
 	        this.$selector = selector ? $(selector) : null;
 	        this.$options = options;
@@ -17092,7 +17092,7 @@
 	            }
 	            return generateUUID();
 	        };
-	        this._uid = ((_a = this.$selector) === null || _a === void 0 ? void 0 : _a.id) || `${GN_CONSTANT.PREFIX}${uuid()}`;
+	        this._uid = ((_a = this.$options) === null || _a === void 0 ? void 0 : _a.id) || ((_b = this.$selector) === null || _b === void 0 ? void 0 : _b.id) || `${GN_CONSTANT.PREFIX}${uuid()}`;
 	    }
 	    $reset() { }
 	    $init(component, options) {
