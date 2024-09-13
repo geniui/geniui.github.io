@@ -148,14 +148,14 @@
 
 <div class="new-grid"></div>
 
-<div style="width: 100%; height: 150px; overflow-x: auto">
+<div style="width: 100%; height: 350px; overflow-x: auto">
   <div class="new-grid2"></div>
 </div>
 </div>
 
 <pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-grid<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
 
-<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >100%</span><span class="token punctuation" >;</span> <span class="token property" >height</span><span class="token punctuation" >:</span> <span class="token number" >150</span>px<span class="token punctuation" >;</span> <span class="token property" >overflow-x</span><span class="token punctuation" >:</span> auto</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span><span class="token style-attr language-css" ><span class="token attr-name" > <span class="token attr-name" >style</span></span><span class="token punctuation" >="</span><span class="token attr-value" ><span class="token property" >width</span><span class="token punctuation" >:</span> <span class="token number" >100%</span><span class="token punctuation" >;</span> <span class="token property" >height</span><span class="token punctuation" >:</span> <span class="token number" >350</span>px<span class="token punctuation" >;</span> <span class="token property" >overflow-x</span><span class="token punctuation" >:</span> auto</span><span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span>
   <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>div</span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-grid2<span class="token punctuation" >"</span></span><span class="token punctuation" >></span></span><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
 <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;/</span>div</span><span class="token punctuation" >></span></span>
 </code></pre>
@@ -242,8 +242,8 @@
   onSort<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>column<span class="token punctuation" >)</span> {
     console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'column'</span><span class="token punctuation" >,</span> column<span class="token punctuation" >)</span>
   }<span class="token punctuation" >,</span>
-  onDragEnd<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>col<span class="token punctuation" >,</span> position<span class="token punctuation" >)</span> {
-    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>col<span class="token punctuation" >,</span> position<span class="token punctuation" >)</span>
+  onDragEnd<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>column<span class="token punctuation" >,</span> columns<span class="token punctuation" >)</span> {
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>column<span class="token punctuation" >,</span> columns<span class="token punctuation" >)</span>
   }<span class="token punctuation" >,</span>
   onToggle<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>type<span class="token punctuation" >,</span> row<span class="token punctuation" >,</span> n<span class="token punctuation" >)</span> {
     console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span>type<span class="token punctuation" >,</span> row<span class="token punctuation" >,</span> n<span class="token punctuation" >)</span>
@@ -297,78 +297,40 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
       style<span class="token punctuation" >:</span> { width<span class="token punctuation" >:</span> <span class="token string" >'50px'</span> }
     }
   <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
-  data<span class="token punctuation" >:</span> <span class="token punctuation" >[</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span> <span class="token string" >'하나'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'232342333'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span>
-        <span class="token string" >'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span><span class="token punctuation" >,</span>
-      desc<span class="token punctuation" >:</span>
-        <span class="token string" >'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span> <span class="token string" >'하나'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'232342333'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span>
-        <span class="token string" >'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span><span class="token punctuation" >,</span>
-      desc<span class="token punctuation" >:</span>
-        <span class="token string" >'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span> <span class="token string" >'하나'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'232342333'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span>
-        <span class="token string" >'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span><span class="token punctuation" >,</span>
-      desc<span class="token punctuation" >:</span>
-        <span class="token string" >'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span> <span class="token string" >'하나'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'232342333'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span>
-        <span class="token string" >'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span><span class="token punctuation" >,</span>
-      desc<span class="token punctuation" >:</span>
-        <span class="token string" >'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span> <span class="token string" >'하나'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span>
-    }<span class="token punctuation" >,</span>
-    {
-      number<span class="token punctuation" >:</span> <span class="token string" >'232342333'</span><span class="token punctuation" >,</span>
-      title<span class="token punctuation" >:</span>
-        <span class="token string" >'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.'</span><span class="token punctuation" >,</span>
-      date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span><span class="token punctuation" >,</span>
-      desc<span class="token punctuation" >:</span>
-        <span class="token string" >'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'</span>
-    }
-  <span class="token punctuation" >]</span><span class="token punctuation" >,</span>
+  data<span class="token punctuation" >:</span> <span class="token punctuation" >(</span>callback<span class="token punctuation" >,</span> ui<span class="token punctuation" >)</span> <span class="token operator" >=</span><span class="token operator" >></span> {
+    return <span class="token function" >callback</span><span class="token punctuation" >(</span><span class="token punctuation" >[</span>
+      {
+        number<span class="token punctuation" >:</span> <span class="token string" >'1'</span><span class="token punctuation" >,</span>
+        title<span class="token punctuation" >:</span> <span class="token string" >'하나'</span><span class="token punctuation" >,</span>
+        date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span>
+      }<span class="token punctuation" >,</span>
+      {
+        number<span class="token punctuation" >:</span> <span class="token string" >'232342333'</span><span class="token punctuation" >,</span>
+        title<span class="token punctuation" >:</span> <span class="token string" >'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.'</span><span class="token punctuation" >,</span>
+        date<span class="token punctuation" >:</span> <span class="token string" >'2020-09-19'</span><span class="token punctuation" >,</span>
+        desc<span class="token punctuation" >:</span> <span class="token string" >'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'</span><span class="token punctuation" >,</span>
+        ordered<span class="token punctuation" >:</span> <span class="token boolean" >false</span><span class="token punctuation" >,</span>
+        limited<span class="token punctuation" >:</span> <span class="token number" >0</span><span class="token punctuation" >,</span>
+        one<span class="token punctuation" >:</span> <span class="token string" >'one'</span><span class="token punctuation" >,</span>
+        two<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span>
+        three<span class="token punctuation" >:</span> {
+          hello<span class="token punctuation" >:</span> <span class="token string" >'p'</span><span class="token punctuation" >,</span>
+          ordered<span class="token punctuation" >:</span> <span class="token boolean" >false</span><span class="token punctuation" >,</span>
+          limited<span class="token punctuation" >:</span> <span class="token number" >0</span><span class="token punctuation" >,</span>
+          one<span class="token punctuation" >:</span> <span class="token string" >'one'</span><span class="token punctuation" >,</span>
+          two<span class="token punctuation" >:</span> <span class="token number" >2</span><span class="token punctuation" >,</span>
+          desc<span class="token punctuation" >:</span> <span class="token string" >'hhhhhhh'</span>
+        }<span class="token punctuation" >,</span>
+        checked<span class="token punctuation" >:</span> <span class="token boolean" >true</span>
+      }
+    <span class="token punctuation" >]</span><span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  }<span class="token punctuation" >,</span>
   sort<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>column<span class="token punctuation" >)</span> {
     console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'column'</span><span class="token punctuation" >,</span> column<span class="token punctuation" >)</span>
   }<span class="token punctuation" >,</span>
   onSelect<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>row<span class="token punctuation" >,</span> index<span class="token punctuation" >)</span> {
-    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'row'</span><span class="token punctuation" >,</span> row<span class="token punctuation" >,</span> index<span class="token punctuation" >)</span>
+    console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'row'</span><span class="token punctuation" >,</span> row<span class="token punctuation" >,</span> index<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    this<span class="token punctuation" >.</span><span class="token function" >showDetail</span><span class="token punctuation" >(</span>index<span class="token punctuation" >,</span> <span class="token keyword" >null</span><span class="token punctuation" >,</span> <span class="token punctuation" >[</span><span class="token string" >'number'</span><span class="token punctuation" >,</span> <span class="token string" >'title'</span><span class="token punctuation" >,</span> <span class="token string" >'date'</span><span class="token punctuation" >,</span> <span class="token string" >'desc'</span><span class="token punctuation" >,</span> <span class="token string" >'ordered'</span><span class="token punctuation" >,</span> <span class="token string" >'limited'</span><span class="token punctuation" >,</span> <span class="token string" >'one'</span><span class="token punctuation" >,</span> <span class="token string" >'two'</span><span class="token punctuation" >,</span> <span class="token string" >'three'</span><span class="token punctuation" >,</span> <span class="token string" >'checked'</span><span class="token punctuation" >]</span><span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
   }<span class="token punctuation" >,</span>
   onDoubleClick<span class="token punctuation" >:</span> <span class="token function" >function</span><span class="token punctuation" >(</span>e<span class="token punctuation" >)</span> {
     console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'dbclick'</span><span class="token punctuation" >,</span> e<span class="token punctuation" >)</span>
@@ -378,6 +340,9 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
   hasOrder<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
   textSets<span class="token punctuation" >:</span> {
     orderLabel<span class="token punctuation" >:</span> <span class="token string" >'이동'</span>
+  }<span class="token punctuation" >,</span>
+  paginator<span class="token punctuation" >:</span> {
+    rows<span class="token punctuation" >:</span> <span class="token number" >30</span>
   }<span class="token punctuation" >,</span>
   hasDelete<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
   fixHeader<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
@@ -462,6 +427,12 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
       <td>데이터를 표시할 템플릿</td>
     </tr>
     <tr>
+      <td>detailTemplate</td>
+      <td>function(key, row)</td>
+      <td></td>
+      <td>상세 데이터를 표시할 템플릿</td>
+    </tr>
+    <tr>
       <td>onSelect</td>
       <td>function(row)</td>
       <td></td>
@@ -481,7 +452,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
     </tr>
     <tr>
       <td colspan="2">data</td>
-      <td>array</td>
+      <td>array | Function(callback, options)</td>
       <td>[]</td>
       <td>key: value로 이루어진 그리드 데이터 <br>
       <b>isOpened:true</b> =&gt; 열린상태로 표시<br>
@@ -564,6 +535,19 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
       <td>그리드 영역에서 헤더를 고정시킨다. <br /><span class="is-danger">데이터를 감싸는 객체에 높이가 고정되어야 한다.</span></td>
     </tr>
     <tr>
+      <td rowspan="2">paginator</td>
+      <td>rows</td>
+      <td>number</td>
+      <td>30</td>
+      <td>한 페이지에 처리될 데이터 갯수 <br />현재는 데이터 연동이 callback으로 된 경우에만 동작</td>
+    </tr>
+    <tr>
+      <td>siblingPages</td>
+      <td>number</td>
+      <td>10</td>
+      <td>페이지 숫자표시 카운트</td>
+    </tr>
+    <tr>
       <td colspan="2">onSort</td>
       <td>function</td>
       <td></td>
@@ -595,7 +579,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
     </tr>
     <tr>
       <td colspan="2">onDragEnd</td>
-      <td>function(col, position)</td>
+      <td>function(column, columns)</td>
       <td></td>
       <td>넓이조정 완료 시 발생이벤트</td>
     </tr>
@@ -685,7 +669,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
 </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/09/13 17:34</footer>
+          <footer class="aigis-footer">Last update at 2024/09/13 17:46</footer>
         </div>
       </div>
     </div>

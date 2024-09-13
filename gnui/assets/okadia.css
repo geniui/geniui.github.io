@@ -4,12 +4,10 @@
  * Loosely based on Monokai textmate theme by http://www.monokai.nl/
  * @author ocodia
  */
-
-code[class*='language-'],
-pre[class*='language-'] {
+.aigis-module>pre>code[class*='language-'],
+.aigis-module>pre[class*='language-'] {
   color: #f8f8f2;
   background: none;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
   text-align: left;
   white-space: pre;
@@ -29,33 +27,33 @@ pre[class*='language-'] {
 }
 
 /* Code blocks */
-pre[class*='language-'] {
+.aigis-module>pre[class*='language-'] {
   padding: 1em;
   margin: 0.5em 0;
   overflow: auto;
   border-radius: 0.3em;
 }
 
-:not(pre) > code[class*='language-'],
-pre[class*='language-'] {
+.aigis-module :not(pre)>code[class*='language-'],
+.aigis-module>pre[class*='language-'] {
   background: #333333;
 }
 
 /* Inline code */
-:not(pre) > code[class*='language-'] {
+.aigis-module :not(pre)>code[class*='language-'] {
   padding: 0.1em;
   border-radius: 0.3em;
   white-space: normal;
 }
 
-.token.comment,
-.token.prolog,
-.token.doctype,
-.token.cdata {
+.aigis-module>pre>code .token.comment,
+.aigis-module>pre>code .token.prolog,
+.aigis-module>pre>code .token.doctype,
+.aigis-module>pre>code .token.cdata {
   color: slategray;
 }
 
-.token.punctuation {
+.aigis-module>pre>code .token.punctuation {
   color: #f8f8f2;
 }
 
@@ -63,60 +61,61 @@ pre[class*='language-'] {
   opacity: 0.7;
 }
 
-.token.property,
-.token.tag,
-.token.constant,
-.token.symbol,
-.token.deleted {
+.aigis-module>pre>code .token.property,
+.aigis-module>pre>code .token.tag,
+.aigis-module>pre>code .token.constant,
+.aigis-module>pre>code .token.symbol,
+.aigis-module>pre>code .token.deleted {
   color: #fa8072;
 }
 
-.token.boolean,
-.token.number {
+.aigis-module>pre>code .token.boolean,
+.aigis-module>pre>code .token.number {
   color: #ae81ff;
 }
 
-.token.selector,
-.token.attr-name,
-.token.string,
-.token.char,
-.token.builtin,
-.token.inserted {
+.aigis-module>pre>code .token.selector,
+.aigis-module>pre>code .token.attr-name,
+.aigis-module>pre>code .token.string,
+.aigis-module>pre>code .token.char,
+.aigis-module>pre>code .token.builtin,
+.aigis-module>pre>code .token.inserted {
   color: #b0e0e6;
 }
 
-.token.operator,
-.token.entity,
-.token.url,
-.language-css .token.string,
-.style .token.string,
-.token.variable {
+.aigis-module>pre>code .token.operator,
+.aigis-module>pre>code .token.entity,
+.aigis-module>pre>code .token.url,
+.aigis-module>pre>code .language-css .token.string,
+.aigis-module>pre>code .style .token.string,
+.aigis-module>pre>code .token.variable {
   color: #f0e68c;
 }
 
-.token.atrule,
-.token.attr-value,
-.token.function {
+.aigis-module>pre>code .token.atrule,
+.aigis-module>pre>code .token.attr-value,
+.aigis-module>pre>code .token.function {
   color: #dfd68a;
 }
 
-.token.keyword {
+.aigis-module>pre>code .token.keyword {
   color: #76b9c7;
 }
 
-.token.regex,
-.token.important {
+.aigis-module>pre>code .token.regex,
+.aigis-module>pre>code .token.important {
   color: #f5deb3;
 }
 
-.token.important,
-.token.bold {
+.aigis-module>pre>code .token.important,
+.aigis-module>pre>code .token.bold {
   font-weight: bold;
 }
-.token.italic {
+
+.aigis-module>pre>code .token.italic {
   font-style: italic;
 }
 
-.token.entity {
+.aigis-module>pre>code .token.entity {
   cursor: help;
 }

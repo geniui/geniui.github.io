@@ -33562,7 +33562,7 @@
 	                        this.$options.value = this.$options.flatData.filter((opt) => values.includes(opt.value) && opt.text);
 	                    }
 	                    else {
-	                        this.$options.value = this.$options.flatData.find((opt) => opt.value === this.$options.value && opt.text);
+	                        this.$options.value = this.$options.flatData.find((opt) => opt.value + '' === this.$options.value + '' && opt.text);
 	                    }
 	                }
 	            },
@@ -34902,2849 +34902,7 @@
 	    }
 	}
 
-	/* eslint-disable @typescript-eslint/no-unused-vars */
-	let rowIdx$1 = 0;
-	let _EventTimer$1 = 0;
-	const _EventDelay = 200;
-	let _EventPrevent = false;
-	class DataGrid extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            sort: (column, e) => {
-	                var _a;
-	                if (hasClass(e.target, 'is-handle')) {
-	                    return;
-	                }
-	                const target = find('.is-ellipsis', e.currentTarget) || e.currentTarget;
-	                column.sort = column.sort === 'asc' ? 'desc' : column.sort === 'desc' ? '' : 'asc';
-	                this.$options.headers.forEach((x) => {
-	                    if (x.key !== column.key) {
-	                        x.sort = '';
-	                    }
-	                });
-	                removeClass(target, 'is-asc', 'is-desc');
-	                removeClass(findAll('.is-asc', this.$el), 'is-asc');
-	                removeClass(findAll('.is-desc', this.$el), 'is-desc');
-	                column.sort !== '' && addClass(target, `is-${column.sort}`);
-	                this.$options.onSort && ((_a = this.$options) === null || _a === void 0 ? void 0 : _a.onSort.call(this, column));
-	            },
-	            renderHeader: (columns) => {
-	                this.$options.hasOrder &&
-	                    !this.$options.readonly &&
-	                    columns.push({
-	                        label: this.$options.textSets.orderLabel,
-	                        key: 'btnOrder',
-	                        style: {
-	                            width: '50px'
-	                        }
-	                    });
-	                this.$options.hasDelete &&
-	                    !this.$options.readonly &&
-	                    columns.push({
-	                        label: this.$options.textSets.deleteLabel,
-	                        key: 'btnDelete',
-	                        style: {
-	                            width: '30px'
-	                        }
-	                    });
-	                return createElement$1("div", { className: "gn-datagrid-header-row" },
-	                    " ",
-	                    columns.map((column, idx) => this._hidden.renderCol(column, idx)));
-	            },
-	            renderCol: (column, idx) => {
-	                const headerStyle = {};
-	                if (column.style) {
-	                    each(column.style, (value, key) => {
-	                        if (key === 'width') {
-	                            headerStyle['max-width'] = value;
-	                            headerStyle.width = value;
-	                            headerStyle['min-width'] = value;
-	                        }
-	                        else {
-	                            headerStyle[key] = value;
-	                        }
-	                    });
-	                }
-	                if (isIE) {
-	                    headerStyle.display = 'inline-block';
-	                }
-	                const renderCheck = () => {
-	                    return (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
-	                        createElement$1("input", { type: "checkbox", className: "is-allChecker", id: this._uid + '-rows-check', "on-click": (e) => {
-	                                this._hidden.checkAll.call(this, e);
-	                            }, disabled: this.$options.disabled })));
-	                };
-	                return (createElement$1("div", { style: headerStyle, className: 'gn-datagrid-header-cell ' +
-	                        (column.className ? column.className : '') +
-	                        (column.sort ? ' is-' + column.sort : '') +
-	                        (column.sortable ? ' is-sortable' : '') +
-	                        (column.isHidden ? ' is-unvisible' : ''), "on-click": column.sortable &&
-	                        ((e) => {
-	                            !this.$options.disabled && this._hidden.sort.call(this, column, e);
-	                        }), title: column.label ? column.label : '' },
-	                    idx === 0 && this.$options.hasCheck && renderCheck(),
-	                    createElement$1("span", { className: "gn-grid-cell" }, column.label),
-	                    column.sortable && createElement$1("span", { className: "is-sortDir" }),
-	                    column.draggable && createElement$1("span", { className: "is-handle", "data-index": idx })));
-	            },
-	            renderBody: (data, columns) => {
-	                rowIdx$1 = 0;
-	                return (createElement$1("div", { className: "gn-datagrid-body", style: {
-	                        maxHeight: this.$options.bodyHeight ? this.$options.bodyHeight : 'auto'
-	                    } }, (data === null || data === void 0 ? void 0 : data.length) ? this._hidden.renderRows(data, columns) : this._hidden.renderNodata()));
-	            },
-	            renderRows: (rows, columns, depth = 0, isOpen = false) => {
-	                return rows.map((row) => {
-	                    return row[this.$options.childField] && isArray$1(row[this.$options.childField])
-	                        ? [this._hidden.renderRow(row, columns, depth, true, isOpen), this._hidden.renderRows(row[this.$options.childField], columns, depth + 1, row.isOpened)]
-	                        : this._hidden.renderRow(row, columns, depth, false, isOpen);
-	                });
-	            },
-	            renderRow: (row, columns, depth = 0, hasChild, isOpened, isCheck = false) => {
-	                row._depth = depth;
-	                const _index = rowIdx$1++;
-	                if (row.isChecked) {
-	                    isCheck = true;
-	                }
-	                return (createElement$1("div", { "on-click": (e) => {
-	                        !this.$options.disabled && this._hidden.selectRow.call(this, row, _index, e);
-	                    }, "on-dblclick": (e) => {
-	                        !this.$options.disabled && this._hidden.doubleSelect.call(this, row, _index, e);
-	                    }, className: 'gn-datagrid-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (depth > 0 && !isOpened ? ' is-hidden' : '') + (row.color ? ` ${row.color}` : ''), id: this._uid + '-row-' + _index, "data-depth": depth }, columns.map((col, idx) => {
-	                    const cellStyle = {};
-	                    if (col.style) {
-	                        each(col.style, (value, key) => {
-	                            if (key === 'width') {
-	                                cellStyle['max-width'] = value;
-	                                cellStyle.width = value;
-	                                cellStyle['min-width'] = value;
-	                            }
-	                            else {
-	                                cellStyle[key] = value;
-	                            }
-	                        });
-	                    }
-	                    if (idx === 0 && depth !== 0) {
-	                        cellStyle.paddingLeft = depth * 15 + 10 + 'px';
-	                    }
-	                    if (isIE) {
-	                        cellStyle.display = 'inline-block';
-	                    }
-	                    if (col.key === 'btnOrder') {
-	                        cellStyle.display = 'flex';
-	                        cellStyle.padding = '0';
-	                        cellStyle['justify-content'] = 'space-evenly';
-	                        cellStyle['align-items'] = 'center';
-	                        return (createElement$1("div", { className: 'gn-datagrid-body-cell btn-container ' + (col.key ? col.key : ''), style: cellStyle, "on-click": (e) => {
-	                                this._hidden.stopRowSelectEvent(e);
-	                            } },
-	                            createElement$1("span", { className: 'gn-icon btn-order ' + (_index == 0 ? 'is-cancel' : 'is-info'), "on-click": () => {
-	                                    !this.$options.disabled && this._hidden.moveRowUp.call(this, _index);
-	                                } },
-	                                createElement$1("i", { className: "fas fa-arrow-circle-up" })),
-	                            createElement$1("span", { className: 'gn-icon btn-order ' + (_index == this.$options.data.length - 1 ? 'is-cancel' : 'is-info'), "on-click": () => {
-	                                    !this.$options.disabled && this._hidden.moveRowDown.call(this, _index);
-	                                } },
-	                                createElement$1("i", { className: "fas fa-arrow-circle-down" }))));
-	                    }
-	                    if (col.key === 'btnDelete') {
-	                        cellStyle.display = 'flex';
-	                        cellStyle['justify-content'] = 'center';
-	                        cellStyle['align-items'] = 'center';
-	                        return (createElement$1("div", { className: 'gn-datagrid-body-cell btn-container ' + (col.key ? col.key : ''), style: cellStyle, "on-click": (e) => {
-	                                this._hidden.stopRowSelectEvent(e);
-	                            } },
-	                            createElement$1("span", { className: "gn-icon is-small is-mono", "on-click": () => {
-	                                    !this.$options.disabled && this._hidden.deleteRow.call(this, _index);
-	                                } },
-	                                createElement$1("i", { className: "fas fa-trash" }))));
-	                    }
-	                    return (createElement$1("div", { className: 'gn-datagrid-body-cell ' +
-	                            (col.bodyClass ? col.bodyClass : col.className ? col.className : '') +
-	                            (isFunction(col.onSelect) ? ' is-selectable' : '') +
-	                            (col.isHidden ? ' is-unvisible' : ''), style: cellStyle, "on-click": (e) => {
-	                            !this.$options.disabled && this._hidden.selectCell.call(this, col, row, _index, e);
-	                        }, "on-mouseenter": (e) => {
-	                            !this.$options.disabled && this._hidden.hoverCell.call(this, col, row, _index, e);
-	                        }, "on-mouseleave": (e) => {
-	                            this._hidden.blurCell.call(this, col, row, _index, e);
-	                        }, title: col.tipField && row[col.tipField] ? row[col.tipField] : !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild, isCheck, _index)));
-	                })));
-	            },
-	            renderCell: (row, col, idx, hasChild, isCheck, _index) => {
-	                return [
-	                    idx === 0 && hasChild ? (createElement$1("span", { className: "is-toggler", "on-click": (e) => {
-	                            !this.$options.disabled && this._hidden.toggle.call(this, row, e);
-	                        } })) : (''),
-	                    idx === 0 && this.$options.hasCheck && row.noCheck !== true && row.noCheck !== 'true' ? (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
-	                        createElement$1("input", { type: "checkbox", id: this._uid + '-row-check-' + _index, className: "is-rowChecker", "on-click": (e) => {
-	                                this._hidden.check.call(this, row, e);
-	                            }, defaultChecked: isCheck, disabled: this.$options.disabled }))) : (''),
-	                    col.template ? createElement$1("span", { className: "gn-grid-cell", innerHTML: col.template(col.key, row) }) : row[col.key] !== undefined ? row[col.key] : ''
-	                ];
-	            },
-	            renderNodata: () => {
-	                return (createElement$1("div", { className: "gn-datagrid-body-row is-nodata" },
-	                    createElement$1("div", { className: "gn-datagrid-body-cell has-text-center" }, this.$options.textSets.noData)));
-	            },
-	            addChild: (index, addData) => {
-	                if (!addData || !addData.length) {
-	                    return;
-	                }
-	                const isRoot = index === null;
-	                // index로 상위 row를 찾는다
-	                let target = !isRoot ? find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el) : find(`.gn-datagrid-body > .gn-datagrid-body-row:last-child`, this.$el);
-	                // 추가되는 row depth를 상위 row의 depth + 1로 지정
-	                const _depth = !isRoot ? data(target, 'depth') * 1 + 1 : data(target, 'depth') * 1;
-	                const rowData = !isRoot ? this._hidden.findData(index) : last(this.$options.data);
-	                let isChecker = false;
-	                if (this.$options.hasCheck && this.$options.checkCapturing) {
-	                    // 체크박스 옵션이 설정된 경우에 부모의 체크값 확인
-	                    isChecker = !isRoot ? find('.is-rowChecker', target) : find('.is-allChecker', this.$el);
-	                    if (isChecker) {
-	                        isChecker = isChecker.checked;
-	                    }
-	                }
-	                addData.forEach((nRow, idx) => {
-	                    const newRow = document.createElement('div');
-	                    addClass(newRow, 'gn-datagrid-body-row');
-	                    if (isArray$1(rowData[this.$options.childField])) {
-	                        rowData[this.$options.childField].splice(idx, 0, nRow);
-	                    }
-	                    else {
-	                        rowData[this.$options.childField] = nRow;
-	                    }
-	                    after(target, newRow);
-	                    this.$template.reRender(newRow, this._hidden.renderRow(nRow, this.$options.headers, _depth, nRow[this.$options.childField] && isArray$1(nRow[this.$options.childField]), true, isChecker));
-	                    target = next(target);
-	                });
-	            },
-	            expand: (index) => {
-	                const target = find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el);
-	                const targetData = this._hidden.findData(index);
-	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'expand');
-	            },
-	            collapse: (index) => {
-	                const target = find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el);
-	                const targetData = this._hidden.findData(index);
-	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'collapse');
-	            },
-	            toggle: (row, e, type) => {
-	                let toggler = e;
-	                if (!row) {
-	                    return;
-	                }
-	                if (e instanceof MouseEvent) {
-	                    e.stopPropagation();
-	                    toggler = parents(e.currentTarget, '.gn-datagrid-body-row');
-	                }
-	                const children = nextUntil(toggler, '.gn-datagrid-body-row[data-depth="' + row._depth + '"]').filter((x) => {
-	                    return x.dataset.depth > row._depth;
-	                });
-	                type = type ? type : hasClass(toggler, 'is-collapsed') ? 'expand' : 'collapse';
-	                if (type === 'collapse') {
-	                    addClass(toggler, 'is-collapsed');
-	                    //hide childs
-	                    addClass(children, 'is-hidden');
-	                    addClass(children.filter((x) => {
-	                        return hasClass(x, 'has-child');
-	                    }), 'is-collapsed');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'collapsed', row, index$1(toggler));
-	                }
-	                else {
-	                    //show childs
-	                    removeClass(toggler, 'is-collapsed');
-	                    removeClass(children.filter((x) => {
-	                        return x.dataset.depth == row._depth + 1;
-	                    }), 'is-hidden');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'expanded', row, index$1(toggler));
-	                }
-	            },
-	            checkAll: (e) => {
-	                e.stopPropagation();
-	                findAll('.is-rowChecker', this.$el).forEach((c) => {
-	                    c.checked = e.target.checked;
-	                });
-	                this.$options.onCheckAll && this.$options.onCheckAll.call(this, e.target.checked);
-	            },
-	            showDetail(index, headerKeys) {
-	                const row = find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el);
-	                if (next(row) && hasClass(next(row), 'gn-datagrid-body-row-detail')) {
-	                    remove(next(row));
-	                    return;
-	                }
-	                const rowData = this.$options.data[index];
-	                const newRow = document.createElement('div');
-	                addClass(newRow, 'gn-datagrid-body-row-detail');
-	                const htmlContent = this.$options.headers.reduce((prev, next) => {
-	                    if (!headerKeys || headerKeys.includes(next.key)) {
-	                        const rowContent = next.template ? `<dd>${next.template(next.key, rowData)}</dd>` : `<dd>${rowData[next.key] || ''}</dd>`;
-	                        return prev + `<dl class="gn-list is-arrange is-borderless"><dt>${next.label}</dt>${rowContent}</dl>`;
-	                    }
-	                    return prev;
-	                }, '');
-	                html(newRow, htmlContent);
-	                after(row, newRow);
-	            },
-	            check: (row, e) => {
-	                e.stopPropagation();
-	                const checker = parents(e.currentTarget, '.gn-datagrid-body-row');
-	                const checkerState = e.target.checked;
-	                find('.is-allChecker', this.$el).checked = false;
-	                // 1. row에 자식노드가 있는지 확인한다.
-	                if (this.$options.checkCapturing && row[this.$options.childField] && row[this.$options.childField].length) {
-	                    // 2. 자식노드가 있는경우 자식 체크박스도 함께 토글한다.
-	                    nextUntil(checker, '.gn-datagrid-body-row[data-depth="' + row._depth + '"]')
-	                        .filter((x) => {
-	                        return x.dataset.depth > row._depth;
-	                    })
-	                        .forEach((x) => {
-	                        const _checker = find('.is-rowChecker', x);
-	                        if (_checker) {
-	                            _checker.checked = e.target.checked;
-	                        }
-	                    });
-	                }
-	                // 3. 체크 해제인 경우만 부모노드가 있는지 확인한다.
-	                if (this.$options.checkCapturing && row._depth > 0 && !checkerState) {
-	                    // 4. 부모노드가 체크되어 있는지 확인한다
-	                    const exeDepth = [];
-	                    prevUntil(checker, '.gn-datagrid-body-row[data-depth="0"]')
-	                        .filter((x) => {
-	                        const _thisDepth = x.dataset.depth;
-	                        if (exeDepth.includes(_thisDepth)) {
-	                            return false;
-	                        }
-	                        exeDepth.push(_thisDepth);
-	                        return _thisDepth < row._depth;
-	                    })
-	                        .forEach((x) => {
-	                        const _checker = find('.is-rowChecker', x);
-	                        if (_checker) {
-	                            _checker.checked = checkerState;
-	                        }
-	                    });
-	                }
-	                this.$options.onCheck && this.$options.onCheck.call(this, row, e);
-	            },
-	            reRender: ({ headers, data, hasCheck }) => {
-	                return new Promise(resolve => {
-	                    if (hasCheck === undefined) {
-	                        hasCheck = this.$options.hasCheck;
-	                    }
-	                    this.$options.headers = headers;
-	                    this.$options.hasCheck = hasCheck;
-	                    this.$template.reRender(find('.gn-datagrid-header-row', this.$el), this._hidden.renderHeader(this.$options.headers));
-	                    this._hidden.resetData(data ? data.slice() : this.$options.data);
-	                    this.$render(this.$options);
-	                    isFunction(resolve) && resolve();
-	                });
-	            },
-	            resetData: (data) => {
-	                return new Promise(resolve => {
-	                    this.$options.data = data;
-	                    Array.isArray(data) && data.some((d) => isArray$1(d[this.$options.childField])) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
-	                    this.$template.reRender(find('.gn-datagrid-body', this.$el), this._hidden.renderBody(this.$options.data, this.$options.headers));
-	                    if (this.$options.fixHeader || this.$options.bodyHeight) {
-	                        this._hidden.setBlankHeader();
-	                    }
-	                    // 체크박스가 있는경우 전체 체크항목을 해제해준다
-	                    if (this.$options.hasCheck) {
-	                        find('.is-allChecker', this.$el).checked = false;
-	                    }
-	                    isFunction(resolve) && resolve();
-	                });
-	            },
-	            selectRow: (row, index, e) => {
-	                if (this.$options.onSelect) {
-	                    if (e) {
-	                        e.currentTarget;
-	                    }
-	                    else {
-	                        const rows = findAll('.gn-datagrid-body-row', this.$el);
-	                        rows[index];
-	                    }
-	                    const ClickTrigger = this.$options.onSelect.bind(this, row, index);
-	                    _EventTimer$1 = setTimeout(() => {
-	                        if (!_EventPrevent) {
-	                            ClickTrigger();
-	                        }
-	                        _EventPrevent = false;
-	                    }, _EventDelay);
-	                }
-	            },
-	            selectCell: (col, row, index, e) => {
-	                if (isFunction(col.onSelect)) {
-	                    col.onSelect.call(this, row, col, index, e);
-	                }
-	            },
-	            stopRowSelectEvent: (e) => {
-	                e.stopPropagation();
-	            },
-	            deleteRow: (index) => {
-	                var _a;
-	                this.$options.data = this.$options.data.filter((_data, idx) => index !== idx);
-	                this._hidden.resetData(this.$options.data);
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
-	            },
-	            moveRowUp: (index) => {
-	                if (index == 0) {
-	                    return;
-	                }
-	                this._hidden.switchRow(index, index - 1);
-	            },
-	            moveRowDown: (index) => {
-	                if (index == this.$options.data.length - 1) {
-	                    return;
-	                }
-	                this._hidden.switchRow(index, index + 1);
-	            },
-	            switchRow: (index1, index2) => {
-	                var _a;
-	                [this.$options.data[index2], this.$options.data[index1]] = [this.$options.data[index1], this.$options.data[index2]];
-	                this._hidden.resetData(this.$options.data);
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
-	            },
-	            doubleSelect: (row, index) => {
-	                if (this.$options.onDoubleClick) {
-	                    clearTimeout(_EventTimer$1);
-	                    _EventPrevent = true;
-	                    this.$options.onDoubleClick.call(this, row, index);
-	                }
-	            },
-	            hoverCell: (col, row, index, e) => {
-	                col.onHover && col.onHover.call(this, row, col, index, e);
-	            },
-	            blurCell: (col, row, index, e) => {
-	                col.offHover && col.offHover.call(this, row, col, index, e);
-	            },
-	            findData: (index) => {
-	                let deter = 0, indexData = null;
-	                const findIndex = (datas, index) => {
-	                    return datas.some((data) => {
-	                        if (index === deter) {
-	                            indexData = data;
-	                            return true;
-	                        }
-	                        ++deter;
-	                        if (isArray$1(data[this.$options.childField]) && data[this.$options.childField].length) {
-	                            return findIndex(data[this.$options.childField], index);
-	                        }
-	                        return false;
-	                    });
-	                };
-	                findIndex(this.$options.data, index);
-	                return indexData;
-	            },
-	            getChecked: () => {
-	                return findAll('.is-rowChecker', this.$el)
-	                    .filter((checker) => {
-	                    return checker.checked;
-	                })
-	                    .map((checker) => {
-	                    return index$1(parents(checker, '.gn-datagrid-body-row').pop());
-	                })
-	                    .map((rowIdx) => {
-	                    return this._hidden.findData(rowIdx);
-	                });
-	            },
-	            hideCols: (keys) => {
-	                const _visibles = [];
-	                this.$options.headers.forEach((header) => {
-	                    keys.includes(header.key) ? _visibles.push(false) : _visibles.push(true);
-	                });
-	                this._hidden.toggleCols(_visibles);
-	            },
-	            showCols: (keys) => {
-	                const _visibles = [];
-	                this.$options.headers.forEach((header) => {
-	                    keys.includes(header.key) ? _visibles.push(true) : _visibles.push(false);
-	                });
-	                this._hidden.toggleCols(_visibles);
-	            },
-	            showAll: () => {
-	                removeClass(findAll('.is-unvisible', this.$el), 'is-unvisible');
-	            },
-	            toggleCols: (visibles = []) => {
-	                visibles.forEach((visible, index) => {
-	                    const colNumber = index + 1;
-	                    !visible
-	                        ? addClass(findAll('.gn-datagrid-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
-	                        : removeClass(findAll('.gn-datagrid-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
-	                    !visible
-	                        ? addClass(findAll('.gn-datagrid-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
-	                        : removeClass(findAll('.gn-datagrid-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
-	                });
-	            },
-	            setBlankHeader: () => {
-	                // body영역에 스크롤이 생긴 경우 헤더의 우측에 여백이 생기도록 한다
-	                const body = find('.gn-datagrid-body', this.$el);
-	                body.scrollHeight > body.clientHeight ? addClass(this.$el, 'has-scroll') : removeClass(this.$el, 'has-scroll');
-	            },
-	            columnDragEvents: {
-	                drag: (e, position, handle) => {
-	                    const target = parents(handle, '.gn-datagrid-header-cell');
-	                    const rowCells = findAll(`.gn-datagrid-body-row:not(.is-nodata) .gn-datagrid-body-cell:nth-child(${data(handle, 'index') * 1 + 1})`, this.$el);
-	                    target &&
-	                        styles$3(target[0], {
-	                            'min-width': getUnit('minWidth', position.x + 5),
-	                            width: getUnit('width', position.x + 5),
-	                            'max-width': getUnit('maxWidth', position.x + 5)
-	                        });
-	                    rowCells &&
-	                        rowCells.forEach((cell) => {
-	                            styles$3(cell, {
-	                                'min-width': getUnit('minWidth', position.x + 5),
-	                                width: getUnit('width', position.x + 5),
-	                                'max-width': getUnit('maxWidth', position.x + 5)
-	                            });
-	                        });
-	                },
-	                dragStart: () => { },
-	                dragEnd: (e, handle) => {
-	                    if (!this.$options.headers[data(handle, 'index')].style) {
-	                        this.$options.headers[data(handle, 'index')].style = {};
-	                    }
-	                    this.$options.headers[data(handle, 'index')].style.width = getUnit('width', position(handle).left + 5);
-	                    this.$options.headers[data(handle, 'index')].style['min-width'] = getUnit('minWidth', position(handle).left + 5);
-	                    this.$options.headers[data(handle, 'index')].style['max-width'] = getUnit('maxWidth', position(handle).left + 5);
-	                    this.$options.onDragEnd && this.$options.onDragEnd.call(this, this.$options.headers[data(handle, 'index')]);
-	                }
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                attr(findAll('input', this.$el), 'disabled', true);
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                removeAttr(findAll('input', this.$el), 'disabled');
-	                removeClass(this.$el, 'is-disabled');
-	            }
-	        };
-	        this.config = {
-	            width: '100%',
-	            hasCheck: false,
-	            hasOrder: false,
-	            hasDelete: false,
-	            isEllipsis: false,
-	            data: [],
-	            textSets: {
-	                noData: 'No records available.',
-	                orderLabel: '',
-	                deleteLabel: ''
-	            },
-	            childField: 'child',
-	            checkCapturing: true
-	        };
-	        this.events = {
-	            onSort: true,
-	            onSelect: true,
-	            onToggle: true,
-	            onCheckAll: true,
-	            onCheck: true,
-	            onDoubleClick: true,
-	            onChange: true
-	        };
-	        this.methods = {
-	            reRender(options) {
-	                return this._hidden.reRender(options);
-	            },
-	            resetData(data) {
-	                return this._hidden.resetData(data === null || data === void 0 ? void 0 : data.slice());
-	            },
-	            addChild(index, data) {
-	                this._hidden.addChild(index, data.slice());
-	            },
-	            addRow(data) {
-	                this._hidden.addChild(null, data.slice());
-	                this.$options.data = this.$options.data.concat(data);
-	            },
-	            expand(index) {
-	                this._hidden.expand(index);
-	            },
-	            collapse(index) {
-	                this._hidden.collapse(index);
-	            },
-	            getChecked() {
-	                return this._hidden.getChecked();
-	            },
-	            hideCols(keys) {
-	                this._hidden.hideCols(keys);
-	            },
-	            showCols(keys) {
-	                this._hidden.showCols(keys);
-	            },
-	            showAll() {
-	                this._hidden.showAll();
-	            },
-	            showDetail(index, headerKeys) {
-	                this._hidden.showDetail.call(this, index, headerKeys);
-	            },
-	            selectRow(index, rowData) {
-	                let row = rowData;
-	                if (!row) {
-	                    row = this.$options.data[index];
-	                }
-	                !this.$options.disable && this._hidden.selectRow(row, index);
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        return (createElement$1("div", { id: this._uid, className: 'gn-datagrid' +
-	                (config.style ? ' is-' + config.style : '') +
-	                (config.isEllipsis ? ' is-ellipsis' : '') +
-	                (config.bodyHeight ? ' has-fixed-body' : '') +
-	                (config.fixHeader ? ' has-fixed-header' : '') +
-	                (config.data.some((d) => isArray$1(d[this.$options.childField])) ? ' has-left-padding' : '') +
-	                (config.disabled ? ' is-disabled' : ''), style: styles },
-	            createElement$1("div", { className: "gn-datagrid-header" }, this._hidden.renderHeader(config.headers)),
-	            createElement$1("div", { className: "gn-datagrid-contents", style: { marginTop: this.$options.bodyTopMargin ? this.$options.bodyTopMargin : '0' } }, this._hidden.renderBody(config.data.slice(), config.headers))));
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) {
-	        const handles = findAll('.is-handle', this.$el);
-	        handles.forEach((handle) => {
-	            dragLayout(handle, [0, 30, 0, window.innerWidth], this._hidden.columnDragEvents);
-	        });
-	        if (isIE) {
-	            css$1(handles, 'display', 'none');
-	        }
-	        if (this.$options.onDoubleClick && this.$options.onSelect) {
-	            console.warn('It is not desirable to bind handlers to both click events and dblick events for the same element.');
-	        }
-	    }
-	    completed() {
-	        if (this.$options.fixHeader) {
-	            const body = find('.gn-datagrid-contents', this.$el);
-	            const header = find('.gn-datagrid-header', this.$el);
-	            const _offset = offset(header);
-	            this.$options.bodyTopMargin = _offset.height ? _offset.height - 1 + 'px' : '2.4rem';
-	            css$1(body, 'margin-top', this.$options.bodyTopMargin);
-	        }
-	        if (this.$options.fixHeader || this.$options.bodyHeight) {
-	            this._hidden.setBlankHeader();
-	            on(window, 'resize', this._hidden.setBlankHeader);
-	        }
-	    }
-	}
-
-	let rowIdx = 0;
-	const _EventTimer = 0;
-	class DataList extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            renderBody: (data, columns) => {
-	                return (createElement$1("div", { className: "gn-datalist-body", style: {
-	                        maxHeight: this.$options.bodyHeight ? this.$options.bodyHeight : 'auto'
-	                    } }, data.length ? this._hidden.renderRows(data, columns) : this._hidden.renderNodata()));
-	            },
-	            renderRows: (rows, columns, depth = 0, isOpen = false) => {
-	                return rows.map((row, idx) => {
-	                    return row[this.$options.childField] && isArray$1(row[this.$options.childField])
-	                        ? [this._hidden.renderRow(row, columns, idx, depth, true, isOpen), this._hidden.renderRows(row[this.$options.childField], columns, depth + 1, row.isOpened)]
-	                        : this._hidden.renderRow(row, columns, idx, depth, false, isOpen);
-	                });
-	            },
-	            renderRow: (row, columns, index, depth = 0, hasChild, isOpened) => {
-	                row._depth = depth;
-	                const _index = rowIdx++;
-	                const btnUpdate = {
-	                    icon: this.$options.readonly ? 'info-circle' : 'pen',
-	                    color: (this.$options.readonly ? 'info' : 'cancel')
-	                };
-	                return (createElement$1("div", { "on-dblclick": (e) => {
-	                        this._hidden.doubleSelect.call(this, row, _index, e);
-	                    }, className: 'gn-datalist-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (row.isSelectedRow ? ' is-active' : '') + (depth > 0 && !isOpened ? ' is-hidden' : ''), "data-depth": depth, style: { cursor: this.$options.onSelect ? 'pointer' : 'default' } },
-	                    createElement$1("ol", { className: 'gn-datalist-ol-container' }, columns.map((col, idx) => {
-	                        const cellStyle = {};
-	                        if (col.style) {
-	                            each(col.style, (value, key) => {
-	                                if (key === 'width') {
-	                                    cellStyle['max-width'] = value;
-	                                    cellStyle.width = value;
-	                                    cellStyle['min-width'] = value;
-	                                }
-	                                else {
-	                                    cellStyle[key] = value;
-	                                }
-	                            });
-	                        }
-	                        if (idx === 0 && depth !== 0) {
-	                            cellStyle.paddingLeft = depth * 15 + 10 + 'px';
-	                        }
-	                        if (isIE) {
-	                            cellStyle.display = 'inline-block';
-	                        }
-	                        const isHiddenCell = (this.$options.isHiddenEmpty && row[col.key] === '') || col.isHidden;
-	                        return (!isHiddenCell && (createElement$1("li", null,
-	                            this._hidden.renderCol(col, idx),
-	                            createElement$1("span", { className: 'gn-datalist-body-cell ' +
-	                                    (col.bodyClass ? col.bodyClass : col.className ? col.className : '') +
-	                                    (isFunction(col.onSelect) ? ' is-selectable' : '') +
-	                                    (col.isHidden ? ' is-unvisible' : ''), style: cellStyle, "on-mouseenter": (e) => {
-	                                    this._hidden.hoverCell.call(this, col, row, _index, e);
-	                                }, "on-mouseleave": (e) => {
-	                                    this._hidden.blurCell.call(this, col, row, _index, e);
-	                                }, title: !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild)))));
-	                    })),
-	                    createElement$1("div", { className: "gn-datalist-btn-container" },
-	                        this.$options.hasUpdate
-	                            ? this._hidden.renderBtn(btnUpdate.icon, btnUpdate.color, (_e) => {
-	                                if (!this.$options.disabled && this.$options.onUpdate) {
-	                                    this.$options.onUpdate.call(this, this.$options.data[index], index);
-	                                    return;
-	                                }
-	                            })
-	                            : '',
-	                        !this.$options.readonly && this.$options.hasDelete
-	                            ? this._hidden.renderBtn('trash', 'mono', (_e) => {
-	                                !this.$options.disabled && this._hidden.deleteRow(+index);
-	                            })
-	                            : '')));
-	            },
-	            renderCol: (column, idx) => {
-	                const headerStyle = {};
-	                if (column.style) {
-	                    each(column.style, (value, key) => {
-	                        if (key === 'width') {
-	                            headerStyle['max-width'] = value;
-	                            headerStyle.width = value;
-	                            headerStyle['min-width'] = value;
-	                        }
-	                        else {
-	                            headerStyle[key] = value;
-	                        }
-	                    });
-	                }
-	                if (isIE) {
-	                    headerStyle.display = 'inline-block';
-	                }
-	                return (createElement$1("strong", { style: headerStyle, className: 'gn-datalist-header-cell ' + (column.className ? column.className : '') + (column.isHidden ? ' is-unvisible' : ''), title: column.label ? column.label : '' },
-	                    createElement$1("span", { className: "gn-grid-cell" }, column.label)));
-	            },
-	            renderCell: (row, col, idx, hasChild) => {
-	                return [
-	                    idx === 0 && hasChild ? (createElement$1("span", { className: "is-toggler", "on-click": (e) => {
-	                            this._hidden.toggle.call(this, row, e);
-	                        } })) : (''),
-	                    col.template ? createElement$1("span", { className: "gn-grid-cell", innerHTML: col.template(col.key, row) }) : row[col.key] !== undefined ? row[col.key] : ''
-	                ];
-	            },
-	            renderBtn: (iconName, color, clickHandler) => {
-	                return (createElement$1("span", { className: 'gn-icon is-small ' + (color ? 'is-' + color : ''), "on-click": clickHandler },
-	                    createElement$1("i", { className: 'fas fa-' + iconName })));
-	            },
-	            renderNodata: () => {
-	                return (createElement$1("div", { className: "gn-datalist-body-row" },
-	                    createElement$1("div", { className: "gn-datalist-body-cell has-text-center" }, this.$options.textSets.noData)));
-	            },
-	            addChild: (index, addData) => {
-	                if (!addData || !addData.length) {
-	                    return;
-	                }
-	                const isRoot = index === null;
-	                // index로 상위 row를 찾는다
-	                let target = !isRoot ? find(`.gn-datalist-body > .gn-datalist-body-row:nth-child(${index * 1 + 1})`, this.$el) : find(`.gn-datalist-body > .gn-datalist-body-row:last-child`, this.$el);
-	                // 추가되는 row depth를 상위 row의 depth + 1로 지정
-	                const _depth = !isRoot ? data(target, 'depth') * 1 + 1 : data(target, 'depth') * 1;
-	                const rowData = !isRoot ? this._hidden.findData(index) : last(this.$options.data);
-	                addData.forEach((nRow, idx) => {
-	                    const newRow = document.createElement('div');
-	                    addClass(newRow, 'gn-datalist-body-row');
-	                    if (isArray$1(rowData[this.$options.childField])) {
-	                        rowData[this.$options.childField].splice(idx, 0, nRow);
-	                    }
-	                    else {
-	                        rowData[this.$options.childField] = nRow;
-	                    }
-	                    after(target, newRow);
-	                    this.$template.reRender(newRow, this._hidden.renderRow(nRow, this.$options.headers, idx, _depth, nRow[this.$options.childField] && isArray$1(nRow[this.$options.childField]), true));
-	                    target = next(target);
-	                });
-	            },
-	            expand: (index) => {
-	                const target = find(`.gn-datalist-body > .gn-datalist-body-row:nth-child(${index * 1 + 1})`, this.$el);
-	                const targetData = this._hidden.findData(index);
-	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'expand');
-	            },
-	            collapse: (index) => {
-	                const target = find(`.gn-datalist-body > .gn-datalist-body-row:nth-child(${index * 1 + 1})`, this.$el);
-	                const targetData = this._hidden.findData(index);
-	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'collapse');
-	            },
-	            toggle: (row, e, type) => {
-	                let toggler = e;
-	                if (!row) {
-	                    return;
-	                }
-	                if (e instanceof MouseEvent) {
-	                    e.stopPropagation();
-	                    toggler = parents(e.currentTarget, '.gn-datalist-body-row');
-	                }
-	                const children = nextUntil(toggler, '.gn-datalist-body-row[data-depth="' + row._depth + '"]').filter((x) => {
-	                    return x.dataset.depth > row._depth;
-	                });
-	                type = type ? type : hasClass(toggler, 'is-collapsed') ? 'expand' : 'collapse';
-	                if (type === 'collapse') {
-	                    addClass(toggler, 'is-collapsed');
-	                    //hide childs
-	                    addClass(children, 'is-hidden');
-	                    addClass(children.filter((x) => {
-	                        return hasClass(x, 'has-child');
-	                    }), 'is-collapsed');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'collapsed', row, index$1(toggler));
-	                }
-	                else {
-	                    //show childs
-	                    removeClass(toggler, 'is-collapsed');
-	                    removeClass(children.filter((x) => {
-	                        return x.dataset.depth == row._depth + 1;
-	                    }), 'is-hidden');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'expanded', row, index$1(toggler));
-	                }
-	            },
-	            reRender: ({ headers, data }) => {
-	                return new Promise(resolve => {
-	                    this.$options.headers = headers;
-	                    this._hidden.resetData(data ? data.slice() : this.$options.data);
-	                    isFunction(resolve) && resolve();
-	                });
-	            },
-	            resetData: (data) => {
-	                return new Promise(resolve => {
-	                    this.$options.data = data;
-	                    data.some((d) => isArray$1(d[this.$options.childField])) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
-	                    this.$template.reRender(find('.gn-datalist-body', this.$el), this._hidden.renderBody(this.$options.data, this.$options.headers));
-	                    isFunction(resolve) && resolve();
-	                });
-	            },
-	            doubleSelect: (row, index) => {
-	                if (this.$options.onDoubleClick) {
-	                    clearTimeout(_EventTimer);
-	                    this.$options.onDoubleClick.call(this, row, index);
-	                }
-	            },
-	            hoverCell: (col, row, index, e) => {
-	                col.onHover && col.onHover.call(this, row, col, index, e);
-	            },
-	            blurCell: (col, row, index, e) => {
-	                col.offHover && col.offHover.call(this, row, col, index, e);
-	            },
-	            findData: (index) => {
-	                let deter = 0, indexData = null;
-	                const findIndex = (datas, index) => {
-	                    return datas.some((data) => {
-	                        if (index === deter) {
-	                            indexData = data;
-	                            return true;
-	                        }
-	                        ++deter;
-	                        if (isArray$1(data[this.$options.childField]) && data[this.$options.childField].length) {
-	                            return findIndex(data[this.$options.childField], index);
-	                        }
-	                        return false;
-	                    });
-	                };
-	                findIndex(this.$options.data, index);
-	                return indexData;
-	            },
-	            hideCols: (keys) => {
-	                const _visibles = [];
-	                this.$options.headers.forEach((header) => {
-	                    keys.includes(header.key) ? _visibles.push(false) : _visibles.push(true);
-	                });
-	                this._hidden.toggleCols(_visibles);
-	            },
-	            showCols: (keys) => {
-	                const _visibles = [];
-	                this.$options.headers.forEach((header) => {
-	                    keys.includes(header.key) ? _visibles.push(true) : _visibles.push(false);
-	                });
-	                this._hidden.toggleCols(_visibles);
-	            },
-	            showAll: () => {
-	                removeClass(findAll('.is-unvisible', this.$el), 'is-unvisible');
-	            },
-	            toggleCols: (visibles = []) => {
-	                visibles.forEach((visible, index) => {
-	                    const colNumber = index + 1;
-	                    !visible
-	                        ? addClass(findAll('.gn-datalist-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
-	                        : removeClass(findAll('.gn-datalist-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
-	                    !visible
-	                        ? addClass(findAll('.gn-datalist-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
-	                        : removeClass(findAll('.gn-datalist-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
-	                });
-	            },
-	            deleteRow: (index) => {
-	                var _a;
-	                this.$options.data.splice(index, 1);
-	                this._hidden.resetData(this.$options.data);
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                removeClass(this.$el, 'is-disabled');
-	            }
-	        };
-	        this.config = {
-	            width: '100%',
-	            hasUpdate: false,
-	            hasDelete: false,
-	            isEllipsis: false,
-	            data: [],
-	            textSets: {
-	                noData: 'No records available.'
-	            },
-	            childField: 'child',
-	            isHiddenEmpty: false
-	        };
-	        this.events = {
-	            onSelect: true,
-	            onToggle: true,
-	            onDoubleClick: true,
-	            onUpdate: true,
-	            onDelete: true,
-	            onChange: true
-	        };
-	        this.methods = {
-	            reRender(options) {
-	                return this._hidden.reRender(options);
-	            },
-	            resetData(data) {
-	                return this._hidden.resetData(data.slice());
-	            },
-	            addChild(index, data) {
-	                this._hidden.addChild(index, data.slice());
-	            },
-	            addRow(data) {
-	                if (data) {
-	                    this.$options.data = this.$options.data.concat(data);
-	                    this._hidden.resetData(this.$options.data);
-	                }
-	            },
-	            expand(index) {
-	                this._hidden.expand(index);
-	            },
-	            collapse(index) {
-	                this._hidden.collapse(index);
-	            },
-	            hideCols(keys) {
-	                this._hidden.hideCols(keys);
-	            },
-	            showCols(keys) {
-	                this._hidden.showCols(keys);
-	            },
-	            showAll() {
-	                this._hidden.showAll();
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        return (createElement$1("div", { id: this._uid, className: 'gn-datalist' +
-	                (config.style ? ' is-' + config.style : '') +
-	                (config.isEllipsis ? ' is-ellipsis' : '') +
-	                (config.bodyHeight ? ' has-fixed-body' : '') +
-	                (config.data.some((d) => isArray$1(d[this.$options.childField])) ? ' has-left-padding' : ''), style: styles },
-	            createElement$1("div", { className: "gn-datalist-contents", style: { marginTop: this.$options.bodyTopMargin ? this.$options.bodyTopMargin : '0' } }, this._hidden.renderBody(config.data.slice(), config.headers))));
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) { }
-	    completed() { }
-	}
-
-	class Growl extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            out: () => {
-	                // eslint-disable-next-line @typescript-eslint/no-this-alias
-	                const closerThis = this;
-	                const clearTimer = setTimeout(function () {
-	                    fadeout(closerThis.$el, 500);
-	                    clearTimeout(clearTimer);
-	                    const closeTimer = setTimeout(function () {
-	                        closerThis.$destroy(closerThis, true);
-	                        clearTimeout(closeTimer);
-	                    }, 500);
-	                }, closerThis.$options.duration);
-	            }
-	        };
-	        this.config = {
-	            textSets: {
-	                message: this.$selector ? this.$selector.textContent : ''
-	            },
-	            width: 400,
-	            duration: 1000,
-	            positionX: 'center',
-	            positionY: 'center'
-	        };
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.width) {
-	            /* inline style이 필요한 경우는 이렇게 사용 */
-	            styles.width = getUnit('width', config.width);
-	        }
-	        return (createElement$1("div", { id: this._uid, className: 'gn-growl' +
-	                (config.color ? ' is-' + config.color : '') /* 색상 클래스 추가 */ +
-	                (config.style ? ' is-' + config.style : '') /* 스타일 클래스 추가 */ +
-	                (config.icon ? ' has-arrange' : '') /* 스타일 클래스 추가 */ +
-	                (config.size ? ' is-' + config.size : ''), 
-	            /* 크기 클래스 추가 */ style: styles },
-	            config.icon ? (createElement$1("span", { className: "gn-icon is-normal" },
-	                createElement$1("i", { className: 'fas fa-' + config.icon }))) : (''),
-	            createElement$1("p", { innerHTML: config.textSets.message })));
-	    }
-	    beforeMount() {
-	        if (!this.$selector) {
-	            const container = $('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
-	            !container && append(document.body, $('<div class="gn-growl-container pos-' + this.$options.positionX + '-' + this.$options.positionY + '"></div>'));
-	            append($('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY), $(`<div id="${this._uid}"></div>`));
-	            this.$selector = $(`#${this._uid}`);
-	        }
-	        if (this.$options.type) {
-	            switch (this.$options.type) {
-	                // type이 설정된 경우, 색상과 아이콘을 반영한다.
-	                case 'error':
-	                case 'danger':
-	                    this.$options.color = 'danger';
-	                    this.$options.icon = 'exclamation-triangle';
-	                    break;
-	                case 'warning':
-	                    this.$options.color = 'warning';
-	                    this.$options.icon = 'exclamation-circle';
-	                    break;
-	                case 'success':
-	                    this.$options.color = 'success';
-	                    this.$options.icon = 'check';
-	                    break;
-	                case 'info':
-	                    this.$options.color = 'info';
-	                    this.$options.icon = 'info-circle';
-	                    break;
-	                case 'guide':
-	                    this.$options.color = 'guide';
-	                    this.$options.icon = 'info-circle';
-	                    break;
-	            }
-	        }
-	    }
-	    completed() {
-	        this._hidden.out();
-	    }
-	    destroyed() {
-	        const container = $('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
-	        if (!container.childElementCount) {
-	            remove(container);
-	        }
-	    }
-	}
-
-	let modal_index = 990;
-	class Modal extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            close: () => {
-	                removeStyle(document.body, 'position');
-	                removeStyle(document.body, 'top');
-	                removeStyle(document.body, 'width');
-	                window.scrollTo(0, this.scrollPosition);
-	                this.$event(this, 'onClose');
-	                this.$options.autoDestroy ? this.$destroy(this) : this._hidden.hide();
-	            },
-	            confirm: () => {
-	                this.$event(this, 'onConfirm');
-	            },
-	            hide: () => {
-	                removeClass(this.$el, 'is-active');
-	            },
-	            show: () => {
-	                this.scrollPosition = window.scrollY;
-	                if (this.$options.isModal) {
-	                    css$1(document.body, 'position', 'fixed');
-	                    css$1(document.body, 'top', `-${this.scrollPosition}px`);
-	                    css$1(document.body, 'width', '100%');
-	                }
-	                addClass(this.$el, 'is-active');
-	                const modal = find('.modal-content', this.$el);
-	                if (this.$options.resizable && css$1(modal, 'transform') !== 'none') {
-	                    css$1(modal, 'transform', 'none');
-	                    css$1(modal, 'left', getPositionX(modal, false));
-	                    css$1(modal, 'top', getPositionY(modal, false));
-	                }
-	                this.$event(this, 'onOpen');
-	            },
-	            toggle: () => {
-	                toggleClass(this.$el, 'is-minimized');
-	            },
-	            focus: () => {
-	                const modal = find('.modal-content', this.$el);
-	                modal.focus();
-	            }
-	        };
-	        this.config = {
-	            textSets: {
-	                title: '',
-	                confirm: '확인',
-	                cancel: '취소'
-	            },
-	            sizeSets: {
-	                confirm: 'normal',
-	                cancel: 'normal'
-	            },
-	            contents: '',
-	            width: 400,
-	            hasClose: true,
-	            hasConfirm: false,
-	            hasCancel: false,
-	            isModal: true,
-	            minimized: false,
-	            resizable: false,
-	            draggable: false,
-	            autoShow: true,
-	            autoDestroy: true
-	        };
-	        this.events = {
-	            onClose: true,
-	            onConfirm: true,
-	            onOpen: true
-	        };
-	        this.methods = {
-	            close() {
-	                this._hidden.close();
-	            },
-	            show() {
-	                this._hidden.show();
-	            },
-	            focus() {
-	                this._hidden.focus();
-	            }
-	        };
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        const contStyles = {};
-	        if (config.width) {
-	            styles.width = getUnit('width', config.width);
-	        }
-	        if (config.height) {
-	            styles.height = getUnit('height', config.height);
-	        }
-	        if (config.padding) {
-	            contStyles.padding = getUnit('padding', config.padding);
-	        }
-	        return (createElement$1("div", { id: this._uid, className: "gn-modal" },
-	            config.isModal && createElement$1("div", { className: "modal-mask" }),
-	            createElement$1("div", { className: "modal-content" },
-	                (config.textSets.title || config.minimized || config.hasClose || config.draggable || config.icon) && (createElement$1("div", { className: 'modal-header' + (config.color ? ' is-' + config.color : '') + (config.draggable ? ' is-draggable' : '') },
-	                    createElement$1("h3", null,
-	                        config.icon && (createElement$1("span", { className: "gn-icon is-normal" },
-	                            createElement$1("i", { className: 'fas fa-' + config.icon }))),
-	                        config.textSets.title),
-	                    createElement$1("div", { className: "modal-control" },
-	                        config.minimized && (createElement$1("span", { className: "gn-icon is-small is-minimize", "on-click": this._hidden.toggle },
-	                            createElement$1("i", { className: "fas" }))),
-	                        config.hasClose && (createElement$1("span", { className: "gn-icon is-close", "on-click": this._hidden.close },
-	                            createElement$1("i", { className: "fas fa-times" })))))),
-	                createElement$1("div", { className: "modal-body", style: styles },
-	                    createElement$1("div", { className: "modal-body-content", style: contStyles })),
-	                (config.hasConfirm || config.hasCancel) /* 확인/취소 옵션 확인 */ && (createElement$1("div", { className: "modal-footer has-text-center" },
-	                    config.hasConfirm && (createElement$1("button", { type: "button", className: 'gn-button' + ` is-${config.sizeSets.confirm}`, "on-click": this._hidden.confirm }, config.textSets.confirm)),
-	                    config.hasCancel && (createElement$1("button", { type: "button", className: 'gn-button btnCloseModal is-cancel' + ` is-${config.sizeSets.cancel}`, "on-click": this._hidden.close }, config.textSets.cancel)))))));
-	    }
-	    $render(config) {
-	        if (config.contents) {
-	            if (config.contents.sel !== undefined) {
-	                append(find('.modal-body-content', this.$el), $('<div class="temp-node"></div>'));
-	                this.$template.reRender(find('.temp-node', this.$el), config.contents);
-	            }
-	            else {
-	                append(find('.modal-body-content', this.$el), $(config.contents));
-	            }
-	        }
-	        if (config.draggable) {
-	            const modal = find('.modal-content', this.$el);
-	            attr(modal, 'tabindex', '-1');
-	            css$1(modal, 'z-index', modal_index);
-	            drag(modal, {
-	                dragStart: () => {
-	                    modal.focus();
-	                }
-	            });
-	        }
-	    }
-	    beforeMount() {
-	        if (!this.$selector) {
-	            append(document.body, $(`<div id="${this._uid}"></div>`));
-	            this.$selector = $(`#${this._uid}`);
-	        }
-	        if (this.$options.color) {
-	            if (!GN_CONSTANT.COLOR_SET.includes(this.$options.color)) {
-	                this.$options.color = '';
-	            }
-	        }
-	    }
-	    completed() {
-	        if (this.$options.resizable) {
-	            resize(find('.modal-body', this.$el), [100, 160, window.screen.availHeight, window.screen.availWidth]);
-	        }
-	        this.$options.autoShow && this._hidden.show();
-	        modal_index++;
-	    }
-	}
-
-	class Tooltip extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            show: () => {
-	                this._hidden.setPosition();
-	                addClass(this.$el, 'is-active');
-	            },
-	            hide: () => {
-	                removeClass(this.$el, 'is-active');
-	            },
-	            toggle: () => {
-	                hasClass(this.$el, 'is-active') ? this._hidden.hide() : this._hidden.show();
-	            },
-	            setPosition: () => {
-	                if (this.$options.position) {
-	                    css$1(this.$el, this.$options.position);
-	                    return;
-	                }
-	                let _position = {
-	                    top: 0,
-	                    left: 0
-	                };
-	                const _offset = offset(this.$options.delegates.trigger);
-	                const width = _offset.width, height = _offset.height;
-	                if (this.$options.delegates.trigger) {
-	                    _position.top = _offset.top;
-	                    _position.left = _offset.left;
-	                }
-	                const _bodyTop = getNumber(css$1(document.body, 'top'));
-	                if (css$1(document.body, 'overflow') == 'hidden' && _bodyTop !== 0) {
-	                    _position.top += _bodyTop * -1;
-	                }
-	                switch (this.$options.direction) {
-	                    case 'top':
-	                        _position = {
-	                            left: (_position.left += width / 2) + 'px',
-	                            top: (_position.top -= 10) + 'px'
-	                        };
-	                        break;
-	                    case 'bottom':
-	                        _position = {
-	                            left: (_position.left += width / 2) + 'px',
-	                            top: (_position.top += height + 10) + 'px'
-	                        };
-	                        break;
-	                    case 'right':
-	                        _position = {
-	                            left: (_position.left += width + 10) + 'px',
-	                            top: (_position.top += height / 2) + 'px'
-	                        };
-	                        break;
-	                    case 'left':
-	                        _position = {
-	                            left: (_position.left -= 10) + 'px',
-	                            top: (_position.top += height / 2) + 'px'
-	                        };
-	                        break;
-	                    case 'left-top':
-	                        _position = {
-	                            left: (_position.left -= 10) + 'px',
-	                            top: (_position.top += height) + 'px'
-	                        };
-	                        break;
-	                    case 'left-bottom':
-	                        _position = {
-	                            left: (_position.left -= 10) + 'px',
-	                            top: _position.top + 'px'
-	                        };
-	                        break;
-	                    case 'right-top':
-	                        _position = {
-	                            left: (_position.left += width + 10) + 'px',
-	                            top: (_position.top += height) + 'px'
-	                        };
-	                        break;
-	                    case 'right-bottom':
-	                        _position = {
-	                            left: (_position.left += width + 10) + 'px',
-	                            top: _position.top + 'px'
-	                        };
-	                        break;
-	                }
-	                css$1(this.$el, _position);
-	            },
-	            reRender: (newContents) => {
-	                this.$options.contents = newContents;
-	                if ($(newContents)) {
-	                    this.$el.innerHTML = '';
-	                    append(this.$el, $(newContents));
-	                }
-	                else if (newContents) {
-	                    this.$el.innerHTML = newContents;
-	                }
-	            }
-	        };
-	        this.config = {
-	            direction: 'bottom',
-	            delegates: {
-	                trigger: undefined
-	            },
-	            type: 'hover'
-	        };
-	        this.methods = {
-	            show() {
-	                this._hidden.show();
-	            },
-	            hide() {
-	                this._hidden.hide();
-	            },
-	            setContents(newContents) {
-	                this.$options.contents = newContents;
-	                this._hidden.reRender.call(null, newContents);
-	            }
-	        };
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.width) {
-	            styles.width = getUnit('width', config.width);
-	        }
-	        return config.template ? (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles }, config.template)) : (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles, innerHTML: config.contents }));
-	    }
-	    beforeMount() {
-	        const popper = $(`<div id="${this._uid}"></div>`);
-	        append(document.body, popper);
-	        if (style(this.$selector, 'position') === 'static') {
-	            style(this.$selector, 'position', 'relative');
-	        }
-	        this.config.delegates.trigger = this.$selector;
-	        // trigger element 에 대해 종속성을 표시한다.
-	        attr(this.config.delegates.trigger, 'data-gnui', this._uid);
-	        this.$selector = popper;
-	        if (this.$options.type === 'hover') {
-	            this.$bind(this, {
-	                show: {
-	                    name: 'mouseenter',
-	                    delegate: this.$options.delegates.trigger,
-	                    handler: () => {
-	                        this._hidden.show.call(this);
-	                    }
-	                },
-	                hide: {
-	                    name: 'mouseleave',
-	                    delegate: this.$options.delegates.trigger,
-	                    handler: () => {
-	                        this._hidden.hide.call(this);
-	                    }
-	                }
-	            });
-	        }
-	        if (this.$options.type === 'click') {
-	            this.$bind(this, {
-	                toggle: {
-	                    name: 'click',
-	                    delegate: this.$options.delegates.trigger,
-	                    handler: () => {
-	                        this._hidden.toggle.call(this);
-	                    }
-	                }
-	            });
-	        }
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) {
-	        const $contents = $(config.contents);
-	        if (!isHtml(config.contents) && isElement$2($contents)) {
-	            empty(this.$el);
-	            append(this.$el, $contents);
-	        }
-	    }
-	}
-
-	const JsonPath = JSONPath;
-	const SortIconList = ['sort', 'sort-up', 'sort-down', 'sort'];
-	class JsonView extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this.subCharts = {};
-	        this.subTooltips = {};
-	        this.subCheckboxs = {};
-	        this.sortIndex = 0;
-	        this._hidden = {
-	            reRender: (data, schema) => {
-	                this.$template.reRender(find('.jsonview-contents', this.$el), createElement$1("div", { className: "jsonview-contents" }, schema ? this._hidden.render(data, schema) : this._hidden.renderRaw(data)));
-	            },
-	            render: (data, schema, parent, key) => {
-	                return !!schema // 스키마가 있는경우만 처리
-	                    ? this._hidden.renderSub(data, schema, parent, key)
-	                    : this._hidden.renderRaw(data); // 스키마 없음
-	            },
-	            renderSub: (data, schema, parent, key) => {
-	                return schema.Type === 'object' || // 타입이 오브젝트이거나
-	                    (isArray$1(schema.Type) && schema.Type.includes('object') && isPlainObject$1(data)) // 타입에 오브젝트가 포함되고, 데이터가 오브젝트인 경우
-	                    ? this._hidden.objView(data, schema)
-	                    : schema.Type === 'array' || // 타입이 배열이거나
-	                        (isArray$1(schema.Type) && schema.Type.includes('array') && isArray$1(data)) // 타입에 배열가 포함되고, 데이터가 배열인 경우
-	                        ? schema.Items.Type === 'object' // 오브젝트 배열인 경우
-	                            ? this._hidden.gridView(data, schema.Items) // 그리드 형식으로 출력
-	                            : // : !schema.Items.Type && schema.Items.$ref
-	                                // ? this._hidden.defView(data, schema, parent)
-	                                this._hidden.arrayView(data, schema.Items) // 일반 배열 형식으로 출력
-	                        : // : !schema.Type && schema.$ref
-	                            // ? this._hidden.defView(data, schema, parent) // $def, $ref 설정 시
-	                            this._hidden.valueView(data, schema, parent, key); // 문자열, 숫자...etc
-	            },
-	            renderRaw: (data) => {
-	                // schema가 없는 경우
-	                return isString(data) || isNumeric(data)
-	                    ? this._hidden.valueView(data)
-	                    : isArray$1(data)
-	                        ? data.some(x => isObject(x))
-	                            ? this._hidden.gridView(data)
-	                            : this._hidden.arrayView(data)
-	                        : isObject(data)
-	                            ? this._hidden.objView(data)
-	                            : this._hidden.valueView(data);
-	            },
-	            defView: (data, schema) => {
-	                let defSchema = schema;
-	                const refPath = (schema.$ref || schema.Items.$ref).split('/');
-	                refPath.forEach((path) => {
-	                    defSchema = path === '#' ? this.$options.schema : defSchema[path];
-	                });
-	                const subContents = new Modal('modal', '', {
-	                    isModal: false,
-	                    draggable: true,
-	                    autoShow: false,
-	                    autoDestroy: false,
-	                    textSets: { title: defSchema.Disp || '' },
-	                    contents: this._hidden.render(data, defSchema)
-	                });
-	                return (createElement$1("a", { "on-click": () => {
-	                        subContents.show();
-	                    } }, "[more]"));
-	            },
-	            gridView: (data, schema) => {
-	                // 오브젝트 배열인 경우 그리드 형식으로 출력
-	                if (!schema && !data.length) {
-	                    return;
-	                }
-	                const keys = schema && schema.Properties ? Object.keys(schema.Properties) : Object.keys(data[0]);
-	                const hasHeader = !schema ||
-	                    (schema &&
-	                        schema.Properties &&
-	                        keys.some(key => {
-	                            return !!schema.Properties[key].Disp;
-	                        }));
-	                return (createElement$1("table", { className: "gn-table is-full is-schema-grid" },
-	                    hasHeader && (createElement$1("thead", null,
-	                        createElement$1("tr", null, keys.map(k => {
-	                            return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : schema && schema.SortItems && schema.SortItems.includes(k) ? (createElement$1("th", { "on-click": (e) => {
-	                                    this._hidden.onSort.call(this, k, schema, e);
-	                                }, className: "is-sortable" },
-	                                this._hidden.keyView(k, schema),
-	                                this._hidden.sortItem())) : (createElement$1("th", null, this._hidden.keyView(k, schema)));
-	                        })))),
-	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' }, data &&
-	                        data.map(d => (createElement$1("tr", null, keys.map(k => {
-	                            var _a;
-	                            const value = startsWith(k, '$') ? JsonPath.query(d, k)[0] : d[k];
-	                            let tooltipIndex = undefined;
-	                            if (schema && schema.Properties[k] && schema.Properties[k].$ref) {
-	                                let defSchema = schema;
-	                                let defData = d;
-	                                const refPath = schema.Properties[k].$ref.split('/');
-	                                refPath.forEach((path) => {
-	                                    defSchema = path === '#' ? this.$options.schema : defSchema[path];
-	                                    defData = path === '#' || path === '$defs' ? defData : d[path];
-	                                });
-	                                tooltipIndex = Object.keys(this.subTooltips).length + 1;
-	                                this.subTooltips[tooltipIndex] = { defData, defSchema };
-	                            }
-	                            const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
-	                            const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_a = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _a === void 0 ? void 0 : _a.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
-	                            return dataItem;
-	                        })))))));
-	            },
-	            objView: (obj, schema) => {
-	                // 오브젝트 형식인 경우 key-value 로 출력
-	                const renderTarget = schema && schema.Properties ? Object.keys(schema.Properties) : Object.keys(obj);
-	                return (createElement$1("table", { className: "gn-table is-borderless is-object-grid" }, renderTarget.map(k => {
-	                    const value = startsWith(k, '$') ? JsonPath.query(obj, k)[0] : obj[k];
-	                    const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
-	                    return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : (createElement$1("tr", null,
-	                        createElement$1("th", { style: { width: this.$options.defWidth } }, this._hidden.keyView(k, schema)),
-	                        createElement$1("td", { "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, obj) }, schema ? this._hidden.render(value, schema.Properties[k], obj, k) : this._hidden.renderRaw(value))));
-	                })));
-	            },
-	            arrayView: (data, schema) => {
-	                // 텍스트 배열인 경우 ,로 연결해서 출력
-	                const dataArr = data.map((val) => {
-	                    return this._hidden.valueView(val, schema, data);
-	                });
-	                if (!schema || schema.Type !== 'html') {
-	                    for (let i = dataArr.length; --i; i) {
-	                        dataArr.splice(i, 0, ',');
-	                    }
-	                }
-	                return dataArr;
-	            },
-	            keyView: (key, schema) => {
-	                let keySchema = schema ? schema.Properties[key] : undefined;
-	                if (schema && keySchema && !keySchema.Type && keySchema.$ref) {
-	                    (keySchema.$ref || keySchema.Items.$ref).split('/').forEach((path) => {
-	                        keySchema = path === '#' ? this.$options.schema : keySchema[path];
-	                    });
-	                }
-	                return (createElement$1("span", { className: schema && keySchema && keySchema.Type === 'number' ? 'is-type-number' : '' },
-	                    schema && keySchema && keySchema.Disp !== null && keySchema.Disp !== undefined ? keySchema.Disp : key,
-	                    schema && keySchema && keySchema.Description ? (createElement$1("span", { className: "gn-icon is-small is-help", title: keySchema.Description },
-	                        createElement$1("i", { className: "fas fa-question-circle" }))) : (''),
-	                    schema && schema.Required && schema.Required.includes(key) ? ' *' : ''));
-	            },
-	            valueView: (data, schema, parent, key) => {
-	                const val = commaNum(data);
-	                return schema && schema.RefURL ? (val === '0' ? (this._hidden.value(data, schema, parent, key)) : (createElement$1("a", { href: interpolateURL(schema.RefURL, { data, schema, parent, root: this.$options.data }), target: schema.Target ? schema.Target : '_self' }, this._hidden.value(data, schema, parent, key)))) : (this._hidden.value(data, schema, parent, key));
-	            },
-	            value: (data, schema, parent, key) => {
-	                var _a;
-	                let valueNode;
-	                let valueMode = 'string';
-	                if (schema) {
-	                    if (schema.Converter) {
-	                        schema.Converter = toArray$1(schema.Converter);
-	                    }
-	                    if (schema.Converter && isArray$1(schema.Converter) && this.$options.convert && isFunction(this.$options.convert)) {
-	                        const Name = schema.Converter[0];
-	                        const Type = schema.Converter[1] || '';
-	                        const Value = schema.Converter[2] || '{{data}}';
-	                        if (Name) {
-	                            const escapeValue = interpolateURL(Value, { data, schema, parent, root: this.$options.data });
-	                            data = this.$options.convert(Name, Type, escapeValue);
-	                        }
-	                    }
-	                    if (schema.Type === 'datetime' || (isArray$1(schema.Type) && schema.Type.includes('datetime') && isDate(data))) {
-	                        valueMode = 'datetime';
-	                        valueNode = dateFormat(toDate(data), 'YYYY-MM-DD hh:mm:ss');
-	                    }
-	                    else if (schema.Type === 'byte' || (isArray$1(schema.Type) && schema.Type.includes('byte') && isNumeric(data))) {
-	                        valueMode = 'byte';
-	                        valueNode = byteSize(data, 2);
-	                    }
-	                    else if (schema.Type === 'number' || (isArray$1(schema.Type) && schema.Type.includes('number') && isNumeric(data))) {
-	                        valueMode = 'number';
-	                        valueNode = commaNum(data);
-	                    }
-	                    else if (schema.Type === 'checkbox' || (isArray$1(schema.Type) && schema.Type.includes('checkbox') && (isNumeric(data) || isString(data) || isBoolean(data) || isPlainObject$1(data)))) {
-	                        valueMode = 'checkbox';
-	                        const hiddenChecks = data.hidden ? (isString(data.hidden) ? toBoolean(interpolateCop(data.hidden, data, parent, this.$options.data)) : data.hidden) : false;
-	                        const checkIndex = Object.keys(this.subCheckboxs).length;
-	                        this.subCheckboxs[checkIndex] = parent !== null && parent !== void 0 ? parent : data;
-	                        valueNode =
-	                            isPlainObject$1(data) && hiddenChecks ? ('') : (createElement$1("input", { type: "checkbox", className: "gn-checkbox-input", name: 'gn-checkbox-' + ((_a = key !== null && key !== void 0 ? key : schema.Disp) !== null && _a !== void 0 ? _a : 'value'), value: isPlainObject$1(data) ? data.value : data, checked: isPlainObject$1(data) ? data.checked : false, "data-check": checkIndex }));
-	                    }
-	                    else if (schema.Type === 'html' || (isArray$1(schema.Type) && schema.Type.includes('html') && data && data.indexOf('<') > -1 && data.indexOf('>') > -1)) {
-	                        valueMode = 'html';
-	                        valueNode = createElement$1("div", { innerHTML: interpolateURL(data, { data, schema, parent, root: this.$options.data }) });
-	                    }
-	                    else if (schema.Type === 'percent' || (isArray$1(schema.Type) && schema.Type.includes('percent') && isObject(data))) {
-	                        valueMode = 'percent';
-	                        valueNode = isNumeric(data) ? (createElement$1("div", { className: "gn-progressbar is-secondary", style: { minWidth: '100px' } },
-	                            createElement$1("span", { className: "gauge", style: { width: data + '%' } }),
-	                            createElement$1("span", { className: 'figure ' + (isNumeric(data) && toNumber(data) > 69 ? 'inner' : '') },
-	                                " ",
-	                                data,
-	                                "%"))) : (createElement$1("div", null));
-	                    }
-	                    else if (schema.Type === 'bignumber' || (isArray$1(schema.Type) && schema.Type.includes('bignumber') && isObject(data))) {
-	                        valueMode = 'bignumber';
-	                        valueNode = Object.keys(data).map((key) => {
-	                            return (createElement$1("div", { className: "gn-bignumber is-small" },
-	                                createElement$1("div", { className: "gn-bignumber-value" }, isObject(data[key]) ? data[key].value : data[key]),
-	                                isObject(data[key]) && data[key].data && createElement$1("div", { className: "gn-chart is-small", "data-sparkline": data[key].data.join(',') }),
-	                                createElement$1("span", { className: "gn-bignumber-label" }, key)));
-	                        });
-	                    }
-	                    else if (schema.Type === 'chart' || (isArray$1(schema.Type) && schema.Type.includes('chart') && isObject(data))) {
-	                        valueMode = 'chart';
-	                        const chartIndex = Object.keys(this.subCharts).length;
-	                        this.subCharts[chartIndex] = data;
-	                        valueNode = createElement$1("div", { "data-chart": chartIndex });
-	                    }
-	                    else {
-	                        valueNode = data;
-	                    }
-	                }
-	                else {
-	                    valueNode = data;
-	                }
-	                return (createElement$1("span", { className: `is-type-${valueMode} ` + (schema && schema.StyleClass ? interpolateCop(schema.StyleClass, data, parent, this.$options.data) : ''), "on-click": this._hidden.selectValue, style: schema && schema.Style ? styleToVNodeStyle(interpolateCop(schema.Style, data, parent, this.$options.data)) : {} }, valueNode));
-	            },
-	            sortItem: () => {
-	                return (createElement$1("span", { className: 'gn-icon is-small jsonview-sort ' + SortIconList[this.sortIndex] },
-	                    createElement$1("i", { className: "fa" })));
-	            },
-	            onSelect: (value, key, obj, e) => {
-	                // !(e.target as HTMLInputElement).className.includes('gn-checkbox') &&
-	                isFunction(this.$options.onSelect) && this.$options.onSelect.call(this, value, key, obj, e);
-	            },
-	            selectValue: () => {
-	                isFunction(this.$options.onSelectValue) && this.$options.onSelectValue.call(this);
-	            },
-	            onSort: (key, schema, e) => {
-	                const _target = find('.jsonview-sort', e.currentTarget);
-	                replaceClass(_target, SortIconList[this.sortIndex], SortIconList[++this.sortIndex]);
-	                if (this.sortIndex > 2) {
-	                    this.sortIndex = 0;
-	                }
-	                isFunction(this.$options.onSort) && this.$options.onSort.call(this, key, SortIconList[this.sortIndex], schema);
-	            },
-	            selectLabel: () => {
-	                isFunction(this.$options.onSelectLabel) && this.$options.onSelectLabel.call(this);
-	            },
-	            formatChecker: (data) => {
-	                if (!data) {
-	                    return data;
-	                }
-	                if (!isObject(data) && !isArray$1(data)) {
-	                    try {
-	                        return JSON.parse(data);
-	                    }
-	                    catch (_a) {
-	                        console.warn("The 'data' should have been in object format.");
-	                    }
-	                }
-	                return data;
-	            },
-	            getChecked: () => {
-	                return findAll('input[type=checkbox]', this.$el)
-	                    .filter((checker) => {
-	                    return checker.checked;
-	                })
-	                    .map((checker) => this.subCheckboxs[checker.dataset.check]);
-	            }
-	        };
-	        this.config = {
-	            name: (this.$selector && this.$selector.name) || this._uid,
-	            defWidth: 'auto'
-	        };
-	        this.events = {
-	            onSelectValue: true,
-	            onSelectLabel: true,
-	            onSelect: true
-	        };
-	        this.methods = {
-	            reRender(param) {
-	                this._hidden.reRender(this._hidden.formatChecker(param.data), this._hidden.formatChecker(param.schema));
-	            },
-	            getChecked() {
-	                return this._hidden.getChecked();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        return (createElement$1("div", { id: this._uid, className: "gn-jsonview" },
-	            config.schema && (config.schema.Disp || config.schema.Description) && (createElement$1("div", { className: "jsonview-header" },
-	                config.schema.Disp && createElement$1("div", { className: "jsonview-title" }, config.schema.Disp),
-	                config.schema.Description && createElement$1("div", { className: "jsonview-desc" }, config.schema.Description))),
-	            createElement$1("div", { className: "jsonview-contents" }, config.schema ? this._hidden.render(config.data, config.schema) : this._hidden.renderRaw(config.data))));
-	    }
-	    beforeMount() {
-	        this.$options.data = this._hidden.formatChecker(this.$options.data);
-	        this.$options.schema = this._hidden.formatChecker(this.$options.schema);
-	    }
-	    completed() {
-	        const $sparklines = $$('[data-sparkline]', this.$el);
-	        if ($sparklines.length) {
-	            each($sparklines, (sl) => {
-	                new Chart('chart', sl, {
-	                    type: 'sparkline',
-	                    series: [
-	                        {
-	                            data: data(sl, 'data-sparkline').split(',')
-	                        }
-	                    ],
-	                    chart: {
-	                        width: 120,
-	                        height: 20
-	                    }
-	                });
-	            });
-	        }
-	        const $charts = $$('[data-chart]', this.$el);
-	        if ($charts.length) {
-	            each($charts, (chart) => {
-	                const chartIndex = data(chart, 'data-chart');
-	                new Chart('chart', chart, Object.assign({}, this.subCharts[chartIndex]));
-	            });
-	        }
-	        const $tooltips = $$('[data-tooltip]', this.$el);
-	        if ($tooltips.length) {
-	            each($tooltips, (tooltip) => {
-	                const tooltipIndex = data(tooltip, 'data-tooltip');
-	                new Tooltip('tooltip', tooltip, {
-	                    template: this._hidden.render(this.subTooltips[tooltipIndex].defData, this.subTooltips[tooltipIndex].defSchema),
-	                    direction: 'bottom',
-	                    color: 'dark'
-	                });
-	            });
-	        }
-	    }
-	}
-
-	class Loader extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            show: (duration) => {
-	                const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
-	                css$1(container, 'display', 'block');
-	                const closerThis = this;
-	                if (duration) {
-	                    const clearTimer = setTimeout(function () {
-	                        fadeout(closerThis.$el, 500);
-	                        clearTimeout(clearTimer);
-	                        const closeTimer = setTimeout(function () {
-	                            closerThis.hide();
-	                            clearTimeout(closeTimer);
-	                        }, 500);
-	                    }, duration);
-	                }
-	            },
-	            hide: () => {
-	                const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
-	                css$1(container, 'display', 'none');
-	            }
-	        };
-	        this.config = {
-	            positionX: 'center',
-	            positionY: 'center'
-	        };
-	        this.methods = {
-	            show(duration) {
-	                this._hidden.show(duration);
-	            },
-	            hide() {
-	                this._hidden.hide();
-	            }
-	        };
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.width) {
-	            /* inline style이 필요한 경우는 이렇게 사용 */
-	            styles.width = getUnit('width', config.width);
-	            styles.height = getUnit('height', config.width);
-	        }
-	        return (createElement$1("div", { id: this._uid, className: 'gn-loader' +
-	                (config.color ? ' is-' + config.color : '') /* 색상 클래스 추가 */ +
-	                (config.style ? ' is-' + config.style : '') /* 스타일 클래스 추가 */ +
-	                (config.type ? ' is-' + config.type : '') +
-	                (config.size ? ' is-' + config.size : ''), 
-	            /* 크기 클래스 추가 */ style: styles }));
-	    }
-	    beforeMount() {
-	        if (!this.$selector) {
-	            const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
-	            !container && append(document.body, $('<div class="gn-loader-container pos-' + this.$options.positionX + '-' + this.$options.positionY + '"></div>'));
-	            append($('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY), $(`<div id="${this._uid}"></div>`));
-	            this.$selector = $(`#${this._uid}`);
-	        }
-	    }
-	    completed() {
-	        this.$options.duration && this._hidden.show(this.$options.duration);
-	    }
-	    hide() {
-	        const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
-	        css$1(container, 'display', 'none');
-	    }
-	}
-
-	/* TODO: 사용자의 추가적인 DOM 생성없이 사용할 수 있도록 utility component로 제공 추가
-	=> Gn.growl */
-	class Message extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            close: () => {
-	                this.$event(this, 'onClose');
-	                animation[this.$options.animation](this.$el, this.$options.duration);
-	                // eslint-disable-next-line @typescript-eslint/no-this-alias
-	                const closerThis = this;
-	                const closeTimer = setTimeout(function () {
-	                    closerThis.$destroy(closerThis, true);
-	                    clearTimeout(closeTimer);
-	                }, this.$options.duration);
-	            }
-	        };
-	        this.config = {
-	            animation: 'slideup',
-	            textSets: {
-	                message: this.$selector ? this.$selector.textContent : ''
-	            },
-	            hasClose: true,
-	            duration: 300
-	        };
-	        this.events = {
-	            onClose: true
-	        };
-	        this.methods = {
-	            close() {
-	                this._hidden.close();
-	            }
-	        };
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.width) {
-	            styles.width = getUnit('width', config.width);
-	        }
-	        return (createElement$1("div", { id: this._uid, className: 'gn-message' + (config.color ? ' is-' + config.color : '') + (config.size ? ' is-' + config.size : '') + (config.icon ? ' has-arrange' : ''), style: styles },
-	            config.icon && (createElement$1("span", { className: "gn-icon is-normal" },
-	                createElement$1("i", { className: 'fas fa-' + config.icon }))),
-	            createElement$1("p", { innerHTML: config.textSets.message }),
-	            config.hasClose && (createElement$1("span", { className: "gn-icon is-close is-dark", "on-click": this._hidden.close },
-	                createElement$1("i", { className: "fas fa-times" })))));
-	    }
-	    beforeMount() {
-	        this.appendTarget(); // patch가 아닌 append 되어야 하는 컴포넌트는 beforeMount cycle에서 target을 추가하는 과정을 수행한다.
-	        if (!this.$selector) {
-	            this.$selector = $(`<div id="${this._uid}"></div>`);
-	        }
-	    }
-	}
-
-	class MenuButton extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            open: () => {
-	                addClass(this.$el, 'is-open');
-	            },
-	            close: () => {
-	                removeClass(this.$el, 'is-open');
-	            },
-	            select: (menu, e) => {
-	                this.$options.onSelect && this.$options.onSelect.call(this, menu.value, menu.text, menu, e);
-	                this._hidden.close();
-	            },
-	            changeText: (buttonText) => {
-	                this.$options.textSets.buttonText = buttonText;
-	                html(find('.menuButton-text', this.$el), buttonText);
-	            }
-	        };
-	        this.config = {
-	            textSets: {
-	                buttonText: this.$selector.textContent
-	            },
-	            name: this.$selector.name,
-	            data: [],
-	            align: 'left'
-	        };
-	        this.events = {
-	            onSelect: true
-	        };
-	        this.methods = {
-	            select() {
-	                this._hidden.select();
-	            },
-	            buttonText(text) {
-	                this._hidden.changeText(text);
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.width) {
-	            styles.width = getUnit('width', config.width);
-	        }
-	        const renderMenus = (menus) => {
-	            return (createElement$1("ul", null, menus.map((menu, index) => (createElement$1("li", { id: this._uid + '-' + index, className: 'menuButton-menu' + (config.align ? ' has-text-' + config.align : ''), "on-click": (e) => {
-	                    this._hidden.select.call(this, menu, e);
-	                }, innerHTML: menu.html ? menu.html : '' }, menu.html ? '' : menu.text)))));
-	        };
-	        const renderSub = (data) => {
-	            return createElement$1("div", null, isArray$1(data) && data.length && isArray$1(data[0]) ? data.map((menus) => renderMenus(menus)) : renderMenus(data));
-	        };
-	        return (createElement$1("div", { id: this._uid, className: 'gn-menuButton' + (config.color ? ' is-' + config.color : '') + (config.style ? ' is-' + config.style : '') + (config.size ? ' is-' + config.size : ''), style: styles },
-	            createElement$1("button", { type: "button", className: config.align ? 'has-text-' + config.align : '', "on-click": this._hidden.open },
-	                config.icon && (createElement$1("span", { className: 'gn-icon is-' + (config.size === 'large' ? 'medium' : config.size === 'medium' ? 'normal' : 'small') },
-	                    createElement$1("i", { className: 'fas fa-' + config.icon }),
-	                    ' ')),
-	                createElement$1("span", { className: "gn-icon is-small menuButton-icon" },
-	                    createElement$1("i", { className: "fas fa-caret-down" })),
-	                createElement$1("span", { className: "menuButton-text" }, config.textSets.buttonText)),
-	            createElement$1("div", { className: "menuButton-menus" }, renderSub(config.data))));
-	    }
-	    completed() {
-	        // 해당 컴포넌트 외 클릭 시 menu panel 숨김
-	        this.$options._destroy = on(document.body, 'click', (e) => {
-	            if (!parents(e.target, '#' + this._uid).length) {
-	                this._hidden.close();
-	            }
-	        });
-	    }
-	    destroyed() {
-	        isFunction(this.$options._destroy) && this.$options._destroy();
-	    }
-	}
-
-	class Tab extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            change: (idx, isInit = false) => {
-	                var _a;
-	                if (!isInit && this.$options.tabIndex === idx) {
-	                    return;
-	                } // 활성화 탭 중복 클릭 방지
-	                if ((isInit || !this.$options.disabled) && this.$options.contents) {
-	                    this.$options.tabIndex = idx;
-	                    !isInit && ((_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, idx, this.$el)); // user onChange event
-	                    const activeTab = find(`li:nth-child(${idx + 1})`, this.$el);
-	                    removeClass(findAll('li', this.$el), 'is-active'); // active 상태 해제
-	                    addClass(activeTab, 'is-active'); // active 상태 표시
-	                    // 탭 컨텐츠가 있는 경우 컨텐츠 보이기
-	                    this._hidden.hideContent();
-	                    this._hidden.showContent(attr(find('a', activeTab), 'href'));
-	                }
-	            },
-	            showContent: (selector) => {
-	                // 탭 컨텐츠 보이기
-	                style(find(selector, $(this.$options.contents)), 'display', 'block');
-	            },
-	            hideContent: () => {
-	                // 탭 컨텐츠 숨기기
-	                const $contents = this.$options.contents ? $(this.$options.contents) : undefined;
-	                $contents &&
-	                    children($contents).forEach((child) => {
-	                        style(child, 'display', 'none');
-	                    });
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                removeClass(this.$el, 'is-disabled');
-	            }
-	        };
-	        this.config = {
-	            contents: '',
-	            tabIndex: 0,
-	            align: 'full'
-	        };
-	        this.events = {
-	            onChange: true
-	        };
-	        this.methods = {
-	            change(idx) {
-	                this._hidden.change(idx);
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) {
-	        addClass(this.$el, 'gn-tab');
-	        config.size && addClass(this.$el, `is-${config.size}`);
-	        config.style && addClass(this.$el, `is-${config.style}`);
-	        config.align && addClass(this.$el, `is-${config.align}`);
-	        config.disabled && addClass(this.$el, 'is-disabled');
-	        attr(this.$el, 'id', this._uid);
-	        // 탭 별 인덱스 추가
-	        findAll('li > a', this.$el).forEach((tab, idx) => {
-	            attr(tab, 'data-tab-index', idx);
-	        });
-	        // 탭 이벤트 바인딩
-	        this.$bind(this, {
-	            click: (e) => {
-	                e.preventDefault();
-	                const tabIndex = attr(e.target, 'data-tab-index') || attr(parents(e.target, '[data-tab-index]'), 'data-tab-index');
-	                if (isNumeric(tabIndex)) {
-	                    this._hidden.change.call(this, tabIndex * 1);
-	                }
-	            }
-	        });
-	        this._hidden.change(config.tabIndex, true); // 초기 탭 활성화
-	    }
-	}
-
-	class MultiTextArea extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            change: (e) => {
-	                const target = e.target;
-	                const lang = data(target, 'data-lang');
-	                this.$options.value[lang] = val(target);
-	                if (this.$options.maxlength) {
-	                    text$1(this.$options.delegates[lang], this.$options.value[lang].length);
-	                }
-	                isFunction(this.$options.onChange) && this.$options.onChange.call(this, this.$options.value);
-	            },
-	            getValue: () => {
-	                return this.$options.value;
-	            },
-	            setValue: (value) => {
-	                if (!value) {
-	                    return;
-	                }
-	                this.$options.lang.forEach((lang) => {
-	                    if (!value[lang]) {
-	                        value[lang] = '';
-	                    }
-	                    const textInput = find(`[data-lang=${lang}]`, this.$el);
-	                    val(textInput, value[lang]);
-	                    trigger(textInput, 'keyup');
-	                });
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                this._tab.disable();
-	                attr(findAll('textarea', this.$el), 'disabled', true);
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                this._tab.enable();
-	                removeAttr(findAll('textarea', this.$el), 'disabled');
-	                removeClass(this.$el, 'is-disabled');
-	            }
-	        };
-	        this.config = {
-	            lang: ['en', 'ko'],
-	            value: {},
-	            delegates: {}
-	        };
-	        this.events = {
-	            onChange: true
-	        };
-	        this.methods = {
-	            getValue() {
-	                return this._hidden.getValue();
-	            },
-	            setValue(value) {
-	                this._hidden.setValue(value);
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.width) {
-	            styles.width = getUnit('width', config.width);
-	        }
-	        return (createElement$1("div", { id: this._uid, className: 'gn-multitext' + (config.disabled ? ' is-disabled' : ''), style: styles },
-	            createElement$1("div", { id: this._uid + '_tab' },
-	                createElement$1("ul", null, config.lang.map((l, index) => (createElement$1("li", { className: index === 0 ? 'is-active' : '' },
-	                    createElement$1("a", { href: '#' + this._uid + '-' + l }, l)))))),
-	            createElement$1("div", { id: this._uid + '_content' }, config.lang.map((l) => (createElement$1("div", { id: this._uid + '-' + l },
-	                createElement$1("textarea", { className: "gn-textarea", "data-lang": l, rows: config.rows ? config.rows : '', maxLength: config.maxlength ? config.maxlength : 524288, "on-keyup": this._hidden.change, disabled: config.disabled, readOnly: config.readonly }, config.value ? config.value[l] : ''),
-	                config.maxlength && (createElement$1("p", { className: "has-text-right has-text-size6" },
-	                    createElement$1("span", { className: "charLen", "data-lang": l }, config.value && config.value[l] ? config.value[l].length : 0),
-	                    "/",
-	                    config.maxlength))))))));
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) {
-	        this._tab = new Tab('tab', '#' + this._uid + '_tab', {
-	            contents: '#' + this._uid + '_content',
-	            size: this.$options.size || 'normal',
-	            style: 'border',
-	            align: 'left',
-	            disabled: this.$options.disabled
-	        });
-	    }
-	    beforeMount() {
-	        if (!this.$options.value) {
-	            this.$options.value = {};
-	        }
-	        this.$options.lang.forEach((lang) => {
-	            if (!this.$options.value[lang]) {
-	                this.$options.value[lang] = '';
-	            }
-	            if (this.$options.maxlength) {
-	                this.$options.delegates[lang] = `.charLen[data-lang=${lang}]`;
-	            }
-	        });
-	    }
-	}
-
-	class Pagination extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            change: () => {
-	                var _a;
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.page, this.$options.first); // user onChange event
-	            },
-	            gotoPage: (page) => {
-	                this.$options.page = page;
-	                this._hidden.setPageSet();
-	                this.$template.reRender(find('.pagination-buttons', this.$el), this._hidden.renderPages());
-	                this._hidden.change();
-	            },
-	            renderPages: () => {
-	                return (createElement$1("div", { className: "pagination-buttons" },
-	                    createElement$1("a", { className: 'page-first' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, 1) },
-	                        createElement$1("i", { className: "fa fa-angle-double-left" })),
-	                    ' ',
-	                    createElement$1("a", { className: 'page-prev' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page - 1) },
-	                        createElement$1("i", { className: "fa fa-angle-left" })),
-	                    ' ',
-	                    createElement$1("ul", null, this._hidden.renderNumbers()),
-	                    createElement$1("a", { className: 'page-next' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page + 1) },
-	                        createElement$1("i", { className: "fa fa-angle-right" })),
-	                    ' ',
-	                    createElement$1("a", { className: 'page-last' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.totalPage) },
-	                        createElement$1("i", { className: "fa fa-angle-double-right" }))));
-	            },
-	            renderNumbers: () => {
-	                let pageList = [];
-	                for (let i = this.$options.startPage; i <= this.$options.endPage && i <= this.$options.totalPage; i++) {
-	                    pageList.push(createElement$1("li", { className: i === this.$options.page ? 'is-active' : '' },
-	                        createElement$1("a", { "on-click": this._hidden.gotoPage.bind(this, i) }, i),
-	                        ' '));
-	                }
-	                return pageList;
-	            },
-	            setPageSet: () => {
-	                if (this.$options.total > 0) {
-	                    this.$options.totalPage = Math.ceil(this.$options.total / this.$options.rows);
-	                    if (this.$options.page > this.$options.totalPage) {
-	                        this.$options.page = this.$options.totalPage;
-	                    }
-	                    if (this.$options.page < 1) {
-	                        this.$options.page = 1;
-	                    }
-	                    this.$options.startPage = Math.floor((this.$options.page - 1) / this.$options.siblingPages) * this.$options.siblingPages + 1;
-	                    this.$options.endPage = this.$options.startPage + this.$options.siblingPages - 1;
-	                    this.$options.first = (this.$options.page - 1) * this.$options.rows + 1;
-	                    this.$options.last = Math.min(this.$options.page * this.$options.rows, this.$options.total || 1);
-	                }
-	            }
-	        };
-	        this.config = {
-	            name: this.$selector.name || this._uid,
-	            delegates: {
-	                first: '.page-first',
-	                prev: '.page-prev',
-	                next: '.page-next',
-	                last: '.page-last'
-	            },
-	            page: 1,
-	            first: 0,
-	            last: 0,
-	            startPage: 1,
-	            endPage: 1,
-	            rows: 30,
-	            total: 0,
-	            totalPage: 0,
-	            siblingPages: 10,
-	            align: 'center',
-	            size: 'normal'
-	        };
-	        this.events = {
-	            onChange: true
-	        };
-	        this.methods = {
-	            setPage(page) {
-	                this._hidden.change(page);
-	            },
-	            setTotal(total) { },
-	            show() { },
-	            hide() { }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        return (createElement$1("div", { id: this._uid, className: 'gn-pagination' + (config.align ? ' is-' + config.align : '') + (config.size ? ' is-' + config.size : ''), style: styles }, this._hidden.renderPages()));
-	    }
-	    beforeMount() {
-	        this._hidden.setPageSet();
-	    }
-	}
-
-	class Picklist extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            search: (obj, e) => {
-	                clearTimeout(this.$options.timer);
-	                this.$options.timer = setTimeout(() => {
-	                    this._hidden.filter(obj, $(e.target).value);
-	                }, 300);
-	            },
-	            filter: (obj, q) => {
-	                css$1(findAll(`.picklist-${obj} .dropdown-item`, this.$el), 'display', 'block');
-	                removeClass(findAll(`.picklist-${obj} .dropdown-item`, this.$el), 'is-active');
-	                this.$options.data[`filtered-${obj}`] = this.$options.data[obj];
-	                if (q === '') {
-	                    return;
-	                }
-	                findAll(`.picklist-${obj} .dropdown-item`, this.$el).forEach((option) => {
-	                    if (!includes(data(option, 'value').toUpperCase(), q.toUpperCase()) && !includes(text$1(find('.dropdown-text', option)).toUpperCase(), q.toUpperCase())) {
-	                        css$1(option, 'display', 'none');
-	                        this.$options.data[`filtered-${obj}`] = this.$options.data[`filtered-${obj}`].filter((e) => e.value !== option.dataset.value);
-	                    }
-	                });
-	            },
-	            toggle: (e) => {
-	                !this.$options.disabled && toggleClass(e.currentTarget, 'is-active');
-	            },
-	            sort: (dir, obj) => {
-	                // dir: 'up','down','up-all','down-all'
-	                // obj: 'source', 'target'
-	                const selected = this._hidden.getSelection(obj);
-	                if (!selected.length || selected.length === this.$options.data[obj].length) {
-	                    return;
-	                }
-	                this.$options.data[obj].map((option) => {
-	                    option.selected = selected.some((select) => {
-	                        return option.value === select.value && option.text === select.text;
-	                    });
-	                    return option;
-	                });
-	                if (dir.indexOf('all') > -1) {
-	                    // 최상단/최하단 정렬
-	                    this.$options.data[obj].sort((a, b) => {
-	                        const _sort = dir === 'up-all' ? -1 : 1;
-	                        if (a.selected && b.selected) {
-	                            return 0;
-	                        }
-	                        else if (a.selected) {
-	                            return _sort;
-	                        }
-	                        else if (b.selected) {
-	                            return _sort * -1;
-	                        }
-	                        return 0;
-	                    });
-	                }
-	                else {
-	                    // 하나씩 정렬
-	                    let sortTemp = [], downItem = [];
-	                    this.$options.data[obj].forEach((option) => {
-	                        if (!option.selected) {
-	                            sortTemp.push(option);
-	                            if (downItem.length) {
-	                                sortTemp = sortTemp.concat(downItem);
-	                                downItem = [];
-	                            }
-	                        }
-	                        else if (dir === 'up') {
-	                            sortTemp.length ? sortTemp.splice(sortTemp.length - 1, 0, option) : sortTemp.push(option);
-	                        }
-	                        else if (dir === 'down') {
-	                            downItem.push(option);
-	                        }
-	                    });
-	                    if (downItem.length) {
-	                        sortTemp = sortTemp.concat(downItem);
-	                        downItem = [];
-	                    }
-	                    this.$options.data[obj] = sortTemp.slice();
-	                    sortTemp = [];
-	                }
-	                this._hidden.reRender(obj);
-	                this.$options.data[obj].forEach((option) => {
-	                    delete option.selected;
-	                });
-	                this.$options.onChange && this.$options.onChange.call(this, this.$options.data.source, this.$options.data.target); // user onChange event
-	                this.$options.onSort && this.$options.onSort.call(this, this.$options.data.source, this.$options.data.target); // user onSort event
-	            },
-	            move: (dir, selected = null) => {
-	                var _a, _b;
-	                if (this.$options.disabled) {
-	                    return;
-	                }
-	                dir = dir.replace('right', 'add').replace('left', 'remove').replace('down', 'add').replace('up', 'remove');
-	                if (dir === 'add-all') {
-	                    if (!this.$options.data.source.length) {
-	                        return;
-	                    }
-	                    this._hidden.moveTo(this.$options.data.source, this.$options.data.target, ((_a = find('.picklist-source input', this.$el)) === null || _a === void 0 ? void 0 : _a.value) ? this.$options.data['filtered-source'] : objClone(this.$options.data.source));
-	                }
-	                else if (dir === 'add') {
-	                    selected = isArray$1(selected) ? selected : this._hidden.getSelection('source');
-	                    if (!selected.length) {
-	                        return;
-	                    }
-	                    this._hidden.moveTo(this.$options.data.source, this.$options.data.target, selected);
-	                }
-	                else if (dir === 'remove') {
-	                    selected = isArray$1(selected) ? selected : this._hidden.getSelection('target');
-	                    if (!selected.length) {
-	                        return;
-	                    }
-	                    this._hidden.moveTo(this.$options.data.target, this.$options.data.source, selected);
-	                }
-	                else if (dir === 'remove-all') {
-	                    if (!this.$options.data.target.length) {
-	                        return;
-	                    }
-	                    this._hidden.moveTo(this.$options.data.target, this.$options.data.source, ((_b = find('.picklist-target input', this.$el)) === null || _b === void 0 ? void 0 : _b.value) ? this.$options.data['filtered-target'] : objClone(this.$options.data.target));
-	                }
-	                this._hidden.reRender('source');
-	                this._hidden.reRender('target');
-	                this.$options.onChange && this.$options.onChange.call(this, this.$options.data.source, this.$options.data.target); // user onChange event
-	                this.$options.onTransfer && this.$options.onTransfer.call(this, this.$options.data.source, this.$options.data.target); // user onTransfer event
-	            },
-	            moveTo: (source, target, addArr) => {
-	                isArray$1(addArr) &&
-	                    addArr.forEach((option) => {
-	                        const _index = source.findIndex((select) => {
-	                            return option.value === select.value && option.text === select.text;
-	                        });
-	                        target.push(source.splice(_index, 1).pop());
-	                    });
-	            },
-	            reRender: (obj) => {
-	                var _a, _b;
-	                this.$template.reRender(find('ul', this.$options.delegates[obj]), this._hidden.renderSub(obj));
-	                ((_a = find(`.picklist-${obj} input`, this.$el)) === null || _a === void 0 ? void 0 : _a.value) && this._hidden.filter(obj, (_b = find(`.picklist-${obj} input`, this.$el)) === null || _b === void 0 ? void 0 : _b.value);
-	            },
-	            renderSub: (item) => {
-	                const items = this.$options.data[item] || [];
-	                return (createElement$1("ul", null, items.map((option) => (createElement$1("li", { className: 'dropdown-item' + (option.selected ? ' is-active' : ''), "data-value": option.value, "on-click": this._hidden.toggle.bind(this), "on-dblclick": this._hidden.move.bind(this, item === 'source' ? 'add' : 'remove', [
-	                        {
-	                            value: option.value,
-	                            text: option.text
-	                        }
-	                    ]) },
-	                    createElement$1("span", { className: "dropdown-text" }, option.text))))));
-	            },
-	            getSelection: (target) => {
-	                return findAll('.is-active', this.$options.delegates[target]).map((select) => {
-	                    return { value: attr(select, 'data-value'), text: text$1(select) };
-	                });
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                attr(findAll('button', this.$el), 'disabled', true);
-	                addClass(find('.gn-dropdown', this.$el), 'is-disabled');
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                removeAttr(findAll('button', this.$el), 'disabled');
-	                removeClass(find('.gn-dropdown', this.$el), 'is-disabled');
-	                removeClass(this.$el, 'is-disabled');
-	            },
-	            setSource: (data) => {
-	                this.$options.data.source = data;
-	                this._hidden.reRender('source');
-	            },
-	            setTarget: (data) => {
-	                this.$options.data.target = data;
-	                this._hidden.reRender('target');
-	            }
-	        };
-	        this.config = {
-	            name: this.$selector.name || this._uid,
-	            textSets: {
-	                sourceCaption: '',
-	                targetCaption: ''
-	            },
-	            data: {
-	                source: (() => {
-	                    return findAll('select.gn-source > option', this.$selector).map((option) => {
-	                        return { value: option.value, text: option.textContent };
-	                    });
-	                })() || [],
-	                target: (() => {
-	                    return findAll('select.gn-target > option', this.$selector).map((option) => {
-	                        return { value: option.value, text: option.textContent };
-	                    });
-	                })() || []
-	            },
-	            timer: 0,
-	            delegates: {
-	                source: '.picklist-source > .gn-dropdown',
-	                target: '.picklist-target > .gn-dropdown'
-	            },
-	            hasSourceSearch: false,
-	            hasTargetSearch: false,
-	            orderable: true,
-	            height: 150
-	        };
-	        this.events = {
-	            onChange: true,
-	            onSort: true,
-	            onTransfer: true
-	        };
-	        this.methods = {
-	            getSource() {
-	                return this.$options.data.source;
-	            },
-	            getTarget() {
-	                return this.$options.data.target;
-	            },
-	            getValue() {
-	                return this.$options.data.target.map((d) => d.value).join(',');
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            },
-	            setData(datas) {
-	                this.setSource(datas.source);
-	                this.setTarget(datas.target);
-	            },
-	            setSource(sources) {
-	                this._hidden.setSource(sources);
-	            },
-	            setTarget(targets) {
-	                this._hidden.setTarget(targets);
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        var _a, _b, _c, _d;
-	        const styles = {};
-	        if (config.width) {
-	            styles.width = getUnit('width', config.width);
-	        }
-	        if (config.direction === 'vertical' && config.height) {
-	            styles.height = getUnit('height', config.height * 2 + 45);
-	        }
-	        const renderControl = (direction) => {
-	            const direction1 = direction !== 'vertical' ? (direction === 'cross' ? 'down' : 'up') : 'right', direction2 = direction !== 'vertical' ? (direction === 'cross' ? 'up' : 'down') : 'left', commandFunc = direction === 'cross' || direction === 'vertical' ? this._hidden.move : this._hidden.sort;
-	            return (createElement$1("div", { className: 'picklist-controls gn-control is-small has-arrange is-center' + (direction === 'cross' ? '' : ' is-vertical') },
-	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, `${direction1}-all`, direction), disabled: config.disabled },
-	                    createElement$1("span", { className: "gn-icon" },
-	                        createElement$1("i", { className: 'fa fa-light fa-angle-double-' + direction1 }))),
-	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, direction1, direction), disabled: config.disabled },
-	                    createElement$1("span", { className: "gn-icon" },
-	                        createElement$1("i", { className: 'fa fa-light fa-angle-' + direction1 }))),
-	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, direction2, direction), disabled: config.disabled },
-	                    createElement$1("span", { className: "gn-icon" },
-	                        createElement$1("i", { className: 'fa fa-light fa-angle-' + direction2 }))),
-	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, `${direction2}-all`, direction), disabled: config.disabled },
-	                    createElement$1("span", { className: "gn-icon" },
-	                        createElement$1("i", { className: 'fa fa-light fa-angle-double-' + direction2 })))));
-	        };
-	        return (createElement$1("div", { id: this._uid, className: 'gn-picklist' + (config.direction === 'vertical' ? ' is-vertical' : '') + (config.disabled ? ' is-disabled' : ''), style: styles },
-	            createElement$1("div", { className: 'picklist-source ' + (config.orderable === 'target' ? 'no-controls' : '') },
-	                (config.orderable === true || config.orderable === 'source') && renderControl('source'),
-	                createElement$1("div", { className: 'gn-dropdown is-opened' + (config.disabled ? ' is-disabled' : '') },
-	                    config.textSets.sourceCaption.length > 0 && createElement$1("div", { className: "picklist-caption" }, config.textSets.sourceCaption),
-	                    createElement$1("div", { className: "dropdown-items", style: config.height
-	                            ? {
-	                                height: getUnit('height', config.height),
-	                                maxHeight: getUnit('height', config.height)
-	                            }
-	                            : {} },
-	                        config.hasSourceSearch && (createElement$1("div", { className: "dropdown-search" },
-	                            createElement$1("div", { className: "gn-control has-icon-right is-full" },
-	                                createElement$1("span", { className: "gn-icon is-right" },
-	                                    createElement$1("i", { className: "fa fa-light fa-search" })),
-	                                createElement$1("input", { type: "text", className: "gn-input is-full", placeholder: (_b = (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.searchText) !== null && _b !== void 0 ? _b : GN_CONSTANT.SEARCH_ITEM, "on-keyup": this._hidden.search.bind(this, 'source'), disabled: config.disabled })))),
-	                        this._hidden.renderSub('source')))),
-	            renderControl(config.direction === 'vertical' ? 'cross' : 'vertical'),
-	            createElement$1("div", { className: 'picklist-target ' + (config.orderable === 'source' ? 'no-controls' : '') },
-	                (config.orderable === true || config.orderable === 'target') && renderControl('target'),
-	                createElement$1("div", { className: 'gn-dropdown is-opened' + (config.disabled ? ' is-disabled' : '') },
-	                    config.textSets.targetCaption.length > 0 && createElement$1("div", { className: "picklist-caption" }, config.textSets.targetCaption),
-	                    createElement$1("div", { className: "dropdown-items", style: config.height
-	                            ? {
-	                                height: getUnit('height', config.height),
-	                                maxHeight: getUnit('height', config.height)
-	                            }
-	                            : {} },
-	                        config.hasTargetSearch && (createElement$1("div", { className: "dropdown-search" },
-	                            createElement$1("div", { className: "gn-control has-icon-right is-full" },
-	                                createElement$1("span", { className: "gn-icon is-right" },
-	                                    createElement$1("i", { className: "fa fa-light fa-search" })),
-	                                createElement$1("input", { type: "text", className: "gn-input is-full", placeholder: (_d = (_c = this.$options.textSets) === null || _c === void 0 ? void 0 : _c.searchText) !== null && _d !== void 0 ? _d : GN_CONSTANT.SEARCH_ITEM, "on-keyup": this._hidden.search.bind(this, 'target'), disabled: config.disabled })))),
-	                        this._hidden.renderSub('target'))))));
-	    }
-	    beforeMount() {
-	        if (typeof this.$options.height === 'number' && this.$options.height < 100) {
-	            this.$options.height = 100;
-	        }
-	    }
-	    completed() {
-	        if (this.$options.textSets.sourceCaption.length > 0) {
-	            style(find('.picklist-source .dropdown-items', this.$el), 'height', getUnit('height', getNumber(this.$options.height) - getNumber(style(find('.picklist-source .picklist-caption', this.$el), 'height'))));
-	        }
-	        if (this.$options.textSets.targetCaption.length > 0) {
-	            style(find('.picklist-target .dropdown-items', this.$el), 'height', getUnit('height', getNumber(this.$options.height) - getNumber(style(find('.picklist-target .picklist-caption', this.$el), 'height'))));
-	        }
-	    }
-	}
-
-	class Progressbar extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            setValue: (value) => {
-	                if (this.$options.indeterminate) {
-	                    return;
-	                }
-	                css$1(find('.gauge', this.$el), 'width', value + '%');
-	                if (this.$options.hasFigure) {
-	                    const figure = find('.figure', this.$el);
-	                    text$1(figure, value + '%');
-	                    value > 95 ? addClass(figure, 'inner') : removeClass(figure, 'inner');
-	                }
-	            },
-	            complete: () => {
-	                this.$options.indeterminate = false;
-	                removeClass(this.$el, 'is-indeterminate');
-	                this._hidden.setValue(100);
-	            }
-	        };
-	        this.config = {
-	            value: 0,
-	            hasFigure: false,
-	            indeterminate: false
-	        };
-	        this.methods = {
-	            setValue(value) {
-	                this._hidden.setValue(value);
-	            },
-	            complete() {
-	                this._hidden.complete();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        if (config.value) {
-	            styles.width = config.value + '%';
-	        }
-	        return (createElement$1("div", { id: this._uid, className: 'gn-progressbar' + (config.color ? ' is-' + config.color : '') + (config.size ? ' is-' + config.size : '') + (config.style ? ' is-' + config.style : '') },
-	            createElement$1("span", { className: "gauge", style: styles }),
-	            config.hasFigure && createElement$1("span", { className: 'figure' + (config.value > 95 ? ' inner' : '') },
-	                config.value,
-	                "%")));
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) {
-	        if (config.indeterminate) {
-	            addClass(this.$el, 'is-indeterminate');
-	        }
-	    }
-	    beforeMount() {
-	        this.appendTarget();
-	        if (!this.$selector) {
-	            this.$selector = $(`<div id="${this._uid}"></div>`);
-	        }
-	    }
-	}
-
-	class SelectButton extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            select: (option) => {
-	                var _a, _b, _c, _d, _e, _f;
-	                if (this.$options.disabled) {
-	                    return;
-	                }
-	                if (this.$options.multiple) {
-	                    const checkItems = findAll('input[name=' + this.config.name + ']', this.$el).filter((item) => {
-	                        return item.checked;
-	                    });
-	                    const newValue = (_b = (_a = checkItems.map((item) => item.value)) === null || _a === void 0 ? void 0 : _a.join(',')) !== null && _b !== void 0 ? _b : '';
-	                    const newText = (_d = (_c = checkItems.map((item) => { var _a; return (_a = item === null || item === void 0 ? void 0 : item.dataset) === null || _a === void 0 ? void 0 : _a.text; })) === null || _c === void 0 ? void 0 : _c.join(',')) !== null && _d !== void 0 ? _d : '';
-	                    (_e = this.$options.onChange) === null || _e === void 0 ? void 0 : _e.call(this, newValue, newText);
-	                }
-	                else {
-	                    (_f = this.$options.onChange) === null || _f === void 0 ? void 0 : _f.call(this, option.value, option.text);
-	                }
-	            },
-	            change: (value) => {
-	                if (this.$options.multiple) {
-	                    $$('input[type=checkbox]', this.$el).forEach((option) => {
-	                        option.checked = value.includes(option.value);
-	                    });
-	                }
-	                else {
-	                    $$('input[type=radio]', this.$el).forEach((option) => {
-	                        option.checked = isEqual(option.value, value);
-	                    });
-	                }
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                attr(findAll('input', this.$el), 'disabled', true);
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                removeAttr(findAll('input', this.$el), 'disabled');
-	                removeClass(this.$el, 'is-disabled');
-	            },
-	            getValue: () => {
-	                return findAll(this.$options.multiple ? 'input[type=checkbox]' : 'input[type=radio]', this.$el)
-	                    .filter((item) => item.checked)
-	                    .map((item) => item.value)
-	                    .join(',');
-	            }
-	        };
-	        this.config = {
-	            name: this.$selector.name || this._uid,
-	            data: [],
-	            disabled: false,
-	            multiple: false,
-	            align: 'horizontal'
-	        };
-	        this.events = {
-	            onChange: true
-	        };
-	        this.methods = {
-	            change(value) {
-	                this._hidden.change(value);
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            },
-	            getValue() {
-	                return this._hidden.getValue();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        return (createElement$1("div", { id: this._uid, className: 'gn-selectButton' +
-	                (config.color ? ' is-' + config.color : '') +
-	                (config.size ? ' is-' + config.size : '') +
-	                (config.disabled ? ' is-disabled' : '') +
-	                (config.multiple ? ' is-multiple' : '') +
-	                (config.align ? ' is-' + config.align : '') }, config.data.map((option, index) => [
-	            createElement$1("input", { type: config.multiple ? 'checkbox' : 'radio', value: option.value, "data-text": option.text, name: config.name, id: this._uid + '_opt_' + index, checked: config.multiple ? config.value.includes(option.value) : config.value === option.value, disabled: config.disabled, "on-change": this._hidden.select.bind(this, option) }),
-	            createElement$1("label", { htmlFor: this._uid + '_opt_' + index },
-	                option.icon && (createElement$1("span", { className: 'gn-icon is-' + (config.size === 'large' ? 'medium' : config.size === 'medium' ? 'normal' : 'small') },
-	                    createElement$1("i", { className: 'fas fa-' + option.icon }),
-	                    ' ')),
-	                option.text)
-	        ])));
-	    }
-	}
-
-	class Splitter extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            drag: (e, position) => {
-	                const attr = this.$options.orientation === 'vertical' ? 'width' : 'height';
-	                const pos = this.$options.orientation === 'vertical' ? 'x' : 'y';
-	                css$1(this.$options.panel[0], attr, position[pos] - 1);
-	                css$1(this.$options.panel[1], attr, getNumber(css$1(this.$el, attr)) - position[pos] - (attr === 'height' ? 7 : 5));
-	                trigger(window.document, 'resize');
-	                e && this.$event(this, 'onDrag');
-	            },
-	            dragStart: () => {
-	                this.$event(this, 'onDragStart');
-	            },
-	            dragEnd: (isMounted = false) => {
-	                const attrStr = this.$options.orientation === 'vertical' ? 'width' : 'height';
-	                const containerSize = offset(this.$el)[attrStr];
-	                const panelWidth = offset(this.$options.delegates.panel1)[attrStr];
-	                css$1(this.$options.delegates.panel1, attrStr, (panelWidth / containerSize) * 100 + '%');
-	                css$1(this.$options.delegates.panel2, attrStr, 100 - (panelWidth / containerSize) * 100 - (5 / containerSize) * 100 + '%');
-	                css$1(this.$options.delegates.handle, this.$options.splitStr[0], (panelWidth / containerSize) * 100 + '%');
-	                (typeof isMounted !== 'boolean' || !isMounted) && !!this.$options.onDragEnd && this.$options.onDragEnd.call(this, offset(this.$options.delegates.handle));
-	            }
-	        };
-	        this.config = {
-	            orientation: 'horizontal',
-	            space: 0,
-	            minPosition: 30,
-	            delegates: {
-	                panel1: undefined,
-	                panel2: undefined,
-	                handle: undefined
-	            }
-	        };
-	        this.events = {
-	            onDrag: true,
-	            onDragStart: true,
-	            onDragEnd: true
-	        };
-	        this.methods = {};
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-	    $render(config) {
-	        config.splitStr = config.orientation === 'vertical' ? ['left', 'right'] : ['top', 'bottom'];
-	        const boundary = config.orientation === 'vertical'
-	            ? [0, config.minPosition, 0, getNumber(css$1(this.$el, 'width')) - config.minPosition]
-	            : [config.minPosition, 0, getNumber(css$1(this.$el, 'height')) - config.minPosition, 0];
-	        const handle = $(`<div class="split-gutter ${config.orientation === 'vertical' ? 'vs-gutter' : 'hs-gutter'}"></div>`);
-	        this.$options.delegates.handle = handle;
-	        if (config.position) {
-	            if (isNumeric(config.position)) {
-	                config.position = config.position + 'px';
-	            }
-	            css$1(handle, config.splitStr[0], config.position);
-	            css$1(handle, config.splitStr[0], `calc(${config.position} - 5px)`);
-	        }
-	        dragLayout(handle, boundary, this._hidden);
-	        addClass(this.$el, 'gn-splitter');
-	        !attr(this.$el, 'id') && attr(this.$el, 'id', this._uid);
-	        append(this.$el, handle);
-	        config.panel.forEach((panel, idx) => {
-	            addClass(panel, `split-panel ${config.splitStr[idx]}-panel`);
-	            config.space && css$1(panel, 'padding', getUnit('padding', config.space));
-	        });
-	    }
-	    beforeMount() {
-	        this.$options.panel.forEach((panel, idx, panels) => {
-	            panels[idx] = find(panel, this.$el);
-	        });
-	        this.$options.minPosition += this.$options.space * 2;
-	    }
-	    completed() {
-	        this.$options.delegates.panel1 = $(this.$options.panel[0], this.$el);
-	        this.$options.delegates.panel2 = $(this.$options.panel[1], this.$el);
-	        if (this.$options.position) {
-	            this._hidden.drag(undefined, {
-	                x: getNumber(css$1(this.$options.delegates.handle, this.$options.splitStr[0])),
-	                y: getNumber(css$1(this.$options.delegates.handle, this.$options.splitStr[0]))
-	            });
-	            this._hidden.dragEnd(true);
-	        }
-	    }
-	}
-
-	class Switch extends GNCoreInstance {
-	    constructor(name, selector, options = {}) {
-	        super(name, selector, options);
-	        this._hidden = {
-	            toggle: (e) => {
-	                this.$options.checked = e.target.checked;
-	                this.$event(this, 'onChange');
-	            },
-	            disable: () => {
-	                this.$options.disabled = true;
-	                attr(find('input', this.$el), 'disabled', true);
-	                addClass(this.$el, 'is-disabled');
-	            },
-	            enable: () => {
-	                this.$options.disabled = false;
-	                removeAttr(find('input', this.$el), 'disabled');
-	                removeClass(this.$el, 'is-disabled');
-	            }
-	        };
-	        this.config = {
-	            textSets: {
-	                toggleText: ''
-	            },
-	            checked: false,
-	            disabled: false,
-	            delegates: {
-	                toggler: '[type=checkbox]'
-	            },
-	            name: this.$selector.name
-	        };
-	        this.events = {
-	            onToggle: {
-	                name: 'click',
-	                delegate: () => {
-	                    return this.config.delegates.toggler;
-	                }
-	            }
-	        };
-	        this.methods = {
-	            toggle() {
-	                this._hidden.toggle();
-	            },
-	            getValue() {
-	                return this.$options.checked;
-	            },
-	            disable() {
-	                this._hidden.disable();
-	            },
-	            enable() {
-	                this._hidden.enable();
-	            }
-	        };
-	        this.$selector = this.$selector;
-	        this.$init(this, options);
-	    }
-	    template(config) {
-	        const styles = {};
-	        return (createElement$1("label", { id: this._uid, className: 'gn-switch' + (config.color ? ' is-' + config.color : '') + (config.size ? ' is-' + config.size : '') + (config.style ? ' is-' + config.style : '') + (config.disabled ? ' is-disabled' : ''), style: styles },
-	            createElement$1("input", { type: "checkbox", name: this.$options.name, "on-click": this._hidden.toggle, defaultChecked: config.checked, disabled: config.disabled }),
-	            createElement$1("span", { className: "switch-toggle" }, "Toggle"),
-	            config.textSets.toggleText));
-	    }
-	}
-
-	var prism$2 = {exports: {}};
+	var prism$3 = {exports: {}};
 
 	(function (module) {
 		/* **********************************************
@@ -39692,12 +36850,2973 @@
 			};
 
 		}()); 
-	} (prism$2));
+	} (prism$3));
 
-	var prismExports = prism$2.exports;
-	var prism$1 = /*@__PURE__*/getDefaultExportFromCjs(prismExports);
+	var prismExports = prism$3.exports;
+	var prism$2 = /*@__PURE__*/getDefaultExportFromCjs(prismExports);
 
-	const prism = prism$1;
+	// https://www.json.org/json-en.html
+	Prism.languages.json = {
+		'property': {
+			pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?=\s*:)/,
+			lookbehind: true,
+			greedy: true
+		},
+		'string': {
+			pattern: /(^|[^\\])"(?:\\.|[^\\"\r\n])*"(?!\s*:)/,
+			lookbehind: true,
+			greedy: true
+		},
+		'comment': {
+			pattern: /\/\/.*|\/\*[\s\S]*?(?:\*\/|$)/,
+			greedy: true
+		},
+		'number': /-?\b\d+(?:\.\d+)?(?:e[+-]?\d+)?\b/i,
+		'punctuation': /[{}[\],]/,
+		'operator': /:/,
+		'boolean': /\b(?:false|true)\b/,
+		'null': {
+			pattern: /\bnull\b/,
+			alias: 'keyword'
+		}
+	};
+
+	Prism.languages.webmanifest = Prism.languages.json;
+
+	class Pagination extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            change: () => {
+	                var _a;
+	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.page, this.$options.first); // user onChange event
+	            },
+	            gotoPage: (page) => {
+	                this.$options.page = page;
+	                this._hidden.setPageSet();
+	                this.$template.reRender(find('.pagination-buttons', this.$el), this._hidden.renderPages());
+	                this._hidden.change();
+	            },
+	            renderPages: () => {
+	                return (createElement$1("div", { className: "pagination-buttons" },
+	                    createElement$1("a", { className: 'page-first' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, 1) },
+	                        createElement$1("i", { className: "fa fa-angle-double-left" })),
+	                    ' ',
+	                    createElement$1("a", { className: 'page-prev' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page - 1) },
+	                        createElement$1("i", { className: "fa fa-angle-left" })),
+	                    ' ',
+	                    createElement$1("ul", null, this._hidden.renderNumbers()),
+	                    createElement$1("a", { className: 'page-next' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page + 1) },
+	                        createElement$1("i", { className: "fa fa-angle-right" })),
+	                    ' ',
+	                    createElement$1("a", { className: 'page-last' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.totalPage) },
+	                        createElement$1("i", { className: "fa fa-angle-double-right" }))));
+	            },
+	            renderNumbers: () => {
+	                let pageList = [];
+	                for (let i = this.$options.startPage; i <= this.$options.endPage && i <= this.$options.totalPage; i++) {
+	                    pageList.push(createElement$1("li", { className: i === this.$options.page ? 'is-active' : '' },
+	                        createElement$1("a", { "on-click": this._hidden.gotoPage.bind(this, i) }, i),
+	                        ' '));
+	                }
+	                return pageList;
+	            },
+	            setPageSet: () => {
+	                if (this.$options.total > 0) {
+	                    this.$options.totalPage = Math.ceil(this.$options.total / this.$options.rows);
+	                    if (this.$options.page > this.$options.totalPage) {
+	                        this.$options.page = this.$options.totalPage;
+	                    }
+	                    if (this.$options.page < 1) {
+	                        this.$options.page = 1;
+	                    }
+	                    this.$options.startPage = Math.floor((this.$options.page - 1) / this.$options.siblingPages) * this.$options.siblingPages + 1;
+	                    this.$options.endPage = this.$options.startPage + this.$options.siblingPages - 1;
+	                    this.$options.first = (this.$options.page - 1) * this.$options.rows + 1;
+	                    this.$options.last = Math.min(this.$options.page * this.$options.rows, this.$options.total || 1);
+	                }
+	            }
+	        };
+	        this.config = {
+	            name: this.$selector.name || this._uid,
+	            delegates: {
+	                first: '.page-first',
+	                prev: '.page-prev',
+	                next: '.page-next',
+	                last: '.page-last'
+	            },
+	            page: 1,
+	            first: 0,
+	            last: 0,
+	            startPage: 1,
+	            endPage: 1,
+	            rows: 30,
+	            total: 0,
+	            totalPage: 0,
+	            siblingPages: 10,
+	            align: 'center',
+	            size: 'normal'
+	        };
+	        this.events = {
+	            onChange: true
+	        };
+	        this.methods = {
+	            setPage(page) {
+	                this._hidden.change(page);
+	            },
+	            setTotal(total) { },
+	            show() { },
+	            hide() { }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        return (createElement$1("div", { id: this._uid, className: 'gn-pagination' + (config.align ? ' is-' + config.align : '') + (config.size ? ' is-' + config.size : ''), style: styles }, this._hidden.renderPages()));
+	    }
+	    beforeMount() {
+	        this._hidden.setPageSet();
+	    }
+	}
+
+	/* eslint-disable @typescript-eslint/no-unused-vars */
+	const prism$1 = prism$2;
+	let rowIdx$1 = 0;
+	let _EventTimer$1 = 0;
+	const _EventDelay = 200;
+	let _EventPrevent = false;
+	class DataGrid extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            sort: (column, e) => {
+	                var _a;
+	                if (hasClass(e.target, 'is-handle')) {
+	                    return;
+	                }
+	                const target = find('.is-ellipsis', e.currentTarget) || e.currentTarget;
+	                this.$options.sort.field = column.key;
+	                column.sort = column.sort === 'asc' ? 'desc' : column.sort === 'desc' ? '' : 'asc';
+	                this.$options.sort.order = column.sort;
+	                this.$options.headers.forEach((x) => {
+	                    if (x.key !== column.key) {
+	                        x.sort = '';
+	                    }
+	                });
+	                removeClass(target, 'is-asc', 'is-desc');
+	                removeClass(findAll('.is-asc', this.$el), 'is-asc');
+	                removeClass(findAll('.is-desc', this.$el), 'is-desc');
+	                column.sort !== '' && addClass(target, `is-${column.sort}`);
+	                if (isFunction(this.$options.asyncData)) {
+	                    this._hidden.asyncData();
+	                }
+	                this.$options.onSort && ((_a = this.$options) === null || _a === void 0 ? void 0 : _a.onSort.call(this, column));
+	            },
+	            renderHeader: (columns) => {
+	                this.$options.hasOrder &&
+	                    !this.$options.readonly &&
+	                    columns.push({
+	                        label: this.$options.textSets.orderLabel,
+	                        key: 'btnOrder',
+	                        style: {
+	                            width: '50px'
+	                        }
+	                    });
+	                this.$options.hasDelete &&
+	                    !this.$options.readonly &&
+	                    columns.push({
+	                        label: this.$options.textSets.deleteLabel,
+	                        key: 'btnDelete',
+	                        style: {
+	                            width: '30px'
+	                        }
+	                    });
+	                return createElement$1("div", { className: "gn-datagrid-header-row" },
+	                    " ",
+	                    columns.map((column, idx) => this._hidden.renderCol(column, idx)));
+	            },
+	            renderCol: (column, idx) => {
+	                const headerStyle = {};
+	                if (column.style) {
+	                    each(column.style, (value, key) => {
+	                        if (key === 'width') {
+	                            if (this._isSystemAddedColumn(column.key) || column.draggable) {
+	                                headerStyle['min-width'] = value;
+	                                headerStyle['max-width'] = value;
+	                                headerStyle.width = value;
+	                            }
+	                            else {
+	                                headerStyle['flex-basis'] = value;
+	                                headerStyle.width = value;
+	                            }
+	                        }
+	                        else {
+	                            headerStyle[key] = value;
+	                        }
+	                    });
+	                }
+	                if (isIE) {
+	                    headerStyle.display = 'inline-block';
+	                }
+	                const renderCheck = () => {
+	                    return (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
+	                        createElement$1("input", { type: "checkbox", className: "is-allChecker", id: this._uid + '-rows-check', "on-click": (e) => {
+	                                this._hidden.checkAll.call(this, e);
+	                            }, disabled: this.$options.disabled })));
+	                };
+	                return (createElement$1("div", { style: headerStyle, className: 'gn-datagrid-header-cell ' +
+	                        (column.className ? column.className : '') +
+	                        (column.sort ? ' is-' + column.sort : '') +
+	                        (column.sortable ? ' is-sortable' : '') +
+	                        (column.isHidden ? ' is-unvisible' : ''), "on-click": column.sortable &&
+	                        ((e) => {
+	                            !this.$options.disabled && this._hidden.sort.call(this, column, e);
+	                        }), title: column.label ? column.label : '' },
+	                    idx === 0 && this.$options.hasCheck && renderCheck(),
+	                    createElement$1("span", { className: "gn-datagrid-cell" }, column.label),
+	                    column.sortable && createElement$1("span", { className: "is-sortDir" }),
+	                    column.draggable && createElement$1("span", { className: "is-handle", "data-index": idx })));
+	            },
+	            renderBody: (data, columns) => {
+	                rowIdx$1 = 0;
+	                return (createElement$1("div", { className: "gn-datagrid-body", style: {
+	                        maxHeight: this.$options.bodyHeight ? this.$options.bodyHeight : 'auto'
+	                    } }, (data === null || data === void 0 ? void 0 : data.length) ? this._hidden.renderRows(data, columns) : this._hidden.renderNodata()));
+	            },
+	            renderRows: (rows, columns, depth = 0, isOpen = false) => {
+	                return rows.map((row) => {
+	                    return row[this.$options.childField] && isArray$1(row[this.$options.childField])
+	                        ? [this._hidden.renderRow(row, columns, depth, true, isOpen), this._hidden.renderRows(row[this.$options.childField], columns, depth + 1, row.isOpened)]
+	                        : this._hidden.renderRow(row, columns, depth, false, isOpen);
+	                });
+	            },
+	            renderRow: (row, columns, depth = 0, hasChild, isOpened, isCheck = false) => {
+	                row._depth = depth;
+	                const _index = rowIdx$1++;
+	                if (row.isChecked) {
+	                    isCheck = true;
+	                }
+	                return (createElement$1("div", { "on-click": (e) => {
+	                        !this.$options.disabled && this._hidden.selectRow.call(this, row, _index, e);
+	                    }, "on-dblclick": (e) => {
+	                        !this.$options.disabled && this._hidden.doubleSelect.call(this, row, _index, e);
+	                    }, className: 'gn-datagrid-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (depth > 0 && !isOpened ? ' is-hidden' : '') + (row.color ? ` ${row.color}` : ''), id: this._uid + '-row-' + _index, "data-depth": depth }, columns.map((col, idx) => {
+	                    const cellStyle = {};
+	                    if (col.style) {
+	                        each(col.style, (value, key) => {
+	                            if (key === 'width') {
+	                                if (this._isSystemAddedColumn(col.key) || col.draggable) {
+	                                    cellStyle['min-width'] = value;
+	                                    cellStyle['max-width'] = value;
+	                                    cellStyle.width = value;
+	                                }
+	                                else {
+	                                    cellStyle['flex-basis'] = value;
+	                                    cellStyle.width = value;
+	                                }
+	                            }
+	                            else {
+	                                cellStyle[key] = value;
+	                            }
+	                        });
+	                    }
+	                    if (idx === 0 && depth !== 0) {
+	                        cellStyle.paddingLeft = depth * 15 + 10 + 'px';
+	                    }
+	                    if (isIE) {
+	                        cellStyle.display = 'inline-block';
+	                    }
+	                    if (col.key === 'btnOrder') {
+	                        cellStyle.display = 'flex';
+	                        cellStyle.padding = '0';
+	                        cellStyle['justify-content'] = 'space-evenly';
+	                        cellStyle['align-items'] = 'center';
+	                        return (createElement$1("div", { className: 'gn-datagrid-body-cell btn-container ' + (col.key ? col.key : ''), style: cellStyle, "on-click": (e) => {
+	                                this._hidden.stopRowSelectEvent(e);
+	                            } },
+	                            createElement$1("span", { className: 'gn-icon btn-order ' + (_index == 0 ? 'is-cancel' : 'is-info'), "on-click": () => {
+	                                    !this.$options.disabled && this._hidden.moveRowUp.call(this, _index);
+	                                } },
+	                                createElement$1("i", { className: "fas fa-arrow-circle-up" })),
+	                            createElement$1("span", { className: 'gn-icon btn-order ' + (_index == this.$options.data.length - 1 ? 'is-cancel' : 'is-info'), "on-click": () => {
+	                                    !this.$options.disabled && this._hidden.moveRowDown.call(this, _index);
+	                                } },
+	                                createElement$1("i", { className: "fas fa-arrow-circle-down" }))));
+	                    }
+	                    if (col.key === 'btnDelete') {
+	                        cellStyle.display = 'flex';
+	                        cellStyle['justify-content'] = 'center';
+	                        cellStyle['align-items'] = 'center';
+	                        return (createElement$1("div", { className: 'gn-datagrid-body-cell btn-container ' + (col.key ? col.key : ''), style: cellStyle, "on-click": (e) => {
+	                                this._hidden.stopRowSelectEvent(e);
+	                            } },
+	                            createElement$1("span", { className: "gn-icon is-small is-mono", "on-click": () => {
+	                                    !this.$options.disabled && this._hidden.deleteRow.call(this, _index);
+	                                } },
+	                                createElement$1("i", { className: "fas fa-trash" }))));
+	                    }
+	                    return (createElement$1("div", { className: 'gn-datagrid-body-cell ' +
+	                            (col.bodyClass ? col.bodyClass : col.className ? col.className : '') +
+	                            (isFunction(col.onSelect) ? ' is-selectable' : '') +
+	                            (col.isHidden ? ' is-unvisible' : ''), style: cellStyle, "on-click": (e) => {
+	                            !this.$options.disabled && this._hidden.selectCell.call(this, col, row, _index, e);
+	                        }, "on-mouseenter": (e) => {
+	                            !this.$options.disabled && this._hidden.hoverCell.call(this, col, row, _index, e);
+	                        }, "on-mouseleave": (e) => {
+	                            this._hidden.blurCell.call(this, col, row, _index, e);
+	                        }, title: col.tipField && row[col.tipField] ? row[col.tipField] : !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild, isCheck, _index)));
+	                })));
+	            },
+	            renderCell: (row, col, idx, hasChild, isCheck, _index) => {
+	                return [
+	                    idx === 0 && hasChild ? (createElement$1("span", { className: "is-toggler", "on-click": (e) => {
+	                            !this.$options.disabled && this._hidden.toggle.call(this, row, e);
+	                        } })) : (''),
+	                    idx === 0 && this.$options.hasCheck && row.noCheck !== true && row.noCheck !== 'true' ? (createElement$1("label", { className: "gn-checkbox is-no-padding", style: { width: '20px' } },
+	                        createElement$1("input", { type: "checkbox", id: this._uid + '-row-check-' + _index, className: "is-rowChecker", "on-click": (e) => {
+	                                this._hidden.check.call(this, row, e);
+	                            }, defaultChecked: isCheck, disabled: this.$options.disabled }))) : (''),
+	                    col.template ? createElement$1("span", { className: "gn-datagrid-cell", innerHTML: col.template(col.key, row, col) }) : row[col.key] !== undefined ? row[col.key] : ''
+	                ];
+	            },
+	            renderNodata: () => {
+	                return (createElement$1("div", { className: "gn-datagrid-body-row is-nodata" },
+	                    createElement$1("div", { className: "gn-datagrid-body-cell has-text-center" }, this.$options.textSets.noData)));
+	            },
+	            addChild: (index, addData) => {
+	                if (!addData || !addData.length) {
+	                    return;
+	                }
+	                const isRoot = index === null;
+	                // index로 상위 row를 찾는다
+	                let target = !isRoot ? find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el) : find(`.gn-datagrid-body > .gn-datagrid-body-row:last-child`, this.$el);
+	                // 추가되는 row depth를 상위 row의 depth + 1로 지정
+	                const _depth = !isRoot ? data(target, 'depth') * 1 + 1 : data(target, 'depth') * 1;
+	                const rowData = !isRoot ? this._hidden.findData(index) : last(this.$options.data);
+	                let isChecker = false;
+	                if (this.$options.hasCheck && this.$options.checkCapturing) {
+	                    // 체크박스 옵션이 설정된 경우에 부모의 체크값 확인
+	                    isChecker = !isRoot ? find('.is-rowChecker', target) : find('.is-allChecker', this.$el);
+	                    if (isChecker) {
+	                        isChecker = isChecker.checked;
+	                    }
+	                }
+	                addData.forEach((nRow, idx) => {
+	                    const newRow = document.createElement('div');
+	                    addClass(newRow, 'gn-datagrid-body-row');
+	                    if (isArray$1(rowData[this.$options.childField])) {
+	                        rowData[this.$options.childField].splice(idx, 0, nRow);
+	                    }
+	                    else {
+	                        rowData[this.$options.childField] = nRow;
+	                    }
+	                    after(target, newRow);
+	                    this.$template.reRender(newRow, this._hidden.renderRow(nRow, this.$options.headers, _depth, nRow[this.$options.childField] && isArray$1(nRow[this.$options.childField]), true, isChecker));
+	                    target = next(target);
+	                });
+	            },
+	            expand: (index) => {
+	                const target = find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el);
+	                const targetData = this._hidden.findData(index);
+	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'expand');
+	            },
+	            collapse: (index) => {
+	                const target = find(`.gn-datagrid-body > .gn-datagrid-body-row:nth-child(${index * 1 + 1})`, this.$el);
+	                const targetData = this._hidden.findData(index);
+	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'collapse');
+	            },
+	            toggle: (row, e, type) => {
+	                let toggler = e;
+	                if (!row) {
+	                    return;
+	                }
+	                if (e instanceof MouseEvent) {
+	                    e.stopPropagation();
+	                    toggler = parents(e.currentTarget, '.gn-datagrid-body-row');
+	                }
+	                const children = nextUntil(toggler, '.gn-datagrid-body-row[data-depth="' + row._depth + '"]').filter((x) => {
+	                    return x.dataset.depth > row._depth;
+	                });
+	                type = type ? type : hasClass(toggler, 'is-collapsed') ? 'expand' : 'collapse';
+	                if (type === 'collapse') {
+	                    addClass(toggler, 'is-collapsed');
+	                    //hide childs
+	                    addClass(children, 'is-hidden');
+	                    addClass(children.filter((x) => {
+	                        return hasClass(x, 'has-child');
+	                    }), 'is-collapsed');
+	                    this.$options.onToggle && this.$options.onToggle.call(this, 'collapsed', row, index$1(toggler));
+	                }
+	                else {
+	                    //show childs
+	                    removeClass(toggler, 'is-collapsed');
+	                    removeClass(children.filter((x) => {
+	                        return x.dataset.depth == row._depth + 1;
+	                    }), 'is-hidden');
+	                    this.$options.onToggle && this.$options.onToggle.call(this, 'expanded', row, index$1(toggler));
+	                }
+	            },
+	            checkAll: (e) => {
+	                e.stopPropagation();
+	                findAll('.is-rowChecker', this.$el).forEach((c) => {
+	                    c.checked = e.target.checked;
+	                });
+	                this.$options.onCheckAll && this.$options.onCheckAll.call(this, e.target.checked);
+	            },
+	            showDetail(index, headerKeys, rawDataKeys) {
+	                const rows = findAll(`.gn-datagrid-body > .gn-datagrid-body-row`, this.$el);
+	                const row = rows[+index];
+	                if (next(row) && hasClass(next(row), 'gn-datagrid-body-row-detail')) {
+	                    remove(next(row));
+	                    return;
+	                }
+	                const rowData = this.$options.data[index];
+	                const newRow = document.createElement('div');
+	                addClass(newRow, 'gn-datagrid-body-row-detail gn-syntaxinput');
+	                const detailWrap = document.createElement('div');
+	                const htmlContent = this.$options.headers.reduce((prev, next) => {
+	                    if (!headerKeys || headerKeys.includes(next.key)) {
+	                        const rowContent = next.detailTemplate
+	                            ? `<dd>${next.detailTemplate(next.key, rowData, next) || ''}</dd>`
+	                            : next.template
+	                                ? `<dd>${next.template(next.key, rowData, next) || ''}</dd>`
+	                                : `<dd>${rowData[next.key] || ''}</dd>`;
+	                        return prev + `<dl class="gn-list is-arrange is-borderless"><dt>${next.label}</dt>${rowContent}</dl>`;
+	                    }
+	                    return prev;
+	                }, '');
+	                append(detailWrap, htmlContent);
+	                append(newRow, detailWrap);
+	                if (rawDataKeys) {
+	                    const rawData = {};
+	                    rawDataKeys.forEach(key => {
+	                        rawData[key] = rowData[key];
+	                    });
+	                    const rawDetailWrap = document.createElement('div');
+	                    addClass(rawDetailWrap, 'gn-datagrid-body-row-raw');
+	                    const pre = document.createElement('pre');
+	                    const code = document.createElement('code');
+	                    addClass(code, 'language-json');
+	                    html(code, prism$1.highlight(JSON.stringify(rawData, null, 4), prism$1.languages.json, 'json'));
+	                    append(pre, code);
+	                    append(rawDetailWrap, pre);
+	                    append(newRow, rawDetailWrap);
+	                }
+	                after(row, newRow);
+	            },
+	            check: (row, e) => {
+	                e.stopPropagation();
+	                const checker = parents(e.currentTarget, '.gn-datagrid-body-row');
+	                const checkerState = e.target.checked;
+	                find('.is-allChecker', this.$el).checked = false;
+	                // 1. row에 자식노드가 있는지 확인한다.
+	                if (this.$options.checkCapturing && row[this.$options.childField] && row[this.$options.childField].length) {
+	                    // 2. 자식노드가 있는경우 자식 체크박스도 함께 토글한다.
+	                    nextUntil(checker, '.gn-datagrid-body-row[data-depth="' + row._depth + '"]')
+	                        .filter((x) => {
+	                        return x.dataset.depth > row._depth;
+	                    })
+	                        .forEach((x) => {
+	                        const _checker = find('.is-rowChecker', x);
+	                        if (_checker) {
+	                            _checker.checked = e.target.checked;
+	                        }
+	                    });
+	                }
+	                // 3. 체크 해제인 경우만 부모노드가 있는지 확인한다.
+	                if (this.$options.checkCapturing && row._depth > 0 && !checkerState) {
+	                    // 4. 부모노드가 체크되어 있는지 확인한다
+	                    const exeDepth = [];
+	                    prevUntil(checker, '.gn-datagrid-body-row[data-depth="0"]')
+	                        .filter((x) => {
+	                        const _thisDepth = x.dataset.depth;
+	                        if (exeDepth.includes(_thisDepth)) {
+	                            return false;
+	                        }
+	                        exeDepth.push(_thisDepth);
+	                        return _thisDepth < row._depth;
+	                    })
+	                        .forEach((x) => {
+	                        const _checker = find('.is-rowChecker', x);
+	                        if (_checker) {
+	                            _checker.checked = checkerState;
+	                        }
+	                    });
+	                }
+	                this.$options.onCheck && this.$options.onCheck.call(this, row, e);
+	            },
+	            reRender: ({ headers, data, hasCheck }) => {
+	                return new Promise(resolve => {
+	                    if (hasCheck === undefined) {
+	                        hasCheck = this.$options.hasCheck;
+	                    }
+	                    this.$options.headers = headers;
+	                    this.$options.hasCheck = hasCheck;
+	                    this.$template.reRender(find('.gn-datagrid-header-row', this.$el), this._hidden.renderHeader(this.$options.headers));
+	                    this._hidden.resetData(data ? data.slice() : this.$options.data);
+	                    this.$render(this.$options);
+	                    isFunction(resolve) && resolve();
+	                });
+	            },
+	            asyncData: () => {
+	                // this.$options.asyncData
+	                this.$options.asyncData.call(this, this._hidden.resetData, {
+	                    headers: this.$options.headers,
+	                    paginator: this.$options.paginator,
+	                    sort: this.$options.sort
+	                });
+	            },
+	            resetData: (data) => {
+	                return new Promise(resolve => {
+	                    this.$options.data = data;
+	                    Array.isArray(data) && data.some((d) => isArray$1(d[this.$options.childField])) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
+	                    this.$template.reRender(find('.gn-datagrid-body', this.$el), this._hidden.renderBody(this.$options.data, this.$options.headers));
+	                    if (this.$options.fixHeader || this.$options.bodyHeight) {
+	                        this._hidden.setBlankHeader();
+	                    }
+	                    // 체크박스가 있는경우 전체 체크항목을 해제해준다
+	                    if (this.$options.hasCheck) {
+	                        find('.is-allChecker', this.$el).checked = false;
+	                    }
+	                    isFunction(resolve) && resolve();
+	                });
+	            },
+	            selectRow: (row, index, e) => {
+	                if ((e === null || e === void 0 ? void 0 : e.target) && attr(e.target, 'role') === 'button') {
+	                    // 이벤트 객체가 role='button' 인경우, selectRow 이벤트가 동작하지 않는다.
+	                    return;
+	                }
+	                if (this.$options.onSelect) {
+	                    if (e) {
+	                        e.currentTarget;
+	                    }
+	                    else {
+	                        const rows = findAll('.gn-datagrid-body-row', this.$el);
+	                        rows[index];
+	                    }
+	                    const ClickTrigger = this.$options.onSelect.bind(this, row, index);
+	                    _EventTimer$1 = setTimeout(() => {
+	                        if (!_EventPrevent) {
+	                            ClickTrigger();
+	                        }
+	                        _EventPrevent = false;
+	                    }, _EventDelay);
+	                }
+	            },
+	            selectCell: (col, row, index, e) => {
+	                if (isFunction(col.onSelect)) {
+	                    col.onSelect.call(this, row, col, index, e);
+	                }
+	            },
+	            stopRowSelectEvent: (e) => {
+	                e.stopPropagation();
+	            },
+	            deleteRow: (index) => {
+	                var _a;
+	                this.$options.data = this.$options.data.filter((_data, idx) => index !== idx);
+	                this._hidden.resetData(this.$options.data);
+	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
+	            },
+	            moveRowUp: (index) => {
+	                if (index == 0) {
+	                    return;
+	                }
+	                this._hidden.switchRow(index, index - 1);
+	            },
+	            moveRowDown: (index) => {
+	                if (index == this.$options.data.length - 1) {
+	                    return;
+	                }
+	                this._hidden.switchRow(index, index + 1);
+	            },
+	            switchRow: (index1, index2) => {
+	                var _a;
+	                [this.$options.data[index2], this.$options.data[index1]] = [this.$options.data[index1], this.$options.data[index2]];
+	                this._hidden.resetData(this.$options.data);
+	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
+	            },
+	            doubleSelect: (row, index) => {
+	                if (this.$options.onDoubleClick) {
+	                    clearTimeout(_EventTimer$1);
+	                    _EventPrevent = true;
+	                    this.$options.onDoubleClick.call(this, row, index);
+	                }
+	            },
+	            hoverCell: (col, row, index, e) => {
+	                col.onHover && col.onHover.call(this, row, col, index, e);
+	            },
+	            blurCell: (col, row, index, e) => {
+	                col.offHover && col.offHover.call(this, row, col, index, e);
+	            },
+	            findData: (index) => {
+	                let deter = 0, indexData = null;
+	                const findIndex = (datas, index) => {
+	                    return datas.some((data) => {
+	                        if (index === deter) {
+	                            indexData = data;
+	                            return true;
+	                        }
+	                        ++deter;
+	                        if (isArray$1(data[this.$options.childField]) && data[this.$options.childField].length) {
+	                            return findIndex(data[this.$options.childField], index);
+	                        }
+	                        return false;
+	                    });
+	                };
+	                findIndex(this.$options.data, index);
+	                return indexData;
+	            },
+	            getChecked: () => {
+	                return findAll('.is-rowChecker', this.$el)
+	                    .filter((checker) => {
+	                    return checker.checked;
+	                })
+	                    .map((checker) => {
+	                    return index$1(parents(checker, '.gn-datagrid-body-row').pop());
+	                })
+	                    .map((rowIdx) => {
+	                    return this._hidden.findData(rowIdx);
+	                });
+	            },
+	            hideCols: (keys) => {
+	                const _visibles = [];
+	                this.$options.headers.forEach((header) => {
+	                    keys.includes(header.key) ? _visibles.push(false) : _visibles.push(true);
+	                });
+	                this._hidden.toggleCols(_visibles);
+	            },
+	            showCols: (keys) => {
+	                const _visibles = [];
+	                this.$options.headers.forEach((header) => {
+	                    keys.includes(header.key) ? _visibles.push(true) : _visibles.push(false);
+	                });
+	                this._hidden.toggleCols(_visibles);
+	            },
+	            showAll: () => {
+	                removeClass(findAll('.is-unvisible', this.$el), 'is-unvisible');
+	            },
+	            toggleCols: (visibles = []) => {
+	                visibles.forEach((visible, index) => {
+	                    const colNumber = index + 1;
+	                    !visible
+	                        ? addClass(findAll('.gn-datagrid-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
+	                        : removeClass(findAll('.gn-datagrid-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
+	                    !visible
+	                        ? addClass(findAll('.gn-datagrid-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
+	                        : removeClass(findAll('.gn-datagrid-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
+	                });
+	            },
+	            setBlankHeader: () => {
+	                // body영역에 스크롤이 생긴 경우 헤더의 우측에 여백이 생기도록 한다
+	                const body = find('.gn-datagrid-body', this.$el);
+	                body.scrollHeight > body.clientHeight ? addClass(this.$el, 'has-scroll') : removeClass(this.$el, 'has-scroll');
+	            },
+	            columnDragEvents: {
+	                drag: (e, position, handle) => {
+	                    const target = parents(handle, '.gn-datagrid-header-cell');
+	                    const rowCells = findAll(`.gn-datagrid-body-row:not(.is-nodata) .gn-datagrid-body-cell:nth-child(${data(handle, 'index') * 1 + 1})`, this.$el);
+	                    target &&
+	                        styles$3(target[0], {
+	                            'min-width': getUnit('minWidth', position.x + 5),
+	                            width: getUnit('width', position.x + 5),
+	                            'max-width': getUnit('maxWidth', position.x + 5)
+	                            // 'flex-basis': getUnit('flex-basis', position.x + 5)
+	                        });
+	                    rowCells &&
+	                        rowCells.forEach((cell) => {
+	                            styles$3(cell, {
+	                                'min-width': getUnit('minWidth', position.x + 5),
+	                                width: getUnit('width', position.x + 5),
+	                                'max-width': getUnit('maxWidth', position.x + 5)
+	                                // 'flex-basis': getUnit('flex-basis', position.x + 5)
+	                            });
+	                        });
+	                },
+	                dragStart: () => { },
+	                dragEnd: (e, handle) => {
+	                    if (!this.$options.headers[data(handle, 'index')].style) {
+	                        this.$options.headers[data(handle, 'index')].style = {};
+	                    }
+	                    this.$options.headers[data(handle, 'index')].style.width = getUnit('width', position(handle).left + 5);
+	                    this.$options.headers[data(handle, 'index')].style['min-width'] = getUnit('minWidth', position(handle).left + 5);
+	                    this.$options.headers[data(handle, 'index')].style['max-width'] = getUnit('maxWidth', position(handle).left + 5);
+	                    // this.$options.headers[data(handle, 'index')].style['flex-basis'] = getUnit('flex-basis', position(handle).left + 5);
+	                    this.$options.onDragEnd && this.$options.onDragEnd.call(this, this.$options.headers[data(handle, 'index')], this.$options.headers);
+	                }
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                attr(findAll('input', this.$el), 'disabled', true);
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                removeAttr(findAll('input', this.$el), 'disabled');
+	                removeClass(this.$el, 'is-disabled');
+	            }
+	        };
+	        this.config = {
+	            width: '100%',
+	            hasCheck: false,
+	            hasOrder: false,
+	            hasDelete: false,
+	            isEllipsis: false,
+	            data: [],
+	            textSets: {
+	                noData: 'No records available.',
+	                orderLabel: '',
+	                deleteLabel: ''
+	            },
+	            childField: 'child',
+	            checkCapturing: true,
+	            sort: {
+	                field: '',
+	                order: 'asc'
+	            },
+	            paginator: null
+	        };
+	        this.events = {
+	            onSort: true,
+	            onSelect: true,
+	            onToggle: true,
+	            onCheckAll: true,
+	            onCheck: true,
+	            onDoubleClick: true,
+	            onChange: true
+	        };
+	        this.methods = {
+	            reRender(options) {
+	                return this._hidden.reRender(options);
+	            },
+	            resetData(data) {
+	                if (isFunction(data)) {
+	                    this.$options.asyncData = data;
+	                    data = [];
+	                    this._hidden.asyncData();
+	                    return;
+	                }
+	                return this._hidden.resetData(data === null || data === void 0 ? void 0 : data.slice());
+	            },
+	            addChild(index, data) {
+	                this._hidden.addChild(index, data.slice());
+	            },
+	            addRow(data) {
+	                this._hidden.addChild(null, data.slice());
+	                this.$options.data = this.$options.data.concat(data);
+	            },
+	            expand(index) {
+	                this._hidden.expand(index);
+	            },
+	            collapse(index) {
+	                this._hidden.collapse(index);
+	            },
+	            getChecked() {
+	                return this._hidden.getChecked();
+	            },
+	            hideCols(keys) {
+	                this._hidden.hideCols(keys);
+	            },
+	            showCols(keys) {
+	                this._hidden.showCols(keys);
+	            },
+	            showAll() {
+	                this._hidden.showAll();
+	            },
+	            showDetail(index, headerKeys, rawDataKeys) {
+	                this._hidden.showDetail.call(this, index, headerKeys, rawDataKeys);
+	            },
+	            selectRow(index, rowData) {
+	                let row = rowData;
+	                if (!row) {
+	                    row = this.$options.data[index];
+	                }
+	                !this.$options.disable && this._hidden.selectRow(row, index);
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    _isSystemAddedColumn(key) {
+	        return ['btnOrder', 'btnDelete'].includes(key);
+	    }
+	    template(config) {
+	        const styles = {};
+	        return (createElement$1("div", { id: this._uid, className: 'gn-datagrid' +
+	                (config.style ? ' is-' + config.style : '') +
+	                (config.isEllipsis ? ' is-ellipsis' : '') +
+	                (config.bodyHeight ? ' has-fixed-body' : '') +
+	                (config.fixHeader ? ' has-fixed-header' : '') +
+	                (config.data.some((d) => isArray$1(d[this.$options.childField])) ? ' has-left-padding' : '') +
+	                (config.disabled ? ' is-disabled' : ''), style: styles },
+	            createElement$1("div", { className: "gn-datagrid-header" }, this._hidden.renderHeader(config.headers)),
+	            createElement$1("div", { className: "gn-datagrid-contents", style: { marginTop: this.$options.bodyTopMargin ? this.$options.bodyTopMargin : '0' } }, this._hidden.renderBody(config.data.slice(), config.headers)),
+	            config.paginator /* 페이지네이터 옵션 확인 */ && createElement$1("div", { className: "gn-datagrid-footer" })));
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) {
+	        const handles = findAll('.is-handle', this.$el);
+	        handles.forEach((handle) => {
+	            dragLayout(handle, [0, 30, 0, window.innerWidth], this._hidden.columnDragEvents);
+	        });
+	        if (isIE) {
+	            css$1(handles, 'display', 'none');
+	        }
+	        if (this.$options.onDoubleClick && this.$options.onSelect) {
+	            console.warn('It is not desirable to bind handlers to both click events and dblick events for the same element.');
+	        }
+	    }
+	    beforeMount() {
+	        //
+	        if (isFunction(this.$options.data)) {
+	            this.$options.asyncData = this.$options.data;
+	            this.$options.data = [];
+	        }
+	    }
+	    completed() {
+	        if (this.$options.fixHeader) {
+	            const body = find('.gn-datagrid-contents', this.$el);
+	            const header = find('.gn-datagrid-header', this.$el);
+	            const _offset = offset(header);
+	            this.$options.bodyTopMargin = _offset.height ? _offset.height - 1 + 'px' : '2.4rem';
+	            css$1(body, 'margin-top', this.$options.bodyTopMargin);
+	        }
+	        if (this.$options.fixHeader || this.$options.bodyHeight) {
+	            this._hidden.setBlankHeader();
+	            on(window, 'resize', this._hidden.setBlankHeader);
+	        }
+	        if (this.$options.asyncData) {
+	            this._hidden.asyncData();
+	            if (this.$options.paginator) {
+	                console.log('paginator create');
+	                new Pagination('pagination', find('.gn-datagrid-footer', this.$el), {
+	                    total: this.$options.paginator.total || 0,
+	                    rows: this.$options.paginator.rows,
+	                    onChange: (page, first) => {
+	                        this.$options.paginator.first = first;
+	                        this._hidden.asyncData();
+	                    }
+	                });
+	            }
+	        }
+	    }
+	}
+
+	let rowIdx = 0;
+	const _EventTimer = 0;
+	class DataList extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            renderBody: (data, columns) => {
+	                return (createElement$1("div", { className: "gn-datalist-body", style: {
+	                        maxHeight: this.$options.bodyHeight ? this.$options.bodyHeight : 'auto'
+	                    } }, data.length ? this._hidden.renderRows(data, columns) : this._hidden.renderNodata()));
+	            },
+	            renderRows: (rows, columns, depth = 0, isOpen = false) => {
+	                return rows.map((row, idx) => {
+	                    return row[this.$options.childField] && isArray$1(row[this.$options.childField])
+	                        ? [this._hidden.renderRow(row, columns, idx, depth, true, isOpen), this._hidden.renderRows(row[this.$options.childField], columns, depth + 1, row.isOpened)]
+	                        : this._hidden.renderRow(row, columns, idx, depth, false, isOpen);
+	                });
+	            },
+	            renderRow: (row, columns, index, depth = 0, hasChild, isOpened) => {
+	                row._depth = depth;
+	                const _index = rowIdx++;
+	                const btnUpdate = {
+	                    icon: this.$options.readonly ? 'info-circle' : 'pen',
+	                    color: (this.$options.readonly ? 'info' : 'cancel')
+	                };
+	                return (createElement$1("div", { "on-dblclick": (e) => {
+	                        this._hidden.doubleSelect.call(this, row, _index, e);
+	                    }, className: 'gn-datalist-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (row.isSelectedRow ? ' is-active' : '') + (depth > 0 && !isOpened ? ' is-hidden' : ''), "data-depth": depth, style: { cursor: this.$options.onSelect ? 'pointer' : 'default' } },
+	                    createElement$1("ol", { className: 'gn-datalist-ol-container' }, columns.map((col, idx) => {
+	                        const cellStyle = {};
+	                        if (col.style) {
+	                            each(col.style, (value, key) => {
+	                                if (key === 'width') {
+	                                    cellStyle['max-width'] = value;
+	                                    cellStyle.width = value;
+	                                    cellStyle['min-width'] = value;
+	                                }
+	                                else {
+	                                    cellStyle[key] = value;
+	                                }
+	                            });
+	                        }
+	                        if (idx === 0 && depth !== 0) {
+	                            cellStyle.paddingLeft = depth * 15 + 10 + 'px';
+	                        }
+	                        if (isIE) {
+	                            cellStyle.display = 'inline-block';
+	                        }
+	                        const isHiddenCell = (this.$options.isHiddenEmpty && row[col.key] === '') || col.isHidden;
+	                        return (!isHiddenCell && (createElement$1("li", null,
+	                            this._hidden.renderCol(col, idx),
+	                            createElement$1("span", { className: 'gn-datalist-body-cell ' +
+	                                    (col.bodyClass ? col.bodyClass : col.className ? col.className : '') +
+	                                    (isFunction(col.onSelect) ? ' is-selectable' : '') +
+	                                    (col.isHidden ? ' is-unvisible' : ''), style: cellStyle, "on-mouseenter": (e) => {
+	                                    this._hidden.hoverCell.call(this, col, row, _index, e);
+	                                }, "on-mouseleave": (e) => {
+	                                    this._hidden.blurCell.call(this, col, row, _index, e);
+	                                }, title: !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild)))));
+	                    })),
+	                    createElement$1("div", { className: "gn-datalist-btn-container" },
+	                        this.$options.hasUpdate
+	                            ? this._hidden.renderBtn(btnUpdate.icon, btnUpdate.color, (_e) => {
+	                                if (!this.$options.disabled && this.$options.onUpdate) {
+	                                    this.$options.onUpdate.call(this, this.$options.data[index], index);
+	                                    return;
+	                                }
+	                            })
+	                            : '',
+	                        !this.$options.readonly && this.$options.hasDelete
+	                            ? this._hidden.renderBtn('trash', 'mono', (_e) => {
+	                                !this.$options.disabled && this._hidden.deleteRow(+index);
+	                            })
+	                            : '')));
+	            },
+	            renderCol: (column, idx) => {
+	                const headerStyle = {};
+	                if (column.style) {
+	                    each(column.style, (value, key) => {
+	                        if (key === 'width') {
+	                            headerStyle['max-width'] = value;
+	                            headerStyle.width = value;
+	                            headerStyle['min-width'] = value;
+	                        }
+	                        else {
+	                            headerStyle[key] = value;
+	                        }
+	                    });
+	                }
+	                if (isIE) {
+	                    headerStyle.display = 'inline-block';
+	                }
+	                return (createElement$1("strong", { style: headerStyle, className: 'gn-datalist-header-cell ' + (column.className ? column.className : '') + (column.isHidden ? ' is-unvisible' : ''), title: column.label ? column.label : '' },
+	                    createElement$1("span", { className: "gn-grid-cell" }, column.label)));
+	            },
+	            renderCell: (row, col, idx, hasChild) => {
+	                return [
+	                    idx === 0 && hasChild ? (createElement$1("span", { className: "is-toggler", "on-click": (e) => {
+	                            this._hidden.toggle.call(this, row, e);
+	                        } })) : (''),
+	                    col.template ? createElement$1("span", { className: "gn-grid-cell", innerHTML: col.template(col.key, row) }) : row[col.key] !== undefined ? row[col.key] : ''
+	                ];
+	            },
+	            renderBtn: (iconName, color, clickHandler) => {
+	                return (createElement$1("span", { className: 'gn-icon is-small ' + (color ? 'is-' + color : ''), "on-click": clickHandler },
+	                    createElement$1("i", { className: 'fas fa-' + iconName })));
+	            },
+	            renderNodata: () => {
+	                return (createElement$1("div", { className: "gn-datalist-body-row" },
+	                    createElement$1("div", { className: "gn-datalist-body-cell has-text-center" }, this.$options.textSets.noData)));
+	            },
+	            addChild: (index, addData) => {
+	                if (!addData || !addData.length) {
+	                    return;
+	                }
+	                const isRoot = index === null;
+	                // index로 상위 row를 찾는다
+	                let target = !isRoot ? find(`.gn-datalist-body > .gn-datalist-body-row:nth-child(${index * 1 + 1})`, this.$el) : find(`.gn-datalist-body > .gn-datalist-body-row:last-child`, this.$el);
+	                // 추가되는 row depth를 상위 row의 depth + 1로 지정
+	                const _depth = !isRoot ? data(target, 'depth') * 1 + 1 : data(target, 'depth') * 1;
+	                const rowData = !isRoot ? this._hidden.findData(index) : last(this.$options.data);
+	                addData.forEach((nRow, idx) => {
+	                    const newRow = document.createElement('div');
+	                    addClass(newRow, 'gn-datalist-body-row');
+	                    if (isArray$1(rowData[this.$options.childField])) {
+	                        rowData[this.$options.childField].splice(idx, 0, nRow);
+	                    }
+	                    else {
+	                        rowData[this.$options.childField] = nRow;
+	                    }
+	                    after(target, newRow);
+	                    this.$template.reRender(newRow, this._hidden.renderRow(nRow, this.$options.headers, idx, _depth, nRow[this.$options.childField] && isArray$1(nRow[this.$options.childField]), true));
+	                    target = next(target);
+	                });
+	            },
+	            expand: (index) => {
+	                const target = find(`.gn-datalist-body > .gn-datalist-body-row:nth-child(${index * 1 + 1})`, this.$el);
+	                const targetData = this._hidden.findData(index);
+	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'expand');
+	            },
+	            collapse: (index) => {
+	                const target = find(`.gn-datalist-body > .gn-datalist-body-row:nth-child(${index * 1 + 1})`, this.$el);
+	                const targetData = this._hidden.findData(index);
+	                targetData[this.$options.childField] && this._hidden.toggle(targetData, target, 'collapse');
+	            },
+	            toggle: (row, e, type) => {
+	                let toggler = e;
+	                if (!row) {
+	                    return;
+	                }
+	                if (e instanceof MouseEvent) {
+	                    e.stopPropagation();
+	                    toggler = parents(e.currentTarget, '.gn-datalist-body-row');
+	                }
+	                const children = nextUntil(toggler, '.gn-datalist-body-row[data-depth="' + row._depth + '"]').filter((x) => {
+	                    return x.dataset.depth > row._depth;
+	                });
+	                type = type ? type : hasClass(toggler, 'is-collapsed') ? 'expand' : 'collapse';
+	                if (type === 'collapse') {
+	                    addClass(toggler, 'is-collapsed');
+	                    //hide childs
+	                    addClass(children, 'is-hidden');
+	                    addClass(children.filter((x) => {
+	                        return hasClass(x, 'has-child');
+	                    }), 'is-collapsed');
+	                    this.$options.onToggle && this.$options.onToggle.call(this, 'collapsed', row, index$1(toggler));
+	                }
+	                else {
+	                    //show childs
+	                    removeClass(toggler, 'is-collapsed');
+	                    removeClass(children.filter((x) => {
+	                        return x.dataset.depth == row._depth + 1;
+	                    }), 'is-hidden');
+	                    this.$options.onToggle && this.$options.onToggle.call(this, 'expanded', row, index$1(toggler));
+	                }
+	            },
+	            reRender: ({ headers, data }) => {
+	                return new Promise(resolve => {
+	                    this.$options.headers = headers;
+	                    this._hidden.resetData(data ? data.slice() : this.$options.data);
+	                    isFunction(resolve) && resolve();
+	                });
+	            },
+	            resetData: (data) => {
+	                return new Promise(resolve => {
+	                    this.$options.data = data;
+	                    data.some((d) => isArray$1(d[this.$options.childField])) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
+	                    this.$template.reRender(find('.gn-datalist-body', this.$el), this._hidden.renderBody(this.$options.data, this.$options.headers));
+	                    isFunction(resolve) && resolve();
+	                });
+	            },
+	            doubleSelect: (row, index) => {
+	                if (this.$options.onDoubleClick) {
+	                    clearTimeout(_EventTimer);
+	                    this.$options.onDoubleClick.call(this, row, index);
+	                }
+	            },
+	            hoverCell: (col, row, index, e) => {
+	                col.onHover && col.onHover.call(this, row, col, index, e);
+	            },
+	            blurCell: (col, row, index, e) => {
+	                col.offHover && col.offHover.call(this, row, col, index, e);
+	            },
+	            findData: (index) => {
+	                let deter = 0, indexData = null;
+	                const findIndex = (datas, index) => {
+	                    return datas.some((data) => {
+	                        if (index === deter) {
+	                            indexData = data;
+	                            return true;
+	                        }
+	                        ++deter;
+	                        if (isArray$1(data[this.$options.childField]) && data[this.$options.childField].length) {
+	                            return findIndex(data[this.$options.childField], index);
+	                        }
+	                        return false;
+	                    });
+	                };
+	                findIndex(this.$options.data, index);
+	                return indexData;
+	            },
+	            hideCols: (keys) => {
+	                const _visibles = [];
+	                this.$options.headers.forEach((header) => {
+	                    keys.includes(header.key) ? _visibles.push(false) : _visibles.push(true);
+	                });
+	                this._hidden.toggleCols(_visibles);
+	            },
+	            showCols: (keys) => {
+	                const _visibles = [];
+	                this.$options.headers.forEach((header) => {
+	                    keys.includes(header.key) ? _visibles.push(true) : _visibles.push(false);
+	                });
+	                this._hidden.toggleCols(_visibles);
+	            },
+	            showAll: () => {
+	                removeClass(findAll('.is-unvisible', this.$el), 'is-unvisible');
+	            },
+	            toggleCols: (visibles = []) => {
+	                visibles.forEach((visible, index) => {
+	                    const colNumber = index + 1;
+	                    !visible
+	                        ? addClass(findAll('.gn-datalist-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
+	                        : removeClass(findAll('.gn-datalist-body-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
+	                    !visible
+	                        ? addClass(findAll('.gn-datalist-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible')
+	                        : removeClass(findAll('.gn-datalist-header-cell:nth-child(' + colNumber + ')', this.$el), 'is-unvisible');
+	                });
+	            },
+	            deleteRow: (index) => {
+	                var _a;
+	                this.$options.data.splice(index, 1);
+	                this._hidden.resetData(this.$options.data);
+	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                removeClass(this.$el, 'is-disabled');
+	            }
+	        };
+	        this.config = {
+	            width: '100%',
+	            hasUpdate: false,
+	            hasDelete: false,
+	            isEllipsis: false,
+	            data: [],
+	            textSets: {
+	                noData: 'No records available.'
+	            },
+	            childField: 'child',
+	            isHiddenEmpty: false
+	        };
+	        this.events = {
+	            onSelect: true,
+	            onToggle: true,
+	            onDoubleClick: true,
+	            onUpdate: true,
+	            onDelete: true,
+	            onChange: true
+	        };
+	        this.methods = {
+	            reRender(options) {
+	                return this._hidden.reRender(options);
+	            },
+	            resetData(data) {
+	                return this._hidden.resetData(data.slice());
+	            },
+	            addChild(index, data) {
+	                this._hidden.addChild(index, data.slice());
+	            },
+	            addRow(data) {
+	                if (data) {
+	                    this.$options.data = this.$options.data.concat(data);
+	                    this._hidden.resetData(this.$options.data);
+	                }
+	            },
+	            expand(index) {
+	                this._hidden.expand(index);
+	            },
+	            collapse(index) {
+	                this._hidden.collapse(index);
+	            },
+	            hideCols(keys) {
+	                this._hidden.hideCols(keys);
+	            },
+	            showCols(keys) {
+	                this._hidden.showCols(keys);
+	            },
+	            showAll() {
+	                this._hidden.showAll();
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        return (createElement$1("div", { id: this._uid, className: 'gn-datalist' +
+	                (config.style ? ' is-' + config.style : '') +
+	                (config.isEllipsis ? ' is-ellipsis' : '') +
+	                (config.bodyHeight ? ' has-fixed-body' : '') +
+	                (config.data.some((d) => isArray$1(d[this.$options.childField])) ? ' has-left-padding' : ''), style: styles },
+	            createElement$1("div", { className: "gn-datalist-contents", style: { marginTop: this.$options.bodyTopMargin ? this.$options.bodyTopMargin : '0' } }, this._hidden.renderBody(config.data.slice(), config.headers))));
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) { }
+	    completed() { }
+	}
+
+	class Growl extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            out: () => {
+	                // eslint-disable-next-line @typescript-eslint/no-this-alias
+	                const closerThis = this;
+	                const clearTimer = setTimeout(function () {
+	                    fadeout(closerThis.$el, 500);
+	                    clearTimeout(clearTimer);
+	                    const closeTimer = setTimeout(function () {
+	                        closerThis.$destroy(closerThis, true);
+	                        clearTimeout(closeTimer);
+	                    }, 500);
+	                }, closerThis.$options.duration);
+	            }
+	        };
+	        this.config = {
+	            textSets: {
+	                message: this.$selector ? this.$selector.textContent : ''
+	            },
+	            width: 400,
+	            duration: 1000,
+	            positionX: 'center',
+	            positionY: 'center'
+	        };
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.width) {
+	            /* inline style이 필요한 경우는 이렇게 사용 */
+	            styles.width = getUnit('width', config.width);
+	        }
+	        return (createElement$1("div", { id: this._uid, className: 'gn-growl' +
+	                (config.color ? ' is-' + config.color : '') /* 색상 클래스 추가 */ +
+	                (config.style ? ' is-' + config.style : '') /* 스타일 클래스 추가 */ +
+	                (config.icon ? ' has-arrange' : '') /* 스타일 클래스 추가 */ +
+	                (config.size ? ' is-' + config.size : ''), 
+	            /* 크기 클래스 추가 */ style: styles },
+	            config.icon ? (createElement$1("span", { className: "gn-icon is-normal" },
+	                createElement$1("i", { className: 'fas fa-' + config.icon }))) : (''),
+	            createElement$1("p", { innerHTML: config.textSets.message })));
+	    }
+	    beforeMount() {
+	        if (!this.$selector) {
+	            const container = $('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
+	            !container && append(document.body, $('<div class="gn-growl-container pos-' + this.$options.positionX + '-' + this.$options.positionY + '"></div>'));
+	            append($('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY), $(`<div id="${this._uid}"></div>`));
+	            this.$selector = $(`#${this._uid}`);
+	        }
+	        if (this.$options.type) {
+	            switch (this.$options.type) {
+	                // type이 설정된 경우, 색상과 아이콘을 반영한다.
+	                case 'error':
+	                case 'danger':
+	                    this.$options.color = 'danger';
+	                    this.$options.icon = 'exclamation-triangle';
+	                    break;
+	                case 'warning':
+	                    this.$options.color = 'warning';
+	                    this.$options.icon = 'exclamation-circle';
+	                    break;
+	                case 'success':
+	                    this.$options.color = 'success';
+	                    this.$options.icon = 'check';
+	                    break;
+	                case 'info':
+	                    this.$options.color = 'info';
+	                    this.$options.icon = 'info-circle';
+	                    break;
+	                case 'guide':
+	                    this.$options.color = 'guide';
+	                    this.$options.icon = 'info-circle';
+	                    break;
+	            }
+	        }
+	    }
+	    completed() {
+	        this._hidden.out();
+	    }
+	    destroyed() {
+	        const container = $('.gn-growl-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
+	        if (!container.childElementCount) {
+	            remove(container);
+	        }
+	    }
+	}
+
+	let modal_index = 990;
+	class Modal extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            close: () => {
+	                removeStyle(document.body, 'position');
+	                removeStyle(document.body, 'top');
+	                removeStyle(document.body, 'width');
+	                window.scrollTo(0, this.scrollPosition);
+	                this.$event(this, 'onClose');
+	                this.$options.autoDestroy ? this.$destroy(this) : this._hidden.hide();
+	            },
+	            confirm: () => {
+	                this.$event(this, 'onConfirm');
+	            },
+	            hide: () => {
+	                removeClass(this.$el, 'is-active');
+	            },
+	            show: () => {
+	                this.scrollPosition = window.scrollY;
+	                if (this.$options.isModal) {
+	                    css$1(document.body, 'position', 'fixed');
+	                    css$1(document.body, 'top', `-${this.scrollPosition}px`);
+	                    css$1(document.body, 'width', '100%');
+	                }
+	                addClass(this.$el, 'is-active');
+	                const modal = find('.modal-content', this.$el);
+	                if (this.$options.resizable && css$1(modal, 'transform') !== 'none') {
+	                    css$1(modal, 'transform', 'none');
+	                    css$1(modal, 'left', getPositionX(modal, false));
+	                    css$1(modal, 'top', getPositionY(modal, false));
+	                }
+	                this.$event(this, 'onOpen');
+	            },
+	            toggle: () => {
+	                toggleClass(this.$el, 'is-minimized');
+	            },
+	            focus: () => {
+	                const modal = find('.modal-content', this.$el);
+	                modal.focus();
+	            }
+	        };
+	        this.config = {
+	            textSets: {
+	                title: '',
+	                confirm: '확인',
+	                cancel: '취소'
+	            },
+	            sizeSets: {
+	                confirm: 'normal',
+	                cancel: 'normal'
+	            },
+	            contents: '',
+	            width: 400,
+	            hasClose: true,
+	            hasConfirm: false,
+	            hasCancel: false,
+	            isModal: true,
+	            minimized: false,
+	            resizable: false,
+	            draggable: false,
+	            autoShow: true,
+	            autoDestroy: true
+	        };
+	        this.events = {
+	            onClose: true,
+	            onConfirm: true,
+	            onOpen: true
+	        };
+	        this.methods = {
+	            close() {
+	                this._hidden.close();
+	            },
+	            show() {
+	                this._hidden.show();
+	            },
+	            focus() {
+	                this._hidden.focus();
+	            }
+	        };
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        const contStyles = {};
+	        if (config.width) {
+	            styles.width = getUnit('width', config.width);
+	        }
+	        if (config.height) {
+	            styles.height = getUnit('height', config.height);
+	        }
+	        if (config.padding) {
+	            contStyles.padding = getUnit('padding', config.padding);
+	        }
+	        return (createElement$1("div", { id: this._uid, className: "gn-modal" },
+	            config.isModal && createElement$1("div", { className: "modal-mask" }),
+	            createElement$1("div", { className: "modal-content" },
+	                (config.textSets.title || config.minimized || config.hasClose || config.draggable || config.icon) && (createElement$1("div", { className: 'modal-header' + (config.color ? ' is-' + config.color : '') + (config.draggable ? ' is-draggable' : '') },
+	                    createElement$1("h3", null,
+	                        config.icon && (createElement$1("span", { className: "gn-icon is-normal" },
+	                            createElement$1("i", { className: 'fas fa-' + config.icon }))),
+	                        config.textSets.title),
+	                    createElement$1("div", { className: "modal-control" },
+	                        config.minimized && (createElement$1("span", { className: "gn-icon is-small is-minimize", "on-click": this._hidden.toggle },
+	                            createElement$1("i", { className: "fas" }))),
+	                        config.hasClose && (createElement$1("span", { className: "gn-icon is-close", "on-click": this._hidden.close },
+	                            createElement$1("i", { className: "fas fa-times" })))))),
+	                createElement$1("div", { className: "modal-body", style: styles },
+	                    createElement$1("div", { className: "modal-body-content", style: contStyles })),
+	                (config.hasConfirm || config.hasCancel) /* 확인/취소 옵션 확인 */ && (createElement$1("div", { className: "modal-footer has-text-center" },
+	                    config.hasConfirm && (createElement$1("button", { type: "button", className: 'gn-button' + ` is-${config.sizeSets.confirm}`, "on-click": this._hidden.confirm }, config.textSets.confirm)),
+	                    config.hasCancel && (createElement$1("button", { type: "button", className: 'gn-button btnCloseModal is-cancel' + ` is-${config.sizeSets.cancel}`, "on-click": this._hidden.close }, config.textSets.cancel)))))));
+	    }
+	    $render(config) {
+	        if (config.contents) {
+	            if (config.contents.sel !== undefined) {
+	                append(find('.modal-body-content', this.$el), $('<div class="temp-node"></div>'));
+	                this.$template.reRender(find('.temp-node', this.$el), config.contents);
+	            }
+	            else {
+	                append(find('.modal-body-content', this.$el), $(config.contents));
+	            }
+	        }
+	        if (config.draggable) {
+	            const modal = find('.modal-content', this.$el);
+	            attr(modal, 'tabindex', '-1');
+	            css$1(modal, 'z-index', modal_index);
+	            drag(modal, {
+	                dragStart: () => {
+	                    modal.focus();
+	                }
+	            });
+	        }
+	    }
+	    beforeMount() {
+	        if (!this.$selector) {
+	            append(document.body, $(`<div id="${this._uid}"></div>`));
+	            this.$selector = $(`#${this._uid}`);
+	        }
+	        if (this.$options.color) {
+	            if (!GN_CONSTANT.COLOR_SET.includes(this.$options.color)) {
+	                this.$options.color = '';
+	            }
+	        }
+	    }
+	    completed() {
+	        if (this.$options.resizable) {
+	            resize(find('.modal-body', this.$el), [100, 160, window.screen.availHeight, window.screen.availWidth]);
+	        }
+	        this.$options.autoShow && this._hidden.show();
+	        modal_index++;
+	    }
+	}
+
+	class Tooltip extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            show: () => {
+	                this._hidden.setPosition();
+	                addClass(this.$el, 'is-active');
+	            },
+	            hide: () => {
+	                removeClass(this.$el, 'is-active');
+	            },
+	            toggle: () => {
+	                hasClass(this.$el, 'is-active') ? this._hidden.hide() : this._hidden.show();
+	            },
+	            setPosition: () => {
+	                if (this.$options.position) {
+	                    css$1(this.$el, this.$options.position);
+	                    return;
+	                }
+	                let _position = {
+	                    top: 0,
+	                    left: 0
+	                };
+	                const _offset = offset(this.$options.delegates.trigger);
+	                const width = _offset.width, height = _offset.height;
+	                if (this.$options.delegates.trigger) {
+	                    _position.top = _offset.top;
+	                    _position.left = _offset.left;
+	                }
+	                const _bodyTop = getNumber(css$1(document.body, 'top'));
+	                if (css$1(document.body, 'overflow') == 'hidden' && _bodyTop !== 0) {
+	                    _position.top += _bodyTop * -1;
+	                }
+	                switch (this.$options.direction) {
+	                    case 'top':
+	                        _position = {
+	                            left: (_position.left += width / 2) + 'px',
+	                            top: (_position.top -= 10) + 'px'
+	                        };
+	                        break;
+	                    case 'bottom':
+	                        _position = {
+	                            left: (_position.left += width / 2) + 'px',
+	                            top: (_position.top += height + 10) + 'px'
+	                        };
+	                        break;
+	                    case 'right':
+	                        _position = {
+	                            left: (_position.left += width + 10) + 'px',
+	                            top: (_position.top += height / 2) + 'px'
+	                        };
+	                        break;
+	                    case 'left':
+	                        _position = {
+	                            left: (_position.left -= 10) + 'px',
+	                            top: (_position.top += height / 2) + 'px'
+	                        };
+	                        break;
+	                    case 'left-top':
+	                        _position = {
+	                            left: (_position.left -= 10) + 'px',
+	                            top: (_position.top += height) + 'px'
+	                        };
+	                        break;
+	                    case 'left-bottom':
+	                        _position = {
+	                            left: (_position.left -= 10) + 'px',
+	                            top: _position.top + 'px'
+	                        };
+	                        break;
+	                    case 'right-top':
+	                        _position = {
+	                            left: (_position.left += width + 10) + 'px',
+	                            top: (_position.top += height) + 'px'
+	                        };
+	                        break;
+	                    case 'right-bottom':
+	                        _position = {
+	                            left: (_position.left += width + 10) + 'px',
+	                            top: _position.top + 'px'
+	                        };
+	                        break;
+	                }
+	                css$1(this.$el, _position);
+	            },
+	            reRender: (newContents) => {
+	                this.$options.contents = newContents;
+	                if ($(newContents)) {
+	                    this.$el.innerHTML = '';
+	                    append(this.$el, $(newContents));
+	                }
+	                else if (newContents) {
+	                    this.$el.innerHTML = newContents;
+	                }
+	            }
+	        };
+	        this.config = {
+	            direction: 'bottom',
+	            delegates: {
+	                trigger: undefined
+	            },
+	            type: 'hover'
+	        };
+	        this.methods = {
+	            show() {
+	                this._hidden.show();
+	            },
+	            hide() {
+	                this._hidden.hide();
+	            },
+	            setContents(newContents) {
+	                this.$options.contents = newContents;
+	                this._hidden.reRender.call(null, newContents);
+	            }
+	        };
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.width) {
+	            styles.width = getUnit('width', config.width);
+	        }
+	        return config.template ? (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles }, config.template)) : (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles, innerHTML: config.contents }));
+	    }
+	    beforeMount() {
+	        const popper = $(`<div id="${this._uid}"></div>`);
+	        append(document.body, popper);
+	        if (style(this.$selector, 'position') === 'static') {
+	            style(this.$selector, 'position', 'relative');
+	        }
+	        this.config.delegates.trigger = this.$selector;
+	        // trigger element 에 대해 종속성을 표시한다.
+	        attr(this.config.delegates.trigger, 'data-gnui', this._uid);
+	        this.$selector = popper;
+	        if (this.$options.type === 'hover') {
+	            this.$bind(this, {
+	                show: {
+	                    name: 'mouseenter',
+	                    delegate: this.$options.delegates.trigger,
+	                    handler: () => {
+	                        this._hidden.show.call(this);
+	                    }
+	                },
+	                hide: {
+	                    name: 'mouseleave',
+	                    delegate: this.$options.delegates.trigger,
+	                    handler: () => {
+	                        this._hidden.hide.call(this);
+	                    }
+	                }
+	            });
+	        }
+	        if (this.$options.type === 'click') {
+	            this.$bind(this, {
+	                toggle: {
+	                    name: 'click',
+	                    delegate: this.$options.delegates.trigger,
+	                    handler: () => {
+	                        this._hidden.toggle.call(this);
+	                    }
+	                }
+	            });
+	        }
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) {
+	        const $contents = $(config.contents);
+	        if (!isHtml(config.contents) && isElement$2($contents)) {
+	            empty(this.$el);
+	            append(this.$el, $contents);
+	        }
+	    }
+	}
+
+	const JsonPath = JSONPath;
+	const SortIconList = ['sort', 'sort-up', 'sort-down', 'sort'];
+	class JsonView extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this.subCharts = {};
+	        this.subTooltips = {};
+	        this.subCheckboxs = {};
+	        this.sortIndex = 0;
+	        this._hidden = {
+	            reRender: (data, schema) => {
+	                this.$template.reRender(find('.jsonview-contents', this.$el), createElement$1("div", { className: "jsonview-contents" }, schema ? this._hidden.render(data, schema) : this._hidden.renderRaw(data)));
+	            },
+	            render: (data, schema, parent, key) => {
+	                return !!schema // 스키마가 있는경우만 처리
+	                    ? this._hidden.renderSub(data, schema, parent, key)
+	                    : this._hidden.renderRaw(data); // 스키마 없음
+	            },
+	            renderSub: (data, schema, parent, key) => {
+	                return schema.Type === 'object' || // 타입이 오브젝트이거나
+	                    (isArray$1(schema.Type) && schema.Type.includes('object') && isPlainObject$1(data)) // 타입에 오브젝트가 포함되고, 데이터가 오브젝트인 경우
+	                    ? this._hidden.objView(data, schema)
+	                    : schema.Type === 'array' || // 타입이 배열이거나
+	                        (isArray$1(schema.Type) && schema.Type.includes('array') && isArray$1(data)) // 타입에 배열가 포함되고, 데이터가 배열인 경우
+	                        ? schema.Items.Type === 'object' // 오브젝트 배열인 경우
+	                            ? this._hidden.gridView(data, schema.Items) // 그리드 형식으로 출력
+	                            : // : !schema.Items.Type && schema.Items.$ref
+	                                // ? this._hidden.defView(data, schema, parent)
+	                                this._hidden.arrayView(data, schema.Items) // 일반 배열 형식으로 출력
+	                        : // : !schema.Type && schema.$ref
+	                            // ? this._hidden.defView(data, schema, parent) // $def, $ref 설정 시
+	                            this._hidden.valueView(data, schema, parent, key); // 문자열, 숫자...etc
+	            },
+	            renderRaw: (data) => {
+	                // schema가 없는 경우
+	                return isString(data) || isNumeric(data)
+	                    ? this._hidden.valueView(data)
+	                    : isArray$1(data)
+	                        ? data.some(x => isObject(x))
+	                            ? this._hidden.gridView(data)
+	                            : this._hidden.arrayView(data)
+	                        : isObject(data)
+	                            ? this._hidden.objView(data)
+	                            : this._hidden.valueView(data);
+	            },
+	            defView: (data, schema) => {
+	                let defSchema = schema;
+	                const refPath = (schema.$ref || schema.Items.$ref).split('/');
+	                refPath.forEach((path) => {
+	                    defSchema = path === '#' ? this.$options.schema : defSchema[path];
+	                });
+	                const subContents = new Modal('modal', '', {
+	                    isModal: false,
+	                    draggable: true,
+	                    autoShow: false,
+	                    autoDestroy: false,
+	                    textSets: { title: defSchema.Disp || '' },
+	                    contents: this._hidden.render(data, defSchema)
+	                });
+	                return (createElement$1("a", { "on-click": () => {
+	                        subContents.show();
+	                    } }, "[more]"));
+	            },
+	            gridView: (data, schema) => {
+	                // 오브젝트 배열인 경우 그리드 형식으로 출력
+	                if (!schema && !data.length) {
+	                    return;
+	                }
+	                const keys = schema && schema.Properties ? Object.keys(schema.Properties) : Object.keys(data[0]);
+	                const hasHeader = !schema ||
+	                    (schema &&
+	                        schema.Properties &&
+	                        keys.some(key => {
+	                            return !!schema.Properties[key].Disp;
+	                        }));
+	                return (createElement$1("table", { className: "gn-table is-full is-schema-grid" },
+	                    hasHeader && (createElement$1("thead", null,
+	                        createElement$1("tr", null, keys.map(k => {
+	                            return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : schema && schema.SortItems && schema.SortItems.includes(k) ? (createElement$1("th", { "on-click": (e) => {
+	                                    this._hidden.onSort.call(this, k, schema, e);
+	                                }, className: "is-sortable" },
+	                                this._hidden.keyView(k, schema),
+	                                this._hidden.sortItem())) : (createElement$1("th", null, this._hidden.keyView(k, schema)));
+	                        })))),
+	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' }, data &&
+	                        data.map(d => (createElement$1("tr", null, keys.map(k => {
+	                            var _a;
+	                            const value = startsWith(k, '$') ? JsonPath.query(d, k)[0] : d[k];
+	                            let tooltipIndex = undefined;
+	                            if (schema && schema.Properties[k] && schema.Properties[k].$ref) {
+	                                let defSchema = schema;
+	                                let defData = d;
+	                                const refPath = schema.Properties[k].$ref.split('/');
+	                                refPath.forEach((path) => {
+	                                    defSchema = path === '#' ? this.$options.schema : defSchema[path];
+	                                    defData = path === '#' || path === '$defs' ? defData : d[path];
+	                                });
+	                                tooltipIndex = Object.keys(this.subTooltips).length + 1;
+	                                this.subTooltips[tooltipIndex] = { defData, defSchema };
+	                            }
+	                            const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
+	                            const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_a = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _a === void 0 ? void 0 : _a.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
+	                            return dataItem;
+	                        })))))));
+	            },
+	            objView: (obj, schema) => {
+	                // 오브젝트 형식인 경우 key-value 로 출력
+	                const renderTarget = schema && schema.Properties ? Object.keys(schema.Properties) : Object.keys(obj);
+	                return (createElement$1("table", { className: "gn-table is-borderless is-object-grid" }, renderTarget.map(k => {
+	                    const value = startsWith(k, '$') ? JsonPath.query(obj, k)[0] : obj[k];
+	                    const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
+	                    return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : (createElement$1("tr", null,
+	                        createElement$1("th", { style: { width: this.$options.defWidth } }, this._hidden.keyView(k, schema)),
+	                        createElement$1("td", { "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, obj) }, schema ? this._hidden.render(value, schema.Properties[k], obj, k) : this._hidden.renderRaw(value))));
+	                })));
+	            },
+	            arrayView: (data, schema) => {
+	                // 텍스트 배열인 경우 ,로 연결해서 출력
+	                const dataArr = data.map((val) => {
+	                    return this._hidden.valueView(val, schema, data);
+	                });
+	                if (!schema || schema.Type !== 'html') {
+	                    for (let i = dataArr.length; --i; i) {
+	                        dataArr.splice(i, 0, ',');
+	                    }
+	                }
+	                return dataArr;
+	            },
+	            keyView: (key, schema) => {
+	                let keySchema = schema ? schema.Properties[key] : undefined;
+	                if (schema && keySchema && !keySchema.Type && keySchema.$ref) {
+	                    (keySchema.$ref || keySchema.Items.$ref).split('/').forEach((path) => {
+	                        keySchema = path === '#' ? this.$options.schema : keySchema[path];
+	                    });
+	                }
+	                return (createElement$1("span", { className: schema && keySchema && keySchema.Type === 'number' ? 'is-type-number' : '' },
+	                    schema && keySchema && keySchema.Disp !== null && keySchema.Disp !== undefined ? keySchema.Disp : key,
+	                    schema && keySchema && keySchema.Description ? (createElement$1("span", { className: "gn-icon is-small is-help", title: keySchema.Description },
+	                        createElement$1("i", { className: "fas fa-question-circle" }))) : (''),
+	                    schema && schema.Required && schema.Required.includes(key) ? ' *' : ''));
+	            },
+	            valueView: (data, schema, parent, key) => {
+	                const val = commaNum(data);
+	                return schema && schema.RefURL ? (val === '0' ? (this._hidden.value(data, schema, parent, key)) : (createElement$1("a", { href: interpolateURL(schema.RefURL, { data, schema, parent, root: this.$options.data }), target: schema.Target ? schema.Target : '_self' }, this._hidden.value(data, schema, parent, key)))) : (this._hidden.value(data, schema, parent, key));
+	            },
+	            value: (data, schema, parent, key) => {
+	                var _a;
+	                let valueNode;
+	                let valueMode = 'string';
+	                if (schema) {
+	                    if (schema.Converter) {
+	                        schema.Converter = toArray$1(schema.Converter);
+	                    }
+	                    if (schema.Converter && isArray$1(schema.Converter) && this.$options.convert && isFunction(this.$options.convert)) {
+	                        const Name = schema.Converter[0];
+	                        const Type = schema.Converter[1] || '';
+	                        const Value = schema.Converter[2] || '{{data}}';
+	                        if (Name) {
+	                            const escapeValue = interpolateURL(Value, { data, schema, parent, root: this.$options.data });
+	                            data = this.$options.convert(Name, Type, escapeValue);
+	                        }
+	                    }
+	                    if (schema.Type === 'datetime' || (isArray$1(schema.Type) && schema.Type.includes('datetime') && isDate(data))) {
+	                        valueMode = 'datetime';
+	                        valueNode = dateFormat(toDate(data), 'YYYY-MM-DD hh:mm:ss');
+	                    }
+	                    else if (schema.Type === 'byte' || (isArray$1(schema.Type) && schema.Type.includes('byte') && isNumeric(data))) {
+	                        valueMode = 'byte';
+	                        valueNode = byteSize(data, 2);
+	                    }
+	                    else if (schema.Type === 'number' || (isArray$1(schema.Type) && schema.Type.includes('number') && isNumeric(data))) {
+	                        valueMode = 'number';
+	                        valueNode = commaNum(data);
+	                    }
+	                    else if (schema.Type === 'checkbox' || (isArray$1(schema.Type) && schema.Type.includes('checkbox') && (isNumeric(data) || isString(data) || isBoolean(data) || isPlainObject$1(data)))) {
+	                        valueMode = 'checkbox';
+	                        const hiddenChecks = data.hidden ? (isString(data.hidden) ? toBoolean(interpolateCop(data.hidden, data, parent, this.$options.data)) : data.hidden) : false;
+	                        const checkIndex = Object.keys(this.subCheckboxs).length;
+	                        this.subCheckboxs[checkIndex] = parent !== null && parent !== void 0 ? parent : data;
+	                        valueNode =
+	                            isPlainObject$1(data) && hiddenChecks ? ('') : (createElement$1("input", { type: "checkbox", className: "gn-checkbox-input", name: 'gn-checkbox-' + ((_a = key !== null && key !== void 0 ? key : schema.Disp) !== null && _a !== void 0 ? _a : 'value'), value: isPlainObject$1(data) ? data.value : data, checked: isPlainObject$1(data) ? data.checked : false, "data-check": checkIndex }));
+	                    }
+	                    else if (schema.Type === 'html' || (isArray$1(schema.Type) && schema.Type.includes('html') && data && data.indexOf('<') > -1 && data.indexOf('>') > -1)) {
+	                        valueMode = 'html';
+	                        valueNode = createElement$1("div", { innerHTML: interpolateURL(data, { data, schema, parent, root: this.$options.data }) });
+	                    }
+	                    else if (schema.Type === 'percent' || (isArray$1(schema.Type) && schema.Type.includes('percent') && isObject(data))) {
+	                        valueMode = 'percent';
+	                        valueNode = isNumeric(data) ? (createElement$1("div", { className: "gn-progressbar is-secondary", style: { minWidth: '100px' } },
+	                            createElement$1("span", { className: "gauge", style: { width: data + '%' } }),
+	                            createElement$1("span", { className: 'figure ' + (isNumeric(data) && toNumber(data) > 69 ? 'inner' : '') },
+	                                " ",
+	                                data,
+	                                "%"))) : (createElement$1("div", null));
+	                    }
+	                    else if (schema.Type === 'bignumber' || (isArray$1(schema.Type) && schema.Type.includes('bignumber') && isObject(data))) {
+	                        valueMode = 'bignumber';
+	                        valueNode = Object.keys(data).map((key) => {
+	                            return (createElement$1("div", { className: "gn-bignumber is-small" },
+	                                createElement$1("div", { className: "gn-bignumber-value" }, isObject(data[key]) ? data[key].value : data[key]),
+	                                isObject(data[key]) && data[key].data && createElement$1("div", { className: "gn-chart is-small", "data-sparkline": data[key].data.join(',') }),
+	                                createElement$1("span", { className: "gn-bignumber-label" }, key)));
+	                        });
+	                    }
+	                    else if (schema.Type === 'chart' || (isArray$1(schema.Type) && schema.Type.includes('chart') && isObject(data))) {
+	                        valueMode = 'chart';
+	                        const chartIndex = Object.keys(this.subCharts).length;
+	                        this.subCharts[chartIndex] = data;
+	                        valueNode = createElement$1("div", { "data-chart": chartIndex });
+	                    }
+	                    else {
+	                        valueNode = data;
+	                    }
+	                }
+	                else {
+	                    valueNode = data;
+	                }
+	                return (createElement$1("span", { className: `is-type-${valueMode} ` + (schema && schema.StyleClass ? interpolateCop(schema.StyleClass, data, parent, this.$options.data) : ''), "on-click": this._hidden.selectValue, style: schema && schema.Style ? styleToVNodeStyle(interpolateCop(schema.Style, data, parent, this.$options.data)) : {} }, valueNode));
+	            },
+	            sortItem: () => {
+	                return (createElement$1("span", { className: 'gn-icon is-small jsonview-sort ' + SortIconList[this.sortIndex] },
+	                    createElement$1("i", { className: "fa" })));
+	            },
+	            onSelect: (value, key, obj, e) => {
+	                // !(e.target as HTMLInputElement).className.includes('gn-checkbox') &&
+	                isFunction(this.$options.onSelect) && this.$options.onSelect.call(this, value, key, obj, e);
+	            },
+	            selectValue: () => {
+	                isFunction(this.$options.onSelectValue) && this.$options.onSelectValue.call(this);
+	            },
+	            onSort: (key, schema, e) => {
+	                const _target = find('.jsonview-sort', e.currentTarget);
+	                replaceClass(_target, SortIconList[this.sortIndex], SortIconList[++this.sortIndex]);
+	                if (this.sortIndex > 2) {
+	                    this.sortIndex = 0;
+	                }
+	                isFunction(this.$options.onSort) && this.$options.onSort.call(this, key, SortIconList[this.sortIndex], schema);
+	            },
+	            selectLabel: () => {
+	                isFunction(this.$options.onSelectLabel) && this.$options.onSelectLabel.call(this);
+	            },
+	            formatChecker: (data) => {
+	                if (!data) {
+	                    return data;
+	                }
+	                if (!isObject(data) && !isArray$1(data)) {
+	                    try {
+	                        return JSON.parse(data);
+	                    }
+	                    catch (_a) {
+	                        console.warn("The 'data' should have been in object format.");
+	                    }
+	                }
+	                return data;
+	            },
+	            getChecked: () => {
+	                return findAll('input[type=checkbox]', this.$el)
+	                    .filter((checker) => {
+	                    return checker.checked;
+	                })
+	                    .map((checker) => this.subCheckboxs[checker.dataset.check]);
+	            }
+	        };
+	        this.config = {
+	            name: (this.$selector && this.$selector.name) || this._uid,
+	            defWidth: 'auto'
+	        };
+	        this.events = {
+	            onSelectValue: true,
+	            onSelectLabel: true,
+	            onSelect: true
+	        };
+	        this.methods = {
+	            reRender(param) {
+	                this._hidden.reRender(this._hidden.formatChecker(param.data), this._hidden.formatChecker(param.schema));
+	            },
+	            getChecked() {
+	                return this._hidden.getChecked();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        return (createElement$1("div", { id: this._uid, className: "gn-jsonview" },
+	            config.schema && (config.schema.Disp || config.schema.Description) && (createElement$1("div", { className: "jsonview-header" },
+	                config.schema.Disp && createElement$1("div", { className: "jsonview-title" }, config.schema.Disp),
+	                config.schema.Description && createElement$1("div", { className: "jsonview-desc" }, config.schema.Description))),
+	            createElement$1("div", { className: "jsonview-contents" }, config.schema ? this._hidden.render(config.data, config.schema) : this._hidden.renderRaw(config.data))));
+	    }
+	    beforeMount() {
+	        this.$options.data = this._hidden.formatChecker(this.$options.data);
+	        this.$options.schema = this._hidden.formatChecker(this.$options.schema);
+	    }
+	    completed() {
+	        const $sparklines = $$('[data-sparkline]', this.$el);
+	        if ($sparklines.length) {
+	            each($sparklines, (sl) => {
+	                new Chart('chart', sl, {
+	                    type: 'sparkline',
+	                    series: [
+	                        {
+	                            data: data(sl, 'data-sparkline').split(',')
+	                        }
+	                    ],
+	                    chart: {
+	                        width: 120,
+	                        height: 20
+	                    }
+	                });
+	            });
+	        }
+	        const $charts = $$('[data-chart]', this.$el);
+	        if ($charts.length) {
+	            each($charts, (chart) => {
+	                const chartIndex = data(chart, 'data-chart');
+	                new Chart('chart', chart, Object.assign({}, this.subCharts[chartIndex]));
+	            });
+	        }
+	        const $tooltips = $$('[data-tooltip]', this.$el);
+	        if ($tooltips.length) {
+	            each($tooltips, (tooltip) => {
+	                const tooltipIndex = data(tooltip, 'data-tooltip');
+	                new Tooltip('tooltip', tooltip, {
+	                    template: this._hidden.render(this.subTooltips[tooltipIndex].defData, this.subTooltips[tooltipIndex].defSchema),
+	                    direction: 'bottom',
+	                    color: 'dark'
+	                });
+	            });
+	        }
+	    }
+	}
+
+	class Loader extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            show: (duration) => {
+	                const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
+	                css$1(container, 'display', 'block');
+	                const closerThis = this;
+	                if (duration) {
+	                    const clearTimer = setTimeout(function () {
+	                        fadeout(closerThis.$el, 500);
+	                        clearTimeout(clearTimer);
+	                        const closeTimer = setTimeout(function () {
+	                            closerThis.hide();
+	                            clearTimeout(closeTimer);
+	                        }, 500);
+	                    }, duration);
+	                }
+	            },
+	            hide: () => {
+	                const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
+	                css$1(container, 'display', 'none');
+	            }
+	        };
+	        this.config = {
+	            positionX: 'center',
+	            positionY: 'center'
+	        };
+	        this.methods = {
+	            show(duration) {
+	                this._hidden.show(duration);
+	            },
+	            hide() {
+	                this._hidden.hide();
+	            }
+	        };
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.width) {
+	            /* inline style이 필요한 경우는 이렇게 사용 */
+	            styles.width = getUnit('width', config.width);
+	            styles.height = getUnit('height', config.width);
+	        }
+	        return (createElement$1("div", { id: this._uid, className: 'gn-loader' +
+	                (config.color ? ' is-' + config.color : '') /* 색상 클래스 추가 */ +
+	                (config.style ? ' is-' + config.style : '') /* 스타일 클래스 추가 */ +
+	                (config.type ? ' is-' + config.type : '') +
+	                (config.size ? ' is-' + config.size : ''), 
+	            /* 크기 클래스 추가 */ style: styles }));
+	    }
+	    beforeMount() {
+	        if (!this.$selector) {
+	            const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
+	            !container && append(document.body, $('<div class="gn-loader-container pos-' + this.$options.positionX + '-' + this.$options.positionY + '"></div>'));
+	            append($('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY), $(`<div id="${this._uid}"></div>`));
+	            this.$selector = $(`#${this._uid}`);
+	        }
+	    }
+	    completed() {
+	        this.$options.duration && this._hidden.show(this.$options.duration);
+	    }
+	    hide() {
+	        const container = $('.gn-loader-container.pos-' + this.$options.positionX + '-' + this.$options.positionY);
+	        css$1(container, 'display', 'none');
+	    }
+	}
+
+	/* TODO: 사용자의 추가적인 DOM 생성없이 사용할 수 있도록 utility component로 제공 추가
+	=> Gn.growl */
+	class Message extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            close: () => {
+	                this.$event(this, 'onClose');
+	                animation[this.$options.animation](this.$el, this.$options.duration);
+	                // eslint-disable-next-line @typescript-eslint/no-this-alias
+	                const closerThis = this;
+	                const closeTimer = setTimeout(function () {
+	                    closerThis.$destroy(closerThis, true);
+	                    clearTimeout(closeTimer);
+	                }, this.$options.duration);
+	            }
+	        };
+	        this.config = {
+	            animation: 'slideup',
+	            textSets: {
+	                message: this.$selector ? this.$selector.textContent : ''
+	            },
+	            hasClose: true,
+	            duration: 300
+	        };
+	        this.events = {
+	            onClose: true
+	        };
+	        this.methods = {
+	            close() {
+	                this._hidden.close();
+	            }
+	        };
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.width) {
+	            styles.width = getUnit('width', config.width);
+	        }
+	        return (createElement$1("div", { id: this._uid, className: 'gn-message' + (config.color ? ' is-' + config.color : '') + (config.size ? ' is-' + config.size : '') + (config.icon ? ' has-arrange' : ''), style: styles },
+	            config.icon && (createElement$1("span", { className: "gn-icon is-normal" },
+	                createElement$1("i", { className: 'fas fa-' + config.icon }))),
+	            createElement$1("p", { innerHTML: config.textSets.message }),
+	            config.hasClose && (createElement$1("span", { className: "gn-icon is-close is-dark", "on-click": this._hidden.close },
+	                createElement$1("i", { className: "fas fa-times" })))));
+	    }
+	    beforeMount() {
+	        this.appendTarget(); // patch가 아닌 append 되어야 하는 컴포넌트는 beforeMount cycle에서 target을 추가하는 과정을 수행한다.
+	        if (!this.$selector) {
+	            this.$selector = $(`<div id="${this._uid}"></div>`);
+	        }
+	    }
+	}
+
+	class MenuButton extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            open: () => {
+	                addClass(this.$el, 'is-open');
+	            },
+	            close: () => {
+	                removeClass(this.$el, 'is-open');
+	            },
+	            select: (menu, e) => {
+	                this.$options.onSelect && this.$options.onSelect.call(this, menu.value, menu.text, menu, e);
+	                this._hidden.close();
+	            },
+	            changeText: (buttonText) => {
+	                this.$options.textSets.buttonText = buttonText;
+	                html(find('.menuButton-text', this.$el), buttonText);
+	            }
+	        };
+	        this.config = {
+	            textSets: {
+	                buttonText: this.$selector.textContent
+	            },
+	            name: this.$selector.name,
+	            data: [],
+	            align: 'left'
+	        };
+	        this.events = {
+	            onSelect: true
+	        };
+	        this.methods = {
+	            select() {
+	                this._hidden.select();
+	            },
+	            buttonText(text) {
+	                this._hidden.changeText(text);
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.width) {
+	            styles.width = getUnit('width', config.width);
+	        }
+	        const renderMenus = (menus) => {
+	            return (createElement$1("ul", null, menus.map((menu, index) => (createElement$1("li", { id: this._uid + '-' + index, className: 'menuButton-menu' + (config.align ? ' has-text-' + config.align : ''), "on-click": (e) => {
+	                    this._hidden.select.call(this, menu, e);
+	                }, innerHTML: menu.html ? menu.html : '' }, menu.html ? '' : menu.text)))));
+	        };
+	        const renderSub = (data) => {
+	            return createElement$1("div", null, isArray$1(data) && data.length && isArray$1(data[0]) ? data.map((menus) => renderMenus(menus)) : renderMenus(data));
+	        };
+	        return (createElement$1("div", { id: this._uid, className: 'gn-menuButton' + (config.color ? ' is-' + config.color : '') + (config.style ? ' is-' + config.style : '') + (config.size ? ' is-' + config.size : ''), style: styles },
+	            createElement$1("button", { type: "button", className: config.align ? 'has-text-' + config.align : '', "on-click": this._hidden.open },
+	                config.icon && (createElement$1("span", { className: 'gn-icon is-' + (config.size === 'large' ? 'medium' : config.size === 'medium' ? 'normal' : 'small') },
+	                    createElement$1("i", { className: 'fas fa-' + config.icon }),
+	                    ' ')),
+	                createElement$1("span", { className: "gn-icon is-small menuButton-icon" },
+	                    createElement$1("i", { className: "fas fa-caret-down" })),
+	                createElement$1("span", { className: "menuButton-text" }, config.textSets.buttonText)),
+	            createElement$1("div", { className: "menuButton-menus" }, renderSub(config.data))));
+	    }
+	    completed() {
+	        // 해당 컴포넌트 외 클릭 시 menu panel 숨김
+	        this.$options._destroy = on(document.body, 'click', (e) => {
+	            if (!parents(e.target, '#' + this._uid).length) {
+	                this._hidden.close();
+	            }
+	        });
+	    }
+	    destroyed() {
+	        isFunction(this.$options._destroy) && this.$options._destroy();
+	    }
+	}
+
+	class Tab extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            change: (idx, isInit = false) => {
+	                var _a;
+	                if (!isInit && this.$options.tabIndex === idx) {
+	                    return;
+	                } // 활성화 탭 중복 클릭 방지
+	                if ((isInit || !this.$options.disabled) && this.$options.contents) {
+	                    this.$options.tabIndex = idx;
+	                    !isInit && ((_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, idx, this.$el)); // user onChange event
+	                    const activeTab = find(`li:nth-child(${idx + 1})`, this.$el);
+	                    removeClass(findAll('li', this.$el), 'is-active'); // active 상태 해제
+	                    addClass(activeTab, 'is-active'); // active 상태 표시
+	                    // 탭 컨텐츠가 있는 경우 컨텐츠 보이기
+	                    this._hidden.hideContent();
+	                    this._hidden.showContent(attr(find('a', activeTab), 'href'));
+	                }
+	            },
+	            showContent: (selector) => {
+	                // 탭 컨텐츠 보이기
+	                style(find(selector, $(this.$options.contents)), 'display', 'block');
+	            },
+	            hideContent: () => {
+	                // 탭 컨텐츠 숨기기
+	                const $contents = this.$options.contents ? $(this.$options.contents) : undefined;
+	                $contents &&
+	                    children($contents).forEach((child) => {
+	                        style(child, 'display', 'none');
+	                    });
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                removeClass(this.$el, 'is-disabled');
+	            }
+	        };
+	        this.config = {
+	            contents: '',
+	            tabIndex: 0,
+	            align: 'full'
+	        };
+	        this.events = {
+	            onChange: true
+	        };
+	        this.methods = {
+	            change(idx) {
+	                this._hidden.change(idx);
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) {
+	        addClass(this.$el, 'gn-tab');
+	        config.size && addClass(this.$el, `is-${config.size}`);
+	        config.style && addClass(this.$el, `is-${config.style}`);
+	        config.align && addClass(this.$el, `is-${config.align}`);
+	        config.disabled && addClass(this.$el, 'is-disabled');
+	        attr(this.$el, 'id', this._uid);
+	        // 탭 별 인덱스 추가
+	        findAll('li > a', this.$el).forEach((tab, idx) => {
+	            attr(tab, 'data-tab-index', idx);
+	        });
+	        // 탭 이벤트 바인딩
+	        this.$bind(this, {
+	            click: (e) => {
+	                e.preventDefault();
+	                const tabIndex = attr(e.target, 'data-tab-index') || attr(parents(e.target, '[data-tab-index]'), 'data-tab-index');
+	                if (isNumeric(tabIndex)) {
+	                    this._hidden.change.call(this, tabIndex * 1);
+	                }
+	            }
+	        });
+	        this._hidden.change(config.tabIndex, true); // 초기 탭 활성화
+	    }
+	}
+
+	class MultiTextArea extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            change: (e) => {
+	                const target = e.target;
+	                const lang = data(target, 'data-lang');
+	                this.$options.value[lang] = val(target);
+	                if (this.$options.maxlength) {
+	                    text$1(this.$options.delegates[lang], this.$options.value[lang].length);
+	                }
+	                isFunction(this.$options.onChange) && this.$options.onChange.call(this, this.$options.value);
+	            },
+	            getValue: () => {
+	                return this.$options.value;
+	            },
+	            setValue: (value) => {
+	                if (!value) {
+	                    return;
+	                }
+	                this.$options.lang.forEach((lang) => {
+	                    if (!value[lang]) {
+	                        value[lang] = '';
+	                    }
+	                    const textInput = find(`[data-lang=${lang}]`, this.$el);
+	                    val(textInput, value[lang]);
+	                    trigger(textInput, 'keyup');
+	                });
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                this._tab.disable();
+	                attr(findAll('textarea', this.$el), 'disabled', true);
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                this._tab.enable();
+	                removeAttr(findAll('textarea', this.$el), 'disabled');
+	                removeClass(this.$el, 'is-disabled');
+	            }
+	        };
+	        this.config = {
+	            lang: ['en', 'ko'],
+	            value: {},
+	            delegates: {}
+	        };
+	        this.events = {
+	            onChange: true
+	        };
+	        this.methods = {
+	            getValue() {
+	                return this._hidden.getValue();
+	            },
+	            setValue(value) {
+	                this._hidden.setValue(value);
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.width) {
+	            styles.width = getUnit('width', config.width);
+	        }
+	        return (createElement$1("div", { id: this._uid, className: 'gn-multitext' + (config.disabled ? ' is-disabled' : ''), style: styles },
+	            createElement$1("div", { id: this._uid + '_tab' },
+	                createElement$1("ul", null, config.lang.map((l, index) => (createElement$1("li", { className: index === 0 ? 'is-active' : '' },
+	                    createElement$1("a", { href: '#' + this._uid + '-' + l }, l)))))),
+	            createElement$1("div", { id: this._uid + '_content' }, config.lang.map((l) => (createElement$1("div", { id: this._uid + '-' + l },
+	                createElement$1("textarea", { className: "gn-textarea", "data-lang": l, rows: config.rows ? config.rows : '', maxLength: config.maxlength ? config.maxlength : 524288, "on-keyup": this._hidden.change, disabled: config.disabled, readOnly: config.readonly }, config.value ? config.value[l] : ''),
+	                config.maxlength && (createElement$1("p", { className: "has-text-right has-text-size6" },
+	                    createElement$1("span", { className: "charLen", "data-lang": l }, config.value && config.value[l] ? config.value[l].length : 0),
+	                    "/",
+	                    config.maxlength))))))));
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) {
+	        this._tab = new Tab('tab', '#' + this._uid + '_tab', {
+	            contents: '#' + this._uid + '_content',
+	            size: this.$options.size || 'normal',
+	            style: 'border',
+	            align: 'left',
+	            disabled: this.$options.disabled
+	        });
+	    }
+	    beforeMount() {
+	        if (!this.$options.value) {
+	            this.$options.value = {};
+	        }
+	        this.$options.lang.forEach((lang) => {
+	            if (!this.$options.value[lang]) {
+	                this.$options.value[lang] = '';
+	            }
+	            if (this.$options.maxlength) {
+	                this.$options.delegates[lang] = `.charLen[data-lang=${lang}]`;
+	            }
+	        });
+	    }
+	}
+
+	class Picklist extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            search: (obj, e) => {
+	                clearTimeout(this.$options.timer);
+	                this.$options.timer = setTimeout(() => {
+	                    this._hidden.filter(obj, $(e.target).value);
+	                }, 300);
+	            },
+	            filter: (obj, q) => {
+	                css$1(findAll(`.picklist-${obj} .dropdown-item`, this.$el), 'display', 'block');
+	                removeClass(findAll(`.picklist-${obj} .dropdown-item`, this.$el), 'is-active');
+	                this.$options.data[`filtered-${obj}`] = this.$options.data[obj];
+	                if (q === '') {
+	                    return;
+	                }
+	                findAll(`.picklist-${obj} .dropdown-item`, this.$el).forEach((option) => {
+	                    if (!includes(data(option, 'value').toUpperCase(), q.toUpperCase()) && !includes(text$1(find('.dropdown-text', option)).toUpperCase(), q.toUpperCase())) {
+	                        css$1(option, 'display', 'none');
+	                        this.$options.data[`filtered-${obj}`] = this.$options.data[`filtered-${obj}`].filter((e) => e.value !== option.dataset.value);
+	                    }
+	                });
+	            },
+	            toggle: (e) => {
+	                !this.$options.disabled && toggleClass(e.currentTarget, 'is-active');
+	            },
+	            sort: (dir, obj) => {
+	                // dir: 'up','down','up-all','down-all'
+	                // obj: 'source', 'target'
+	                const selected = this._hidden.getSelection(obj);
+	                if (!selected.length || selected.length === this.$options.data[obj].length) {
+	                    return;
+	                }
+	                this.$options.data[obj].map((option) => {
+	                    option.selected = selected.some((select) => {
+	                        return option.value === select.value && option.text === select.text;
+	                    });
+	                    return option;
+	                });
+	                if (dir.indexOf('all') > -1) {
+	                    // 최상단/최하단 정렬
+	                    this.$options.data[obj].sort((a, b) => {
+	                        const _sort = dir === 'up-all' ? -1 : 1;
+	                        if (a.selected && b.selected) {
+	                            return 0;
+	                        }
+	                        else if (a.selected) {
+	                            return _sort;
+	                        }
+	                        else if (b.selected) {
+	                            return _sort * -1;
+	                        }
+	                        return 0;
+	                    });
+	                }
+	                else {
+	                    // 하나씩 정렬
+	                    let sortTemp = [], downItem = [];
+	                    this.$options.data[obj].forEach((option) => {
+	                        if (!option.selected) {
+	                            sortTemp.push(option);
+	                            if (downItem.length) {
+	                                sortTemp = sortTemp.concat(downItem);
+	                                downItem = [];
+	                            }
+	                        }
+	                        else if (dir === 'up') {
+	                            sortTemp.length ? sortTemp.splice(sortTemp.length - 1, 0, option) : sortTemp.push(option);
+	                        }
+	                        else if (dir === 'down') {
+	                            downItem.push(option);
+	                        }
+	                    });
+	                    if (downItem.length) {
+	                        sortTemp = sortTemp.concat(downItem);
+	                        downItem = [];
+	                    }
+	                    this.$options.data[obj] = sortTemp.slice();
+	                    sortTemp = [];
+	                }
+	                this._hidden.reRender(obj);
+	                this.$options.data[obj].forEach((option) => {
+	                    delete option.selected;
+	                });
+	                this.$options.onChange && this.$options.onChange.call(this, this.$options.data.source, this.$options.data.target); // user onChange event
+	                this.$options.onSort && this.$options.onSort.call(this, this.$options.data.source, this.$options.data.target); // user onSort event
+	            },
+	            move: (dir, selected = null) => {
+	                var _a, _b;
+	                if (this.$options.disabled) {
+	                    return;
+	                }
+	                dir = dir.replace('right', 'add').replace('left', 'remove').replace('down', 'add').replace('up', 'remove');
+	                if (dir === 'add-all') {
+	                    if (!this.$options.data.source.length) {
+	                        return;
+	                    }
+	                    this._hidden.moveTo(this.$options.data.source, this.$options.data.target, ((_a = find('.picklist-source input', this.$el)) === null || _a === void 0 ? void 0 : _a.value) ? this.$options.data['filtered-source'] : objClone(this.$options.data.source));
+	                }
+	                else if (dir === 'add') {
+	                    selected = isArray$1(selected) ? selected : this._hidden.getSelection('source');
+	                    if (!selected.length) {
+	                        return;
+	                    }
+	                    this._hidden.moveTo(this.$options.data.source, this.$options.data.target, selected);
+	                }
+	                else if (dir === 'remove') {
+	                    selected = isArray$1(selected) ? selected : this._hidden.getSelection('target');
+	                    if (!selected.length) {
+	                        return;
+	                    }
+	                    this._hidden.moveTo(this.$options.data.target, this.$options.data.source, selected);
+	                }
+	                else if (dir === 'remove-all') {
+	                    if (!this.$options.data.target.length) {
+	                        return;
+	                    }
+	                    this._hidden.moveTo(this.$options.data.target, this.$options.data.source, ((_b = find('.picklist-target input', this.$el)) === null || _b === void 0 ? void 0 : _b.value) ? this.$options.data['filtered-target'] : objClone(this.$options.data.target));
+	                }
+	                this._hidden.reRender('source');
+	                this._hidden.reRender('target');
+	                this.$options.onChange && this.$options.onChange.call(this, this.$options.data.source, this.$options.data.target); // user onChange event
+	                this.$options.onTransfer && this.$options.onTransfer.call(this, this.$options.data.source, this.$options.data.target); // user onTransfer event
+	            },
+	            moveTo: (source, target, addArr) => {
+	                isArray$1(addArr) &&
+	                    addArr.forEach((option) => {
+	                        const _index = source.findIndex((select) => {
+	                            return option.value === select.value && option.text === select.text;
+	                        });
+	                        target.push(source.splice(_index, 1).pop());
+	                    });
+	            },
+	            reRender: (obj) => {
+	                var _a, _b;
+	                this.$template.reRender(find('ul', this.$options.delegates[obj]), this._hidden.renderSub(obj));
+	                ((_a = find(`.picklist-${obj} input`, this.$el)) === null || _a === void 0 ? void 0 : _a.value) && this._hidden.filter(obj, (_b = find(`.picklist-${obj} input`, this.$el)) === null || _b === void 0 ? void 0 : _b.value);
+	            },
+	            renderSub: (item) => {
+	                const items = this.$options.data[item] || [];
+	                return (createElement$1("ul", null, items.map((option) => (createElement$1("li", { className: 'dropdown-item' + (option.selected ? ' is-active' : ''), "data-value": option.value, "on-click": this._hidden.toggle.bind(this), "on-dblclick": this._hidden.move.bind(this, item === 'source' ? 'add' : 'remove', [
+	                        {
+	                            value: option.value,
+	                            text: option.text
+	                        }
+	                    ]) },
+	                    createElement$1("span", { className: "dropdown-text" }, option.text))))));
+	            },
+	            getSelection: (target) => {
+	                return findAll('.is-active', this.$options.delegates[target]).map((select) => {
+	                    return { value: attr(select, 'data-value'), text: text$1(select) };
+	                });
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                attr(findAll('button', this.$el), 'disabled', true);
+	                addClass(find('.gn-dropdown', this.$el), 'is-disabled');
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                removeAttr(findAll('button', this.$el), 'disabled');
+	                removeClass(find('.gn-dropdown', this.$el), 'is-disabled');
+	                removeClass(this.$el, 'is-disabled');
+	            },
+	            setSource: (data) => {
+	                this.$options.data.source = data;
+	                this._hidden.reRender('source');
+	            },
+	            setTarget: (data) => {
+	                this.$options.data.target = data;
+	                this._hidden.reRender('target');
+	            }
+	        };
+	        this.config = {
+	            name: this.$selector.name || this._uid,
+	            textSets: {
+	                sourceCaption: '',
+	                targetCaption: ''
+	            },
+	            data: {
+	                source: (() => {
+	                    return findAll('select.gn-source > option', this.$selector).map((option) => {
+	                        return { value: option.value, text: option.textContent };
+	                    });
+	                })() || [],
+	                target: (() => {
+	                    return findAll('select.gn-target > option', this.$selector).map((option) => {
+	                        return { value: option.value, text: option.textContent };
+	                    });
+	                })() || []
+	            },
+	            timer: 0,
+	            delegates: {
+	                source: '.picklist-source > .gn-dropdown',
+	                target: '.picklist-target > .gn-dropdown'
+	            },
+	            hasSourceSearch: false,
+	            hasTargetSearch: false,
+	            orderable: true,
+	            height: 150
+	        };
+	        this.events = {
+	            onChange: true,
+	            onSort: true,
+	            onTransfer: true
+	        };
+	        this.methods = {
+	            getSource() {
+	                return this.$options.data.source;
+	            },
+	            getTarget() {
+	                return this.$options.data.target;
+	            },
+	            getValue() {
+	                return this.$options.data.target.map((d) => d.value).join(',');
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            },
+	            setData(datas) {
+	                this.setSource(datas.source);
+	                this.setTarget(datas.target);
+	            },
+	            setSource(sources) {
+	                this._hidden.setSource(sources);
+	            },
+	            setTarget(targets) {
+	                this._hidden.setTarget(targets);
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        var _a, _b, _c, _d;
+	        const styles = {};
+	        if (config.width) {
+	            styles.width = getUnit('width', config.width);
+	        }
+	        if (config.direction === 'vertical' && config.height) {
+	            styles.height = getUnit('height', config.height * 2 + 45);
+	        }
+	        const renderControl = (direction) => {
+	            const direction1 = direction !== 'vertical' ? (direction === 'cross' ? 'down' : 'up') : 'right', direction2 = direction !== 'vertical' ? (direction === 'cross' ? 'up' : 'down') : 'left', commandFunc = direction === 'cross' || direction === 'vertical' ? this._hidden.move : this._hidden.sort;
+	            return (createElement$1("div", { className: 'picklist-controls gn-control is-small has-arrange is-center' + (direction === 'cross' ? '' : ' is-vertical') },
+	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, `${direction1}-all`, direction), disabled: config.disabled },
+	                    createElement$1("span", { className: "gn-icon" },
+	                        createElement$1("i", { className: 'fa fa-light fa-angle-double-' + direction1 }))),
+	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, direction1, direction), disabled: config.disabled },
+	                    createElement$1("span", { className: "gn-icon" },
+	                        createElement$1("i", { className: 'fa fa-light fa-angle-' + direction1 }))),
+	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, direction2, direction), disabled: config.disabled },
+	                    createElement$1("span", { className: "gn-icon" },
+	                        createElement$1("i", { className: 'fa fa-light fa-angle-' + direction2 }))),
+	                createElement$1("button", { type: "button", className: "gn-button is-outline", "on-click": commandFunc.bind(this, `${direction2}-all`, direction), disabled: config.disabled },
+	                    createElement$1("span", { className: "gn-icon" },
+	                        createElement$1("i", { className: 'fa fa-light fa-angle-double-' + direction2 })))));
+	        };
+	        return (createElement$1("div", { id: this._uid, className: 'gn-picklist' + (config.direction === 'vertical' ? ' is-vertical' : '') + (config.disabled ? ' is-disabled' : ''), style: styles },
+	            createElement$1("div", { className: 'picklist-source ' + (config.orderable === 'target' ? 'no-controls' : '') },
+	                (config.orderable === true || config.orderable === 'source') && renderControl('source'),
+	                createElement$1("div", { className: 'gn-dropdown is-opened' + (config.disabled ? ' is-disabled' : '') },
+	                    config.textSets.sourceCaption.length > 0 && createElement$1("div", { className: "picklist-caption" }, config.textSets.sourceCaption),
+	                    createElement$1("div", { className: "dropdown-items", style: config.height
+	                            ? {
+	                                height: getUnit('height', config.height),
+	                                maxHeight: getUnit('height', config.height)
+	                            }
+	                            : {} },
+	                        config.hasSourceSearch && (createElement$1("div", { className: "dropdown-search" },
+	                            createElement$1("div", { className: "gn-control has-icon-right is-full" },
+	                                createElement$1("span", { className: "gn-icon is-right" },
+	                                    createElement$1("i", { className: "fa fa-light fa-search" })),
+	                                createElement$1("input", { type: "text", className: "gn-input is-full", placeholder: (_b = (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.searchText) !== null && _b !== void 0 ? _b : GN_CONSTANT.SEARCH_ITEM, "on-keyup": this._hidden.search.bind(this, 'source'), disabled: config.disabled })))),
+	                        this._hidden.renderSub('source')))),
+	            renderControl(config.direction === 'vertical' ? 'cross' : 'vertical'),
+	            createElement$1("div", { className: 'picklist-target ' + (config.orderable === 'source' ? 'no-controls' : '') },
+	                (config.orderable === true || config.orderable === 'target') && renderControl('target'),
+	                createElement$1("div", { className: 'gn-dropdown is-opened' + (config.disabled ? ' is-disabled' : '') },
+	                    config.textSets.targetCaption.length > 0 && createElement$1("div", { className: "picklist-caption" }, config.textSets.targetCaption),
+	                    createElement$1("div", { className: "dropdown-items", style: config.height
+	                            ? {
+	                                height: getUnit('height', config.height),
+	                                maxHeight: getUnit('height', config.height)
+	                            }
+	                            : {} },
+	                        config.hasTargetSearch && (createElement$1("div", { className: "dropdown-search" },
+	                            createElement$1("div", { className: "gn-control has-icon-right is-full" },
+	                                createElement$1("span", { className: "gn-icon is-right" },
+	                                    createElement$1("i", { className: "fa fa-light fa-search" })),
+	                                createElement$1("input", { type: "text", className: "gn-input is-full", placeholder: (_d = (_c = this.$options.textSets) === null || _c === void 0 ? void 0 : _c.searchText) !== null && _d !== void 0 ? _d : GN_CONSTANT.SEARCH_ITEM, "on-keyup": this._hidden.search.bind(this, 'target'), disabled: config.disabled })))),
+	                        this._hidden.renderSub('target'))))));
+	    }
+	    beforeMount() {
+	        if (typeof this.$options.height === 'number' && this.$options.height < 100) {
+	            this.$options.height = 100;
+	        }
+	    }
+	    completed() {
+	        if (this.$options.textSets.sourceCaption.length > 0) {
+	            style(find('.picklist-source .dropdown-items', this.$el), 'height', getUnit('height', getNumber(this.$options.height) - getNumber(style(find('.picklist-source .picklist-caption', this.$el), 'height'))));
+	        }
+	        if (this.$options.textSets.targetCaption.length > 0) {
+	            style(find('.picklist-target .dropdown-items', this.$el), 'height', getUnit('height', getNumber(this.$options.height) - getNumber(style(find('.picklist-target .picklist-caption', this.$el), 'height'))));
+	        }
+	    }
+	}
+
+	class Progressbar extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            setValue: (value) => {
+	                if (this.$options.indeterminate) {
+	                    return;
+	                }
+	                css$1(find('.gauge', this.$el), 'width', value + '%');
+	                if (this.$options.hasFigure) {
+	                    const figure = find('.figure', this.$el);
+	                    text$1(figure, value + '%');
+	                    value > 95 ? addClass(figure, 'inner') : removeClass(figure, 'inner');
+	                }
+	            },
+	            complete: () => {
+	                this.$options.indeterminate = false;
+	                removeClass(this.$el, 'is-indeterminate');
+	                this._hidden.setValue(100);
+	            }
+	        };
+	        this.config = {
+	            value: 0,
+	            hasFigure: false,
+	            indeterminate: false
+	        };
+	        this.methods = {
+	            setValue(value) {
+	                this._hidden.setValue(value);
+	            },
+	            complete() {
+	                this._hidden.complete();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        if (config.value) {
+	            styles.width = config.value + '%';
+	        }
+	        return (createElement$1("div", { id: this._uid, className: 'gn-progressbar' + (config.color ? ' is-' + config.color : '') + (config.size ? ' is-' + config.size : '') + (config.style ? ' is-' + config.style : '') },
+	            createElement$1("span", { className: "gauge", style: styles }),
+	            config.hasFigure && createElement$1("span", { className: 'figure' + (config.value > 95 ? ' inner' : '') },
+	                config.value,
+	                "%")));
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) {
+	        if (config.indeterminate) {
+	            addClass(this.$el, 'is-indeterminate');
+	        }
+	    }
+	    beforeMount() {
+	        this.appendTarget();
+	        if (!this.$selector) {
+	            this.$selector = $(`<div id="${this._uid}"></div>`);
+	        }
+	    }
+	}
+
+	class SelectButton extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            select: (option) => {
+	                var _a, _b, _c, _d, _e, _f;
+	                if (this.$options.disabled) {
+	                    return;
+	                }
+	                if (this.$options.multiple) {
+	                    const checkItems = findAll('input[name=' + this.config.name + ']', this.$el).filter((item) => {
+	                        return item.checked;
+	                    });
+	                    const newValue = (_b = (_a = checkItems.map((item) => item.value)) === null || _a === void 0 ? void 0 : _a.join(',')) !== null && _b !== void 0 ? _b : '';
+	                    const newText = (_d = (_c = checkItems.map((item) => { var _a; return (_a = item === null || item === void 0 ? void 0 : item.dataset) === null || _a === void 0 ? void 0 : _a.text; })) === null || _c === void 0 ? void 0 : _c.join(',')) !== null && _d !== void 0 ? _d : '';
+	                    (_e = this.$options.onChange) === null || _e === void 0 ? void 0 : _e.call(this, newValue, newText);
+	                }
+	                else {
+	                    (_f = this.$options.onChange) === null || _f === void 0 ? void 0 : _f.call(this, option.value, option.text);
+	                }
+	            },
+	            change: (value) => {
+	                if (this.$options.multiple) {
+	                    $$('input[type=checkbox]', this.$el).forEach((option) => {
+	                        option.checked = value.includes(option.value);
+	                    });
+	                }
+	                else {
+	                    $$('input[type=radio]', this.$el).forEach((option) => {
+	                        option.checked = isEqual(option.value, value);
+	                    });
+	                }
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                attr(findAll('input', this.$el), 'disabled', true);
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                removeAttr(findAll('input', this.$el), 'disabled');
+	                removeClass(this.$el, 'is-disabled');
+	            },
+	            getValue: () => {
+	                return findAll(this.$options.multiple ? 'input[type=checkbox]' : 'input[type=radio]', this.$el)
+	                    .filter((item) => item.checked)
+	                    .map((item) => item.value)
+	                    .join(',');
+	            }
+	        };
+	        this.config = {
+	            name: this.$selector.name || this._uid,
+	            data: [],
+	            disabled: false,
+	            multiple: false,
+	            align: 'horizontal'
+	        };
+	        this.events = {
+	            onChange: true
+	        };
+	        this.methods = {
+	            change(value) {
+	                this._hidden.change(value);
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            },
+	            getValue() {
+	                return this._hidden.getValue();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        return (createElement$1("div", { id: this._uid, className: 'gn-selectButton' +
+	                (config.color ? ' is-' + config.color : '') +
+	                (config.size ? ' is-' + config.size : '') +
+	                (config.disabled ? ' is-disabled' : '') +
+	                (config.multiple ? ' is-multiple' : '') +
+	                (config.align ? ' is-' + config.align : '') }, config.data.map((option, index) => [
+	            createElement$1("input", { type: config.multiple ? 'checkbox' : 'radio', value: option.value, "data-text": option.text, name: config.name, id: this._uid + '_opt_' + index, checked: config.multiple ? config.value.includes(option.value) : config.value === option.value, disabled: config.disabled, "on-change": this._hidden.select.bind(this, option) }),
+	            createElement$1("label", { htmlFor: this._uid + '_opt_' + index },
+	                option.icon && (createElement$1("span", { className: 'gn-icon is-' + (config.size === 'large' ? 'medium' : config.size === 'medium' ? 'normal' : 'small') },
+	                    createElement$1("i", { className: 'fas fa-' + option.icon }),
+	                    ' ')),
+	                option.text)
+	        ])));
+	    }
+	}
+
+	class Splitter extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            drag: (e, position) => {
+	                const attr = this.$options.orientation === 'vertical' ? 'width' : 'height';
+	                const pos = this.$options.orientation === 'vertical' ? 'x' : 'y';
+	                css$1(this.$options.panel[0], attr, position[pos] - 1);
+	                css$1(this.$options.panel[1], attr, getNumber(css$1(this.$el, attr)) - position[pos] - (attr === 'height' ? 7 : 5));
+	                trigger(window.document, 'resize');
+	                e && this.$event(this, 'onDrag');
+	            },
+	            dragStart: () => {
+	                this.$event(this, 'onDragStart');
+	            },
+	            dragEnd: (isMounted = false) => {
+	                const attrStr = this.$options.orientation === 'vertical' ? 'width' : 'height';
+	                const containerSize = offset(this.$el)[attrStr];
+	                const panelWidth = offset(this.$options.delegates.panel1)[attrStr];
+	                css$1(this.$options.delegates.panel1, attrStr, (panelWidth / containerSize) * 100 + '%');
+	                css$1(this.$options.delegates.panel2, attrStr, 100 - (panelWidth / containerSize) * 100 - (5 / containerSize) * 100 + '%');
+	                css$1(this.$options.delegates.handle, this.$options.splitStr[0], (panelWidth / containerSize) * 100 + '%');
+	                (typeof isMounted !== 'boolean' || !isMounted) && !!this.$options.onDragEnd && this.$options.onDragEnd.call(this, offset(this.$options.delegates.handle));
+	            }
+	        };
+	        this.config = {
+	            orientation: 'horizontal',
+	            space: 0,
+	            minPosition: 30,
+	            delegates: {
+	                panel1: undefined,
+	                panel2: undefined,
+	                handle: undefined
+	            }
+	        };
+	        this.events = {
+	            onDrag: true,
+	            onDragStart: true,
+	            onDragEnd: true
+	        };
+	        this.methods = {};
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+	    $render(config) {
+	        config.splitStr = config.orientation === 'vertical' ? ['left', 'right'] : ['top', 'bottom'];
+	        const boundary = config.orientation === 'vertical'
+	            ? [0, config.minPosition, 0, getNumber(css$1(this.$el, 'width')) - config.minPosition]
+	            : [config.minPosition, 0, getNumber(css$1(this.$el, 'height')) - config.minPosition, 0];
+	        const handle = $(`<div class="split-gutter ${config.orientation === 'vertical' ? 'vs-gutter' : 'hs-gutter'}"></div>`);
+	        this.$options.delegates.handle = handle;
+	        if (config.position) {
+	            if (isNumeric(config.position)) {
+	                config.position = config.position + 'px';
+	            }
+	            css$1(handle, config.splitStr[0], config.position);
+	            css$1(handle, config.splitStr[0], `calc(${config.position} - 5px)`);
+	        }
+	        dragLayout(handle, boundary, this._hidden);
+	        addClass(this.$el, 'gn-splitter');
+	        !attr(this.$el, 'id') && attr(this.$el, 'id', this._uid);
+	        append(this.$el, handle);
+	        config.panel.forEach((panel, idx) => {
+	            addClass(panel, `split-panel ${config.splitStr[idx]}-panel`);
+	            config.space && css$1(panel, 'padding', getUnit('padding', config.space));
+	        });
+	    }
+	    beforeMount() {
+	        this.$options.panel.forEach((panel, idx, panels) => {
+	            panels[idx] = find(panel, this.$el);
+	        });
+	        this.$options.minPosition += this.$options.space * 2;
+	    }
+	    completed() {
+	        this.$options.delegates.panel1 = $(this.$options.panel[0], this.$el);
+	        this.$options.delegates.panel2 = $(this.$options.panel[1], this.$el);
+	        if (this.$options.position) {
+	            this._hidden.drag(undefined, {
+	                x: getNumber(css$1(this.$options.delegates.handle, this.$options.splitStr[0])),
+	                y: getNumber(css$1(this.$options.delegates.handle, this.$options.splitStr[0]))
+	            });
+	            this._hidden.dragEnd(true);
+	        }
+	    }
+	}
+
+	class Switch extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            toggle: (e) => {
+	                this.$options.checked = e.target.checked;
+	                this.$event(this, 'onChange');
+	            },
+	            disable: () => {
+	                this.$options.disabled = true;
+	                attr(find('input', this.$el), 'disabled', true);
+	                addClass(this.$el, 'is-disabled');
+	            },
+	            enable: () => {
+	                this.$options.disabled = false;
+	                removeAttr(find('input', this.$el), 'disabled');
+	                removeClass(this.$el, 'is-disabled');
+	            }
+	        };
+	        this.config = {
+	            textSets: {
+	                toggleText: ''
+	            },
+	            checked: false,
+	            disabled: false,
+	            delegates: {
+	                toggler: '[type=checkbox]'
+	            },
+	            name: this.$selector.name
+	        };
+	        this.events = {
+	            onToggle: {
+	                name: 'click',
+	                delegate: () => {
+	                    return this.config.delegates.toggler;
+	                }
+	            }
+	        };
+	        this.methods = {
+	            toggle() {
+	                this._hidden.toggle();
+	            },
+	            getValue() {
+	                return this.$options.checked;
+	            },
+	            disable() {
+	                this._hidden.disable();
+	            },
+	            enable() {
+	                this._hidden.enable();
+	            }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        return (createElement$1("label", { id: this._uid, className: 'gn-switch' + (config.color ? ' is-' + config.color : '') + (config.size ? ' is-' + config.size : '') + (config.style ? ' is-' + config.style : '') + (config.disabled ? ' is-disabled' : ''), style: styles },
+	            createElement$1("input", { type: "checkbox", name: this.$options.name, "on-click": this._hidden.toggle, defaultChecked: config.checked, disabled: config.disabled }),
+	            createElement$1("span", { className: "switch-toggle" }, "Toggle"),
+	            config.textSets.toggleText));
+	    }
+	}
+
+	const prism = prism$2;
 	class SyntaxInput extends GNCoreInstance {
 	    constructor(name, selector, options = {}) {
 	        super(name, selector, options);

@@ -444,71 +444,43 @@ const components = {
           style: { width: '50px' }
         }
       ],
-      data: [
-        {
-          number: '1',
-          title: '하나',
-          date: '2020-09-19'
-        },
-        {
-          number: '232342333',
-          title: 'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.',
-          date: '2020-09-19',
-          desc: 'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'
-        },
-        {
-          number: '1',
-          title: '하나',
-          date: '2020-09-19',
-          color: 'is-warning-light'
-        },
-        {
-          number: '232342333',
-          title: 'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.',
-          date: '2020-09-19',
-          desc: 'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'
-        },
-        {
-          number: '1',
-          title: '하나',
-          date: '2020-09-19'
-        },
-        {
-          number: '232342333',
-          title:
-            'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.',
-          date: '2020-09-19',
-          desc: 'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'
-        },
-        {
-          number: '1',
-          title: '하나',
-          date: '2020-09-19'
-        },
-        {
-          number: '232342333',
-          title: 'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.',
-          date: '2020-09-19',
-          desc: 'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'
-        },
-        {
-          number: '1',
-          title: '하나',
-          date: '2020-09-19'
-        },
-        {
-          number: '232342333',
-          title: 'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.',
-          date: '2020-09-19',
-          desc: 'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.'
-        }
-      ],
+      data: (callback, ui) => {
+        console.log('ui', ui);
+        ui.paginator.total = 40;
+
+        return callback([
+          {
+            number: '1',
+            title: '하나',
+            date: '2020-09-19'
+          },
+          {
+            number: '232342333',
+            title: 'Lorem labore culpa voluptate proident ad et id nostrud excepteur incididunt ut officia et ullamco.',
+            date: '2020-09-19',
+            desc: 'Voluptate enim culpa anim dolor magna excepteur ullamco id aliquip consequat ullamco voluptate consectetur.',
+            ordered: false,
+            limited: 0,
+            one: 'one',
+            two: 2,
+            three: {
+              hello: 'p',
+              ordered: false,
+              limited: 0,
+              one: 'one',
+              two: 2,
+              desc: 'hhhhhhh'
+            },
+            checked: true
+          }
+        ]);
+      },
       sort: function (column) {
         console.log('column', column);
       },
       onSelect: function (row, index) {
         console.log('row', row, index);
-        this.showDetail(index);
+        this.showDetail(index, null, ['number', 'title', 'date', 'desc', 'ordered', 'limited', 'one', 'two', 'three', 'checked']);
       },
       onDoubleClick: function (e) {
         console.log('dbclick', e);
@@ -519,8 +491,11 @@ const components = {
       textSets: {
         orderLabel: '이동'
       },
-      hasDelete: true,
-      fixHeader: true,
+      paginator: {
+        rows: 10
+      },
+      // hasDelete: true,
+      // fixHeader: true,
       onChange: updatedData => {
         console.log(updatedData);
       }
