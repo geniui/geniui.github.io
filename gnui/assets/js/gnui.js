@@ -37027,6 +37027,103 @@
 	    }
 	}
 
+	class Pagination extends GNCoreInstance {
+	    constructor(name, selector, options = {}) {
+	        super(name, selector, options);
+	        this._hidden = {
+	            change: () => {
+	                var _a;
+	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.page, this.$options.first); // user onChange event
+	            },
+	            gotoPage: (page) => {
+	                this.$options.page = page;
+	                this._hidden.setPageSet();
+	                this.$template.reRender(find('.pagination-buttons', this.$el), this._hidden.renderPages());
+	                this._hidden.change();
+	            },
+	            renderPages: () => {
+	                return (createElement$1("div", { className: "pagination-buttons" },
+	                    createElement$1("a", { className: 'page-first' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, 1) },
+	                        createElement$1("i", { className: "fa fa-angle-double-left" })),
+	                    ' ',
+	                    createElement$1("a", { className: 'page-prev' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page - 1) },
+	                        createElement$1("i", { className: "fa fa-angle-left" })),
+	                    ' ',
+	                    createElement$1("ul", null, this._hidden.renderNumbers()),
+	                    createElement$1("a", { className: 'page-next' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page + 1) },
+	                        createElement$1("i", { className: "fa fa-angle-right" })),
+	                    ' ',
+	                    createElement$1("a", { className: 'page-last' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.totalPage) },
+	                        createElement$1("i", { className: "fa fa-angle-double-right" }))));
+	            },
+	            renderNumbers: () => {
+	                let pageList = [];
+	                for (let i = this.$options.startPage; i <= this.$options.endPage && i <= this.$options.totalPage; i++) {
+	                    pageList.push(createElement$1("li", { className: i === this.$options.page ? 'is-active' : '' },
+	                        createElement$1("a", { "on-click": this._hidden.gotoPage.bind(this, i) }, i),
+	                        ' '));
+	                }
+	                return pageList;
+	            },
+	            setPageSet: () => {
+	                if (this.$options.total > 0) {
+	                    this.$options.totalPage = Math.ceil(this.$options.total / this.$options.rows);
+	                    if (this.$options.page > this.$options.totalPage) {
+	                        this.$options.page = this.$options.totalPage;
+	                    }
+	                    if (this.$options.page < 1) {
+	                        this.$options.page = 1;
+	                    }
+	                    this.$options.startPage = Math.floor((this.$options.page - 1) / this.$options.siblingPages) * this.$options.siblingPages + 1;
+	                    this.$options.endPage = this.$options.startPage + this.$options.siblingPages - 1;
+	                    this.$options.first = (this.$options.page - 1) * this.$options.rows + 1;
+	                    this.$options.last = Math.min(this.$options.page * this.$options.rows, this.$options.total || 1);
+	                }
+	            }
+	        };
+	        this.config = {
+	            name: this.$selector.name || this._uid,
+	            delegates: {
+	                first: '.page-first',
+	                prev: '.page-prev',
+	                next: '.page-next',
+	                last: '.page-last'
+	            },
+	            page: 1,
+	            first: 0,
+	            last: 0,
+	            startPage: 1,
+	            endPage: 1,
+	            rows: 30,
+	            total: 0,
+	            totalPage: 0,
+	            siblingPages: 10,
+	            align: 'center',
+	            size: 'normal'
+	        };
+	        this.events = {
+	            onChange: true
+	        };
+	        this.methods = {
+	            setPage(page) {
+	                this._hidden.change(page);
+	            },
+	            setTotal(total) { },
+	            show() { },
+	            hide() { }
+	        };
+	        this.$selector = this.$selector;
+	        this.$init(this, options);
+	    }
+	    template(config) {
+	        const styles = {};
+	        return (createElement$1("div", { id: this._uid, className: 'gn-pagination' + (config.align ? ' is-' + config.align : '') + (config.size ? ' is-' + config.size : ''), style: styles }, this._hidden.renderPages()));
+	    }
+	    beforeMount() {
+	        this._hidden.setPageSet();
+	    }
+	}
+
 	class Picklist extends GNCoreInstance {
 	    constructor(name, selector, options = {}) {
 	        super(name, selector, options);
@@ -40092,6 +40189,7 @@
 	    menubutton: MenuButton,
 	    modal: Modal,
 	    multitext: MultiTextArea,
+	    pagination: Pagination,
 	    picklist: Picklist,
 	    progressbar: Progressbar,
 	    selectbutton: SelectButton,
