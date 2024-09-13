@@ -1279,6 +1279,15 @@ const components = {
       }
     });
   },
+  Pagination: function () {
+    Gn.create('pagination', {
+      target: '.new-pagination',
+      total: 12000,
+      onChange: p => {
+        console.log(p);
+      }
+    });
+  },
   MultiText: function () {
     Gn.create('multitext', {
       target: '.default-multitext'
