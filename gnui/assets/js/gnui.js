@@ -37374,6 +37374,7 @@
 	                        rows: this.$options.paginator.rows,
 	                        onChange: (page, first) => {
 	                            this.$options.paginator.first = first;
+	                            this.$options.paginator.page = page;
 	                            this._hidden.asyncData();
 	                        }
 	                    });
