@@ -37361,11 +37361,24 @@
 	            },
 	            asyncData: () => {
 	                // this.$options.asyncData
-	                this.$options.asyncData.call(this, this._hidden.resetData, {
+	                this.$options.asyncData.call(this, this._hidden.awaitData, {
 	                    headers: this.$options.headers,
 	                    paginator: this.$options.paginator,
 	                    sort: this.$options.sort
 	                });
+	            },
+	            awaitData: (data) => {
+	                if (this.$options.asyncData && this.$options.paginator && !this._paginator) {
+	                    this._paginator = new Pagination('pagination', find('.gn-datagrid-footer', this.$el), {
+	                        total: this.$options.paginator.total || 0,
+	                        rows: this.$options.paginator.rows,
+	                        onChange: (page, first) => {
+	                            this.$options.paginator.first = first;
+	                            this._hidden.asyncData();
+	                        }
+	                    });
+	                }
+	                this._hidden.resetData(data);
 	            },
 	            resetData: (data) => {
 	                return new Promise(resolve => {
@@ -37693,17 +37706,6 @@
 	        }
 	        if (this.$options.asyncData) {
 	            this._hidden.asyncData();
-	            if (this.$options.paginator) {
-	                console.log('paginator create');
-	                new Pagination('pagination', find('.gn-datagrid-footer', this.$el), {
-	                    total: this.$options.paginator.total || 0,
-	                    rows: this.$options.paginator.rows,
-	                    onChange: (page, first) => {
-	                        this.$options.paginator.first = first;
-	                        this._hidden.asyncData();
-	                    }
-	                });
-	            }
 	        }
 	    }
 	}
