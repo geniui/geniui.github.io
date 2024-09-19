@@ -37667,6 +37667,7 @@
 	                (config.isEllipsis ? ' is-ellipsis' : '') +
 	                (config.bodyHeight ? ' has-fixed-body' : '') +
 	                (config.fixHeader ? ' has-fixed-header' : '') +
+	                (config.fixFooter ? ' has-fixed-footer' : '') +
 	                (config.data.some((d) => isArray$1(d[this.$options.childField])) ? ' has-left-padding' : '') +
 	                (config.disabled ? ' is-disabled' : ''), style: styles },
 	            createElement$1("div", { className: "gn-datagrid-header" }, this._hidden.renderHeader(config.headers)),
