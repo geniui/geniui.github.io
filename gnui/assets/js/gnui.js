@@ -36891,7 +36891,10 @@
 	                var _a;
 	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.page, this.$options.first); // user onChange event
 	            },
-	            gotoPage: (page) => {
+	            gotoPage: (page, isDisabled = false) => {
+	                if (isDisabled) {
+	                    return;
+	                }
 	                this.$options.page = page;
 	                this._hidden.setPageSet();
 	                this.$template.reRender(find('.pagination-buttons', this.$el), this._hidden.renderPages());
@@ -36899,17 +36902,17 @@
 	            },
 	            renderPages: () => {
 	                return (createElement$1("div", { className: "pagination-buttons" },
-	                    createElement$1("a", { className: 'page-first' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, 1) },
+	                    createElement$1("a", { className: 'page-first' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, 1, this.$options.page === 1) },
 	                        createElement$1("i", { className: "fa fa-angle-double-left" })),
 	                    ' ',
-	                    createElement$1("a", { className: 'page-prev' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page - 1) },
+	                    createElement$1("a", { className: 'page-prev' + (this.$options.page === 1 ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page - 1, this.$options.page === 1) },
 	                        createElement$1("i", { className: "fa fa-angle-left" })),
 	                    ' ',
 	                    createElement$1("ul", null, this._hidden.renderNumbers()),
-	                    createElement$1("a", { className: 'page-next' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page + 1) },
+	                    createElement$1("a", { className: 'page-next' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.page + 1, this.$options.page === this.$options.totalPage) },
 	                        createElement$1("i", { className: "fa fa-angle-right" })),
 	                    ' ',
-	                    createElement$1("a", { className: 'page-last' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.totalPage) },
+	                    createElement$1("a", { className: 'page-last' + (this.$options.page === this.$options.totalPage ? ' is-disabled' : ''), "on-click": this._hidden.gotoPage.bind(this, this.$options.totalPage, this.$options.page === this.$options.totalPage) },
 	                        createElement$1("i", { className: "fa fa-angle-double-right" }))));
 	            },
 	            renderNumbers: () => {
@@ -36934,6 +36937,13 @@
 	                    this.$options.endPage = this.$options.startPage + this.$options.siblingPages - 1;
 	                    this.$options.first = (this.$options.page - 1) * this.$options.rows + 1;
 	                    this.$options.last = Math.min(this.$options.page * this.$options.rows, this.$options.total || 1);
+	                }
+	                else {
+	                    this.$options.totalPage = 1;
+	                    this.$options.startPage = 1;
+	                    this.$options.endPage = 1;
+	                    this.$options.first = 0;
+	                    this.$options.last = 0;
 	                }
 	            }
 	        };
