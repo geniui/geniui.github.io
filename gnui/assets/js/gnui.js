@@ -36919,7 +36919,7 @@
 	                let pageList = [];
 	                for (let i = this.$options.startPage; i <= this.$options.endPage && i <= this.$options.totalPage; i++) {
 	                    pageList.push(createElement$1("li", { className: i === this.$options.page ? 'is-active' : '' },
-	                        createElement$1("a", { "on-click": this._hidden.gotoPage.bind(this, i) }, i),
+	                        createElement$1("a", { "on-click": this._hidden.gotoPage.bind(this, i, false) }, i),
 	                        ' '));
 	                }
 	                return pageList;
