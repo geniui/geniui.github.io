@@ -17774,7 +17774,7 @@
 	        }
 	        return (createElement$1("div", { id: this._uid, className: 'gn-alert' + (config.color ? ' is-' + config.color : '') /* 색상 클래스 추가 */ + (config.size ? ' is-' + config.size : ''), style: styles },
 	            createElement$1("p", { innerHTML: config.textSets.alertText }),
-	            config.hasClose && (createElement$1("span", { className: "gn-icon is-close", "on-click": this._hidden.close },
+	            config.hasClose && (createElement$1("span", { className: "gn-icon is-close", id: this._uid + '_close', "on-click": this._hidden.close },
 	                createElement$1("i", { className: "fas fa-times" }))),
 	            (config.hasConfirm || config.hasCancel) /* 확인/취소 옵션 확인 */ && (createElement$1("div", { className: 'alert-controls' + (getNumber(config.width) > 400 ? ' has-text-right' : '') },
 	                config.hasConfirm && (createElement$1("button", { type: "button", className: 'gn-button gn-alert-confirm' + (config.color ? ' is-outline is-trans' : ''), "on-click": this._hidden.confirm }, config.textSets.confirm)),
@@ -33514,7 +33514,7 @@
 	                if (this.$options.type === 'opened' && !items.length) {
 	                    return createElement$1("div", { className: 'dropdown-nodata' }, this.$options.textSets.noData);
 	                }
-	                return (createElement$1("ul", null, items.map((option, index) => (createElement$1("li", { className: 'dropdown-item' +
+	                return (createElement$1("ul", null, items.map((option, index) => (createElement$1("li", { id: this._uid + '_opt_' + index, className: 'dropdown-item' +
 	                        (option.text ? '' : ' is-unselectable') +
 	                        (this.$options.value &&
 	                            (isArray$1(this.$options.value) ? this.$options.value.find((v) => v.value === option.value) : option.value === this.$options.value.value)
@@ -33523,9 +33523,9 @@
 	                        (this.$options.multiple ? ' has-checkbox' : ''), "on-click": isArray$1(option.value) || !option.text ? null : this._hidden.select.bind(this, option), "data-value": isArray$1(option.value) ? '' : option.value },
 	                    createElement$1("span", { className: "dropdown-text", innerHTML: option.html ? option.html : '' },
 	                        option.html ? ('') : this.$options.multiple ? (createElement$1("div", { className: "gn-checks is-small is-no-padding" },
-	                            createElement$1("input", { type: "checkbox", id: 'chk_' + index, defaultChecked: this.$options.value &&
+	                            createElement$1("input", { type: "checkbox", id: this._uid + '_chk_' + index, defaultChecked: this.$options.value &&
 	                                    (isArray$1(this.$options.value) ? this.$options.value.find((v) => v.value === option.value) : option.value === this.$options.value.value), disabled: this.$options.disabled }),
-	                            createElement$1("label", { for: 'chk_' + index }, escapeEntity(option.text)))) : option.icon ? (createElement$1("span", null,
+	                            createElement$1("label", { for: this._uid + '_chk_' + index }, escapeEntity(option.text)))) : option.icon ? (createElement$1("span", null,
 	                            createElement$1("span", { className: 'gn-icon' + (this.$options.size ? ' is-' + this.$options.size : '') },
 	                                createElement$1("i", { className: (this.isBrandIcon(option.icon) ? 'fab' : 'fa') + ` fa-${option.icon}` })),
 	                            escapeEntity(option.text))) : (escapeEntity(option.text)),
@@ -33781,21 +33781,21 @@
 	                createElement$1("span", { className: "gn-icon" },
 	                    createElement$1("i", { className: "fa fa-clock" })),
 	                createElement$1("div", { className: "picker-time" },
-	                    createElement$1("input", { className: "gn-input is-medium time-hour", "data-field": "hour", type: "number", min: "0", max: "23", maxLength: "2", "on-change": (e) => {
+	                    createElement$1("input", { className: "gn-input is-medium time-hour", id: this._uid + '_hour', "data-field": "hour", type: "number", min: "0", max: "23", maxLength: "2", "on-change": (e) => {
 	                            this._hidden.timeChange.call(this, e);
 	                        }, value: config.parseTime.hour, disabled: config.disabled, readOnly: config.readonly })),
 	                createElement$1("div", { className: "picker-time" },
-	                    createElement$1("input", { className: "gn-input is-medium time-minute", "data-field": "minute", type: "number", min: "0", max: "59", maxLength: "2", "on-change": (e) => {
+	                    createElement$1("input", { className: "gn-input is-medium time-minute", id: this._uid + '_minute', "data-field": "minute", type: "number", min: "0", max: "59", maxLength: "2", "on-change": (e) => {
 	                            this._hidden.timeChange.call(this, e);
 	                        }, value: config.parseTime.minute, disabled: config.disabled, readOnly: config.readonly })),
 	                config.timeFormat.indexOf('ss') > -1 && (createElement$1("div", { className: "picker-time" },
-	                    createElement$1("input", { className: "gn-input is-medium time-second", "data-field": "second", type: "number", min: "0", max: "59", maxLength: "2", "on-change": (e) => {
+	                    createElement$1("input", { className: "gn-input is-medium time-second", id: this._uid + '_second', "data-field": "second", type: "number", min: "0", max: "59", maxLength: "2", "on-change": (e) => {
 	                            this._hidden.timeChange.call(this, e);
 	                        }, value: config.parseTime.second, disabled: config.disabled, readOnly: config.readonly }))),
 	                config.hasControls && (createElement$1("div", { className: "time-setter" },
-	                    createElement$1("span", { className: "gn-icon is-tiny", "on-click": this._hidden.timeSet.bind(this, 'max') },
+	                    createElement$1("span", { className: "gn-icon is-tiny", id: this._uid + '_backward', "on-click": this._hidden.timeSet.bind(this, 'max') },
 	                        createElement$1("i", { className: "fas fa-step-backward" })),
-	                    createElement$1("span", { className: "gn-icon is-tiny", "on-click": this._hidden.timeSet.bind(this, 'min') },
+	                    createElement$1("span", { className: "gn-icon is-tiny", id: this._uid + '_forward', "on-click": this._hidden.timeSet.bind(this, 'min') },
 	                        createElement$1("i", { className: "fas fa-step-forward" })))))));
 	    }
 	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34600,7 +34600,7 @@
 	        return (createElement$1("div", { className: "gn-colorpicker", style: styles },
 	            createElement$1("div", { className: "color-header is-draggable" },
 	                PICK_A_COLOR,
-	                createElement$1("span", { className: "color-cancel gn-icon is-close ", "on-click": this._hidden.hide },
+	                createElement$1("span", { className: "color-cancel gn-icon is-close ", id: this._uid + '_close', "on-click": this._hidden.hide },
 	                    createElement$1("i", { className: "fas fa-times" }))),
 	            createElement$1("div", { className: "color-controls" },
 	                createElement$1("div", { className: "color-palette", "on-click": this._hidden.movePointer },
@@ -34611,7 +34611,7 @@
 	                    createElement$1("div", { className: "color-slide-bar" }))),
 	            createElement$1("div", { className: "color-set" },
 	                createElement$1("div", { className: "color-palette-preview" }, DEFAULT_COLOR),
-	                createElement$1("button", { className: "gn-button color-confirm", "on-click": this._hidden.change.bind(this) }, "OK"))));
+	                createElement$1("button", { className: "gn-button color-confirm", id: this._uid + '_confirm', "on-click": this._hidden.change.bind(this) }, "OK"))));
 	    }
 	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 	    $render(config) {
@@ -34742,11 +34742,11 @@
 	    template(config) {
 	        return (createElement$1("div", { id: this._uid, className: 'gn-colorinput' + (config.size ? ' is-' + config.size : '') + (config.readonly ? ' is-readonly' : '') + (config.disabled ? ' is-disabled' : '') },
 	            createElement$1("div", { className: "gn-control has-icon-left has-icon-right" },
-	                createElement$1("button", { className: "color-preview", "on-click": this._hidden.show, style: {
+	                createElement$1("button", { className: "color-preview", id: this._uid + '_preview', "on-click": this._hidden.show, style: {
 	                        background: config.value || NONE_COLOR
 	                    }, disabled: config.disabled }),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), placeholder: PICK_A_COLOR, style: { width: '160px' }, value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
-	                createElement$1("span", { className: "gn-icon is-cancel is-right color-remover", "on-click": this._hidden.removeColor },
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: PICK_A_COLOR, style: { width: '160px' }, value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
+	                createElement$1("span", { className: "gn-icon is-cancel is-right color-remover", id: this._uid + '_remover', "on-click": this._hidden.removeColor },
 	                    createElement$1("i", { className: "fas fa-times" })))));
 	    }
 	}
@@ -34891,10 +34891,10 @@
 	            createElement$1("div", { className: 'gn-control has-icon-right' + (config.hasIcon ? ' has-icon-left' : '') },
 	                config.hasIcon ? (createElement$1("span", { className: "gn-icon is-left" },
 	                    createElement$1("i", { className: "fas fa-calendar" }))) : (''),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : ''), disabled: config.disabled, readOnly: true, placeholder: (_a = config.textSets.placeholder) !== null && _a !== void 0 ? _a : 'pick a date', style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: true, placeholder: (_a = config.textSets.placeholder) !== null && _a !== void 0 ? _a : 'pick a date', style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
 	                        this._hidden.show.call(this, e);
 	                    } }),
-	                config.readonly ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", "on-click": this._hidden.removeDate },
+	                config.readonly ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", id: this._uid + '_remover', "on-click": this._hidden.removeDate },
 	                    createElement$1("i", { className: "fas fa-times" }))))));
 	    }
 	    destroyed() {
@@ -37749,7 +37749,7 @@
 	                };
 	                return (createElement$1("div", { "on-dblclick": (e) => {
 	                        this._hidden.doubleSelect.call(this, row, _index, e);
-	                    }, className: 'gn-datalist-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (row.isSelectedRow ? ' is-active' : '') + (depth > 0 && !isOpened ? ' is-hidden' : ''), "data-depth": depth, style: { cursor: this.$options.onSelect ? 'pointer' : 'default' } },
+	                    }, id: this._uid + '-row-' + _index, className: 'gn-datalist-body-row' + (hasChild ? ' has-child' : '') + (row.isOpened ? '' : ' is-collapsed') + (row.isSelectedRow ? ' is-active' : '') + (depth > 0 && !isOpened ? ' is-hidden' : ''), "data-depth": depth, style: { cursor: this.$options.onSelect ? 'pointer' : 'default' } },
 	                    createElement$1("ol", { className: 'gn-datalist-ol-container' }, columns.map((col, idx) => {
 	                        const cellStyle = {};
 	                        if (col.style) {
@@ -37771,7 +37771,7 @@
 	                            cellStyle.display = 'inline-block';
 	                        }
 	                        const isHiddenCell = (this.$options.isHiddenEmpty && row[col.key] === '') || col.isHidden;
-	                        return (!isHiddenCell && (createElement$1("li", null,
+	                        return (!isHiddenCell && (createElement$1("li", { id: this._uid + '-col-' + idx },
 	                            this._hidden.renderCol(col, idx),
 	                            createElement$1("span", { className: 'gn-datalist-body-cell ' +
 	                                    (col.bodyClass ? col.bodyClass : col.className ? col.className : '') +
@@ -37782,7 +37782,7 @@
 	                                    this._hidden.blurCell.call(this, col, row, _index, e);
 	                                }, title: !col.template && row[col.key] ? row[col.key] : '' }, this._hidden.renderCell(row, col, idx, hasChild)))));
 	                    })),
-	                    createElement$1("div", { className: "gn-datalist-btn-container" },
+	                    createElement$1("div", { id: this._uid + '-btn-' + index, className: "gn-datalist-btn-container" },
 	                        this.$options.hasUpdate
 	                            ? this._hidden.renderBtn(btnUpdate.icon, btnUpdate.color, (_e) => {
 	                                if (!this.$options.disabled && this.$options.onUpdate) {
@@ -37908,7 +37908,7 @@
 	            resetData: (data) => {
 	                return new Promise(resolve => {
 	                    this.$options.data = data;
-	                    data.some((d) => isArray$1(d[this.$options.childField])) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
+	                    (data === null || data === void 0 ? void 0 : data.some((d) => isArray$1(d[this.$options.childField]))) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
 	                    this.$template.reRender(find('.gn-datalist-body', this.$el), this._hidden.renderBody(this.$options.data, this.$options.headers));
 	                    isFunction(resolve) && resolve();
 	                });
@@ -38256,13 +38256,13 @@
 	                    createElement$1("div", { className: "modal-control" },
 	                        config.minimized && (createElement$1("span", { className: "gn-icon is-small is-minimize", "on-click": this._hidden.toggle },
 	                            createElement$1("i", { className: "fas" }))),
-	                        config.hasClose && (createElement$1("span", { className: "gn-icon is-close", "on-click": this._hidden.close },
+	                        config.hasClose && (createElement$1("span", { className: "gn-icon is-close", id: this._uid + '_close', "on-click": this._hidden.close },
 	                            createElement$1("i", { className: "fas fa-times" })))))),
 	                createElement$1("div", { className: "modal-body", style: styles },
 	                    createElement$1("div", { className: "modal-body-content", style: contStyles })),
 	                (config.hasConfirm || config.hasCancel) /* 확인/취소 옵션 확인 */ && (createElement$1("div", { className: "modal-footer has-text-center" },
-	                    config.hasConfirm && (createElement$1("button", { type: "button", className: 'gn-button' + ` is-${config.sizeSets.confirm}`, "on-click": this._hidden.confirm }, config.textSets.confirm)),
-	                    config.hasCancel && (createElement$1("button", { type: "button", className: 'gn-button btnCloseModal is-cancel' + ` is-${config.sizeSets.cancel}`, "on-click": this._hidden.close }, config.textSets.cancel)))))));
+	                    config.hasConfirm && (createElement$1("button", { type: "button", className: 'gn-button' + ` is-${config.sizeSets.confirm}`, id: this._uid + '_confirm', "on-click": this._hidden.confirm }, config.textSets.confirm)),
+	                    config.hasCancel && (createElement$1("button", { type: "button", className: 'gn-button btnCloseModal is-cancel' + ` is-${config.sizeSets.cancel}`, id: this._uid + '_cancel', "on-click": this._hidden.close }, config.textSets.cancel)))))));
 	    }
 	    $render(config) {
 	        if (config.contents) {
@@ -38925,7 +38925,7 @@
 	            config.icon && (createElement$1("span", { className: "gn-icon is-normal" },
 	                createElement$1("i", { className: 'fas fa-' + config.icon }))),
 	            createElement$1("p", { innerHTML: config.textSets.message }),
-	            config.hasClose && (createElement$1("span", { className: "gn-icon is-close is-dark", "on-click": this._hidden.close },
+	            config.hasClose && (createElement$1("span", { className: "gn-icon is-close is-dark", id: this._uid + '_close', "on-click": this._hidden.close },
 	                createElement$1("i", { className: "fas fa-times" })))));
 	    }
 	    beforeMount() {
@@ -39351,7 +39351,7 @@
 	            },
 	            renderSub: (item) => {
 	                const items = this.$options.data[item] || [];
-	                return (createElement$1("ul", null, items.map((option) => (createElement$1("li", { className: 'dropdown-item' + (option.selected ? ' is-active' : ''), "data-value": option.value, "on-click": this._hidden.toggle.bind(this), "on-dblclick": this._hidden.move.bind(this, item === 'source' ? 'add' : 'remove', [
+	                return (createElement$1("ul", null, items.map((option, index) => (createElement$1("li", { id: this._uid + '_opt_' + index, className: 'dropdown-item' + (option.selected ? ' is-active' : ''), "data-value": option.value, "on-click": this._hidden.toggle.bind(this), "on-dblclick": this._hidden.move.bind(this, item === 'source' ? 'add' : 'remove', [
 	                        {
 	                            value: option.value,
 	                            text: option.text
