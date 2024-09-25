@@ -13939,7 +13939,7 @@
 	        }));
 	}
 	function isIPv6(ipStr) {
-	    if (!ipStr || ipStr.includes('.') || ipStr.includes('/') || ipStr.includes('-')) {
+	    if (!ipStr || !ipStr.includes(':') || ipStr.includes('.') || ipStr.includes('/') || ipStr.includes('-')) {
 	        return false;
 	    }
 	    return ipStr.split(':').every(part => part.length <= 4);
