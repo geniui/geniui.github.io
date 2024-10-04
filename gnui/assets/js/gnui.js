@@ -34072,7 +34072,7 @@
 	        });
 	        new Button('button', find('.btn-year-decrease', this.$el), {
 	            size: 'small',
-	            color: 'invert',
+	            color: 'plain',
 	            icon: 'angle-left',
 	            onClick: () => {
 	                --this.$options.parseDate.year;
@@ -34081,7 +34081,7 @@
 	        });
 	        new Button('button', find('.btn-year-increase', this.$el), {
 	            size: 'small',
-	            color: 'invert',
+	            color: 'plain',
 	            icon: 'angle-right',
 	            onClick: () => {
 	                ++this.$options.parseDate.year;
@@ -34090,7 +34090,7 @@
 	        });
 	        new Button('button', find('.btn-month-decrease', this.$el), {
 	            size: 'small',
-	            color: 'invert',
+	            color: 'plain',
 	            icon: 'angle-left',
 	            onClick: () => {
 	                if (this.$options.parseDate.month < 2) {
@@ -34104,7 +34104,7 @@
 	        });
 	        new Button('button', find('.btn-month-increase', this.$el), {
 	            size: 'small',
-	            color: 'invert',
+	            color: 'plain',
 	            icon: 'angle-right',
 	            onClick: () => {
 	                if (this.$options.parseDate.month > 11) {
