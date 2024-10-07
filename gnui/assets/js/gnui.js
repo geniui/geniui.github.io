@@ -38770,8 +38770,14 @@
 	            createElement$1("div", { className: "jsonview-contents" }, config.schema ? this._hidden.render(config.data, config.schema) : this._hidden.renderRaw(config.data))));
 	    }
 	    beforeMount() {
+	        var _a, _b, _c, _d, _e;
 	        this.$options.data = this._hidden.formatChecker(this.$options.data);
 	        this.$options.schema = this._hidden.formatChecker(this.$options.schema);
+	        if (((_b = (_a = this.$options.schema) === null || _a === void 0 ? void 0 : _a.Items) === null || _b === void 0 ? void 0 : _b.Properties) && isArray$1(this.$options.data)) {
+	            const schemaProperties = ((_d = (_c = this.$options.schema) === null || _c === void 0 ? void 0 : _c.Items) === null || _d === void 0 ? void 0 : _d.Properties) || {};
+	            const properties = Object.fromEntries(Object.keys(schemaProperties).map(p => [p, '']));
+	            this.$options.data = (_e = this.$options.data) === null || _e === void 0 ? void 0 : _e.map((d) => objExtends(properties, d));
+	        }
 	    }
 	    completed() {
 	        const $sparklines = $$('[data-sparkline]', this.$el);
