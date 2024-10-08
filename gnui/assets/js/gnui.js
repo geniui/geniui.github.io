@@ -2365,10 +2365,10 @@
 	// check on default Array iterator
 	var Iterators$4 = _iterators;
 	var ITERATOR$3 = _wksExports('iterator');
-	var ArrayProto$1 = Array.prototype;
+	var ArrayProto$2 = Array.prototype;
 
 	var _isArrayIter = function (it) {
-	  return it !== undefined && (Iterators$4.Array === it || ArrayProto$1[ITERATOR$3] === it);
+	  return it !== undefined && (Iterators$4.Array === it || ArrayProto$2[ITERATOR$3] === it);
 	};
 
 	var $defineProperty = _objectDp;
@@ -2786,28 +2786,20 @@
 		return _arrayCopyWithin;
 	}
 
-	var _addToUnscopables;
-	var hasRequired_addToUnscopables;
-
-	function require_addToUnscopables () {
-		if (hasRequired_addToUnscopables) return _addToUnscopables;
-		hasRequired_addToUnscopables = 1;
-		// 22.1.3.31 Array.prototype[@@unscopables]
-		var UNSCOPABLES = _wksExports('unscopables');
-		var ArrayProto = Array.prototype;
-		if (ArrayProto[UNSCOPABLES] == undefined) _hide(ArrayProto, UNSCOPABLES, {});
-		_addToUnscopables = function (key) {
-		  ArrayProto[UNSCOPABLES][key] = true;
-		};
-		return _addToUnscopables;
-	}
+	// 22.1.3.31 Array.prototype[@@unscopables]
+	var UNSCOPABLES = _wksExports('unscopables');
+	var ArrayProto$1 = Array.prototype;
+	if (ArrayProto$1[UNSCOPABLES] == undefined) _hide(ArrayProto$1, UNSCOPABLES, {});
+	var _addToUnscopables = function (key) {
+	  ArrayProto$1[UNSCOPABLES][key] = true;
+	};
 
 	// 22.1.3.3 Array.prototype.copyWithin(target, start, end = this.length)
 	var $export$v = _export;
 
 	$export$v($export$v.P, 'Array', { copyWithin: require_arrayCopyWithin() });
 
-	require_addToUnscopables()('copyWithin');
+	_addToUnscopables('copyWithin');
 
 	var _arrayFill;
 	var hasRequired_arrayFill;
@@ -2836,7 +2828,7 @@
 
 	$export$u($export$u.P, 'Array', { fill: require_arrayFill() });
 
-	require_addToUnscopables()('fill');
+	_addToUnscopables('fill');
 
 	// 22.1.3.8 Array.prototype.find(predicate, thisArg = undefined)
 	var $export$t = _export;
@@ -2850,7 +2842,7 @@
 	    return $find$1(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
-	require_addToUnscopables()(KEY$1);
+	_addToUnscopables(KEY$1);
 
 	// 22.1.3.9 Array.prototype.findIndex(predicate, thisArg = undefined)
 	var $export$s = _export;
@@ -2864,7 +2856,7 @@
 	    return $find(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
 	  }
 	});
-	require_addToUnscopables()(KEY);
+	_addToUnscopables(KEY);
 
 	var global$c = _globalExports;
 	var dP$5 = _objectDp;
@@ -2885,7 +2877,7 @@
 	  return { value: value, done: !!done };
 	};
 
-	var addToUnscopables = require_addToUnscopables();
+	var addToUnscopables = _addToUnscopables;
 	var step$1 = _iterStep;
 	var Iterators$2 = _iterators;
 	var toIObject$2 = _toIobject;
@@ -5699,7 +5691,7 @@
 	  }
 	});
 
-	require_addToUnscopables()('includes');
+	_addToUnscopables('includes');
 
 	_coreExports.Array.includes;
 
@@ -5762,7 +5754,7 @@
 	  }
 	});
 
-	require_addToUnscopables()('flatMap');
+	_addToUnscopables('flatMap');
 
 	_coreExports.Array.flatMap;
 
