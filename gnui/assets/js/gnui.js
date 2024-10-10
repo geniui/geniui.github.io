@@ -17047,11 +17047,12 @@
 	        // 이벤트 삭제
 	        delete this._eventMap[uid];
 	    }
-	    dispatch(uid, name, ...params) {
+	    dispatch(uid, name, params) {
 	        const _events = this._getEvent(uid, name);
 	        if (_events.length) {
 	            _events.forEach((_event) => {
-	                _event.target ? _event.handler.call(_event.target, ...params) : _event.handler.call(this, ...params);
+	                const _tagret = _event.target || this;
+	                params ? _event.handler.call(_tagret, ...params) : _event.handler.call(_tagret);
 	            });
 	        }
 	    }
@@ -33343,14 +33344,13 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            change: (option) => {
-	                var _a;
 	                if (isEmpty(option)) {
 	                    option = {
 	                        value: '',
 	                        text: ''
 	                    };
 	                }
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, option.value, option.text, this.$options.value); // user onChange event
+	                this.$event(this, 'onChange', option.value, option.text, this.$options.value);
 	            },
 	            toggle: () => {
 	                if (this.$options.disabled) {
@@ -33706,7 +33706,7 @@
 	                }
 	                this._hidden.setParseTime();
 	                this._hidden.update();
-	                this.$options.onChange && this.$options.onChange.call(this, this._hidden.getTime()); // user onChange event
+	                this.$event(this, 'onChange', this._hidden.getTime()); // user onChange event
 	            },
 	            timeChange: (e) => {
 	                const _target = $(e.target);
@@ -33721,7 +33721,7 @@
 	                val(_target, zf(val(_target), 2));
 	                this.$options.parseTime[data(_target, 'field')] = val(_target) || '00';
 	                this.$options.value = tempDateByTime(this.$options.parseTime.hour + ':' + this.$options.parseTime.minute + ':' + this.$options.parseTime.second, dateFormat(this.$options.value, 'yyyy-MM-dd'));
-	                this.$options.onChange && this.$options.onChange.call(this, this._hidden.getTime()); // user onChange event
+	                this.$event(this, 'onChange', this._hidden.getTime()); // user onChange event
 	            },
 	            setParseTime: () => {
 	                this.$options.parseTime = {
@@ -33926,11 +33926,11 @@
 	                if (this.$options.dateType === 'datetime') {
 	                    this._hidden.updatePreview();
 	                }
-	                this.$options.dateType !== 'datetime' && isFunction(this.$options.onSelect) && this.$options.onSelect.call(this, dateFormat(this.$options.value, this.$options.dateFormat));
+	                this.$options.dateType !== 'datetime' && this.$event(this, 'onSelect', dateFormat(this.$options.value, this.$options.dateFormat));
 	            },
 	            onConfirm: () => {
 	                // type이 datetime인 경우 확인버튼 클릭
-	                isFunction(this.$options.onSelect) && this.$options.onSelect.call(this, dateFormat(this.$options.value, this.$options.dateFormat + ' ' + this.$options.timeFormat));
+	                this.$event(this, 'onSelect', dateFormat(this.$options.value, this.$options.dateFormat + ' ' + this.$options.timeFormat));
 	            },
 	            setParseDate: () => {
 	                this.$options.parseDate = {
@@ -33947,11 +33947,7 @@
 	                this._hidden.setParseDate();
 	                this._hidden.update();
 	                this._hidden.updatePreview();
-	                if (isFunction(this.$options.onSelect)) {
-	                    this.$options.dateType !== 'datetime'
-	                        ? this.$options.onSelect.call(this, dateFormat(this.$options.value, this.$options.dateFormat))
-	                        : this.$options.onSelect.call(this, dateFormat(this.$options.value, this.$options.dateFormat + ' ' + this.$options.timeFormat));
-	                }
+	                this.$event(this, 'onSelect', this.$options.dateType !== 'datetime' ? dateFormat(this.$options.value, this.$options.dateFormat) : dateFormat(this.$options.value, this.$options.dateFormat + ' ' + this.$options.timeFormat));
 	            },
 	            setRange: () => {
 	                this.$options.setNow = true;
@@ -34653,6 +34649,7 @@
 	                this.$options.value = (color[0] === '#' ? '' : '#') + color || '';
 	                css$1(this.$options.delegates.preview, 'background', this.$options.value);
 	                val(this.$options.delegates.value, this.$options.value);
+	                trigger(this.$options.delegates.value, 'change');
 	                this.$event(this, 'onChange', this.$options.value);
 	            },
 	            show: (e) => {
@@ -34766,7 +34763,8 @@
 	                        : dateFormat(this.$options.value, this.$options.dateFormat + ' ' + this.$options.timeFormat)
 	                    : '';
 	                val(this.$options.delegates.date, formatValue);
-	                isFunction(this.$options.onChange) && this.$options.onChange.call(this, formatValue);
+	                trigger(this.$options.delegates.date, 'change');
+	                this.$event(this, 'onChange', formatValue);
 	            },
 	            getDate: () => {
 	                return this.$options.type
@@ -34838,7 +34836,7 @@
 	            removeDate: () => {
 	                this.$options.value = '';
 	                val(this.$options.delegates.date, '');
-	                isFunction(this.$options.onChange) && this.$options.onChange.call(this, '');
+	                this.$event(this, 'onChange', '');
 	            },
 	            disable: () => {
 	                this.$options.disabled = true;
@@ -36890,8 +36888,7 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            change: () => {
-	                var _a;
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.page, this.$options.first); // user onChange event
+	                this.$event(this, 'onChange', this.$options.page, this.$options.first); // user onChange event
 	            },
 	            gotoPage: (page, isDisabled = false) => {
 	                if (isDisabled) {
@@ -37003,7 +37000,6 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            sort: (column, e) => {
-	                var _a;
 	                if (hasClass(e.target, 'is-handle')) {
 	                    return;
 	                }
@@ -37023,7 +37019,7 @@
 	                if (isFunction(this.$options.asyncData)) {
 	                    this._hidden.asyncData();
 	                }
-	                this.$options.onSort && ((_a = this.$options) === null || _a === void 0 ? void 0 : _a.onSort.call(this, column));
+	                this.$event(this, 'onSort', column);
 	            },
 	            renderHeader: (columns) => {
 	                this.$options.hasOrder &&
@@ -37258,7 +37254,7 @@
 	                    addClass(children.filter((x) => {
 	                        return hasClass(x, 'has-child');
 	                    }), 'is-collapsed');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'collapsed', row, index$1(toggler));
+	                    this.$event(this, 'onToggle', 'collapsed', row, index$1(toggler));
 	                }
 	                else {
 	                    //show childs
@@ -37266,7 +37262,7 @@
 	                    removeClass(children.filter((x) => {
 	                        return x.dataset.depth == row._depth + 1;
 	                    }), 'is-hidden');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'expanded', row, index$1(toggler));
+	                    this.$event(this, 'onToggle', 'expanded', row, index$1(toggler));
 	                }
 	            },
 	            checkAll: (e) => {
@@ -37274,7 +37270,7 @@
 	                findAll('.is-rowChecker', this.$el).forEach((c) => {
 	                    c.checked = e.target.checked;
 	                });
-	                this.$options.onCheckAll && this.$options.onCheckAll.call(this, e.target.checked);
+	                this.$event(this, 'onCheckAll', e.target.checked);
 	            },
 	            showDetail(index, headerKeys, rawDataKeys) {
 	                const rows = findAll(`.gn-datagrid-body > .gn-datagrid-body-row`, this.$el);
@@ -37356,7 +37352,7 @@
 	                        }
 	                    });
 	                }
-	                this.$options.onCheck && this.$options.onCheck.call(this, row, e);
+	                this.$event(this, 'onCheck', row, e);
 	            },
 	            reRender: ({ headers, data, hasCheck }) => {
 	                return new Promise(resolve => {
@@ -37439,10 +37435,9 @@
 	                e.stopPropagation();
 	            },
 	            deleteRow: (index) => {
-	                var _a;
 	                this.$options.data = this.$options.data.filter((_data, idx) => index !== idx);
 	                this._hidden.resetData(this.$options.data);
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
+	                this.$event(this, 'onChange', this.$options.data);
 	            },
 	            moveRowUp: (index) => {
 	                if (index == 0) {
@@ -37457,16 +37452,15 @@
 	                this._hidden.switchRow(index, index + 1);
 	            },
 	            switchRow: (index1, index2) => {
-	                var _a;
 	                [this.$options.data[index2], this.$options.data[index1]] = [this.$options.data[index1], this.$options.data[index2]];
 	                this._hidden.resetData(this.$options.data);
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
+	                this.$event(this, 'onChange', this.$options.data);
 	            },
 	            doubleSelect: (row, index) => {
 	                if (this.$options.onDoubleClick) {
 	                    clearTimeout(_EventTimer$1);
 	                    _EventPrevent = true;
-	                    this.$options.onDoubleClick.call(this, row, index);
+	                    this.$event(this, 'onDoubleClick', row, index);
 	                }
 	            },
 	            hoverCell: (col, row, index, e) => {
@@ -37568,7 +37562,7 @@
 	                    this.$options.headers[data(handle, 'index')].style['min-width'] = getUnit('minWidth', position(handle).left + 5);
 	                    this.$options.headers[data(handle, 'index')].style['max-width'] = getUnit('maxWidth', position(handle).left + 5);
 	                    // this.$options.headers[data(handle, 'index')].style['flex-basis'] = getUnit('flex-basis', position(handle).left + 5);
-	                    this.$options.onDragEnd && this.$options.onDragEnd.call(this, this.$options.headers[data(handle, 'index')], this.$options.headers);
+	                    this.$event(this, 'onDragEnd', this.$options.headers[data(handle, 'index')], this.$options.headers);
 	                }
 	            },
 	            disable: () => {
@@ -37609,7 +37603,8 @@
 	            onCheckAll: true,
 	            onCheck: true,
 	            onDoubleClick: true,
-	            onChange: true
+	            onChange: true,
+	            onDragEnd: true
 	        };
 	        this.methods = {
 	            reRender(options) {
@@ -37788,7 +37783,7 @@
 	                        this.$options.hasUpdate
 	                            ? this._hidden.renderBtn(btnUpdate.icon, btnUpdate.color, (_e) => {
 	                                if (!this.$options.disabled && this.$options.onUpdate) {
-	                                    this.$options.onUpdate.call(this, this.$options.data[index], index);
+	                                    this.$event(this, 'onUpdate', this.$options.data[index], index);
 	                                    return;
 	                                }
 	                            })
@@ -37889,7 +37884,7 @@
 	                    addClass(children.filter((x) => {
 	                        return hasClass(x, 'has-child');
 	                    }), 'is-collapsed');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'collapsed', row, index$1(toggler));
+	                    this.$event(this, 'onToggle', 'collapsed', row, index$1(toggler));
 	                }
 	                else {
 	                    //show childs
@@ -37897,7 +37892,7 @@
 	                    removeClass(children.filter((x) => {
 	                        return x.dataset.depth == row._depth + 1;
 	                    }), 'is-hidden');
-	                    this.$options.onToggle && this.$options.onToggle.call(this, 'expanded', row, index$1(toggler));
+	                    this.$event(this, 'onToggle', 'expanded', row, index$1(toggler));
 	                }
 	            },
 	            reRender: ({ headers, data }) => {
@@ -37918,7 +37913,7 @@
 	            doubleSelect: (row, index) => {
 	                if (this.$options.onDoubleClick) {
 	                    clearTimeout(_EventTimer);
-	                    this.$options.onDoubleClick.call(this, row, index);
+	                    this.$event(this, 'onDoubleClick', row, index);
 	                }
 	            },
 	            hoverCell: (col, row, index, e) => {
@@ -37974,10 +37969,9 @@
 	                });
 	            },
 	            deleteRow: (index) => {
-	                var _a;
 	                this.$options.data.splice(index, 1);
 	                this._hidden.resetData(this.$options.data);
-	                (_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, this.$options.data);
+	                this.$event(this, 'onChange', this.$options.data);
 	            },
 	            disable: () => {
 	                this.$options.disabled = true;
@@ -38706,10 +38700,10 @@
 	            },
 	            onSelect: (value, key, obj, e) => {
 	                // !(e.target as HTMLInputElement).className.includes('gn-checkbox') &&
-	                isFunction(this.$options.onSelect) && this.$options.onSelect.call(this, value, key, obj, e);
+	                this.$event(this, 'onSelect', value, key, obj, e);
 	            },
 	            selectValue: () => {
-	                isFunction(this.$options.onSelectValue) && this.$options.onSelectValue.call(this);
+	                this.$event(this, 'onSelectValue');
 	            },
 	            onSort: (key, schema, e) => {
 	                const _target = find('.jsonview-sort', e.currentTarget);
@@ -38717,10 +38711,10 @@
 	                if (this.sortIndex > 2) {
 	                    this.sortIndex = 0;
 	                }
-	                isFunction(this.$options.onSort) && this.$options.onSort.call(this, key, SortIconList[this.sortIndex], schema);
+	                this.$event(this, 'onSort', key, SortIconList[this.sortIndex], schema);
 	            },
 	            selectLabel: () => {
-	                isFunction(this.$options.onSelectLabel) && this.$options.onSelectLabel.call(this);
+	                this.$event(this, 'onSelectLabel');
 	            },
 	            formatChecker: (data) => {
 	                if (!data) {
@@ -38751,7 +38745,8 @@
 	        this.events = {
 	            onSelectValue: true,
 	            onSelectLabel: true,
-	            onSelect: true
+	            onSelect: true,
+	            onSort: true
 	        };
 	        this.methods = {
 	            reRender(param) {
@@ -38955,7 +38950,7 @@
 	                removeClass(this.$el, 'is-open');
 	            },
 	            select: (menu, e) => {
-	                this.$options.onSelect && this.$options.onSelect.call(this, menu.value, menu.text, menu, e);
+	                this.$event(this, 'onSelect', menu.value, menu.text, menu, e);
 	                this._hidden.close();
 	            },
 	            changeText: (buttonText) => {
@@ -39026,13 +39021,12 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            change: (idx, isInit = false) => {
-	                var _a;
 	                if (!isInit && this.$options.tabIndex === idx) {
 	                    return;
 	                } // 활성화 탭 중복 클릭 방지
 	                if ((isInit || !this.$options.disabled) && this.$options.contents) {
 	                    this.$options.tabIndex = idx;
-	                    !isInit && ((_a = this.$options.onChange) === null || _a === void 0 ? void 0 : _a.call(this, idx, this.$el)); // user onChange event
+	                    !isInit && this.$event(this, 'onChange', idx, this.$el); // user onChange event
 	                    const activeTab = find(`li:nth-child(${idx + 1})`, this.$el);
 	                    removeClass(findAll('li', this.$el), 'is-active'); // active 상태 해제
 	                    addClass(activeTab, 'is-active'); // active 상태 표시
@@ -39121,7 +39115,7 @@
 	                if (this.$options.maxlength) {
 	                    text$1(this.$options.delegates[lang], this.$options.value[lang].length);
 	                }
-	                isFunction(this.$options.onChange) && this.$options.onChange.call(this, this.$options.value);
+	                this.$event(this, 'onChange', this.$options.value);
 	            },
 	            getValue: () => {
 	                return this.$options.value;
@@ -39303,8 +39297,8 @@
 	                this.$options.data[obj].forEach((option) => {
 	                    delete option.selected;
 	                });
-	                this.$options.onChange && this.$options.onChange.call(this, this.$options.data.source, this.$options.data.target); // user onChange event
-	                this.$options.onSort && this.$options.onSort.call(this, this.$options.data.source, this.$options.data.target); // user onSort event
+	                this.$event(this, 'onChange', this.$options.data.source, this.$options.data.target); // user onChange event
+	                this.$event(this, 'onSort', this.$options.data.source, this.$options.data.target); // user onSort event
 	            },
 	            move: (dir, selected = null) => {
 	                var _a, _b;
@@ -39340,8 +39334,8 @@
 	                }
 	                this._hidden.reRender('source');
 	                this._hidden.reRender('target');
-	                this.$options.onChange && this.$options.onChange.call(this, this.$options.data.source, this.$options.data.target); // user onChange event
-	                this.$options.onTransfer && this.$options.onTransfer.call(this, this.$options.data.source, this.$options.data.target); // user onTransfer event
+	                this.$event(this, 'onChange', this.$options.data.source, this.$options.data.target); // user onChange event
+	                this.$event(this, 'onTransfer', this.$options.data.source, this.$options.data.target); // user onTransfer event
 	            },
 	            moveTo: (source, target, addArr) => {
 	                isArray$1(addArr) &&
@@ -39598,7 +39592,7 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            select: (option) => {
-	                var _a, _b, _c, _d, _e, _f;
+	                var _a, _b, _c, _d;
 	                if (this.$options.disabled) {
 	                    return;
 	                }
@@ -39608,10 +39602,10 @@
 	                    });
 	                    const newValue = (_b = (_a = checkItems.map((item) => item.value)) === null || _a === void 0 ? void 0 : _a.join(',')) !== null && _b !== void 0 ? _b : '';
 	                    const newText = (_d = (_c = checkItems.map((item) => { var _a; return (_a = item === null || item === void 0 ? void 0 : item.dataset) === null || _a === void 0 ? void 0 : _a.text; })) === null || _c === void 0 ? void 0 : _c.join(',')) !== null && _d !== void 0 ? _d : '';
-	                    (_e = this.$options.onChange) === null || _e === void 0 ? void 0 : _e.call(this, newValue, newText);
+	                    this.$event(this, 'onChange', newValue, newText);
 	                }
 	                else {
-	                    (_f = this.$options.onChange) === null || _f === void 0 ? void 0 : _f.call(this, option.value, option.text);
+	                    this.$event(this, 'onChange', option.value, option.text);
 	                }
 	            },
 	            change: (value) => {
@@ -39709,7 +39703,7 @@
 	                css$1(this.$options.delegates.panel1, attrStr, (panelWidth / containerSize) * 100 + '%');
 	                css$1(this.$options.delegates.panel2, attrStr, 100 - (panelWidth / containerSize) * 100 - (5 / containerSize) * 100 + '%');
 	                css$1(this.$options.delegates.handle, this.$options.splitStr[0], (panelWidth / containerSize) * 100 + '%');
-	                (typeof isMounted !== 'boolean' || !isMounted) && !!this.$options.onDragEnd && this.$options.onDragEnd.call(this, offset(this.$options.delegates.handle));
+	                (typeof isMounted !== 'boolean' || !isMounted) && this.$event(this, 'onDragEnd', offset(this.$options.delegates.handle));
 	            }
 	        };
 	        this.config = {
@@ -39860,7 +39854,7 @@
 	                // Syntax Highlight
 	                prism.highlightElement(this.$options.delegates.content);
 	                e && this._hidden.sync(e);
-	                this.$options.onChange && this.$options.onChange.call(this, this.$options.value); // user onChange event
+	                this.$event(this, 'onChange', this.$options.value); // user onChange event
 	            },
 	            sync: (e) => {
 	                this.$options.delegates.preview.scrollTop = e.target.scrollTop;
@@ -39980,7 +39974,7 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            click: (tag) => {
-	                this.$options.onClick && this.$options.onClick.call(this, tag);
+	                this.$event(this, 'onClick', tag);
 	            },
 	            setValue: (value) => {
 	                const boundary = (this.$options.boundary.max - this.$options.boundary.min) / (this.$options.max - this.$options.min);
@@ -40010,7 +40004,7 @@
 	        }
 	        return (createElement$1("div", { id: this._uid, className: "gn-tagcloud", style: styles },
 	            createElement$1("ul", null, config.data.map((tag) => (createElement$1("li", null,
-	                createElement$1("a", { "data-size": this._hidden.setValue(tag.value), "on-click": this._hidden.click(tag) }, tag.text)))))));
+	                createElement$1("a", { "data-size": this._hidden.setValue(tag.value), "on-click": () => this._hidden.click(tag) }, tag.text)))))));
 	    }
 	    beforeMount() {
 	        if (this.$options.data && this.$options.data.length) {
@@ -40037,12 +40031,12 @@
 	                if (!this.$options.multiple) {
 	                    removeClass(findAll('.tree-item', this.$el), 'is-active');
 	                    addClass(target, 'is-active');
-	                    this.$options.onSelect && this.$options.onSelect.call(this, item, e);
+	                    this.$event(this, 'onSelect', item, e);
 	                }
 	                else {
 	                    toggleClass(target, 'is-active');
 	                    if (hasClass(target, 'is-active')) {
-	                        this.$options.onSelect && this.$options.onSelect.call(this, item, e);
+	                        this.$event(this, 'onSelect', item, e);
 	                    }
 	                }
 	            },
@@ -40069,7 +40063,7 @@
 	                const itemEl = findAll('.tree-item', this.$el)[index];
 	                if (hasClass(itemEl, 'has-child')) {
 	                    addClass(itemEl, 'is-open');
-	                    this.$options.onToggle.call(this, this._hidden.findData(index), 'expanded', index);
+	                    this.$event(this, 'onToggle', this._hidden.findData(index), 'expanded', index);
 	                }
 	            },
 	            expandAll: () => {
@@ -40080,7 +40074,7 @@
 	            collapse: (index) => {
 	                const itemEl = findAll('.tree-item', this.$el)[index];
 	                removeClass(itemEl, 'is-open');
-	                this.$options.onToggle.call(this, this._hidden.findData(index), 'collapsed', index);
+	                this.$event(this, 'onToggle', this._hidden.findData(index), 'collapsed', index);
 	            },
 	            collapseAll: () => {
 	                findAll('.is-open', this.$el).forEach((el) => {
@@ -40101,7 +40095,7 @@
 	                        find('.is-checker', item).checked = true;
 	                    });
 	                }
-	                this.$options.onCheck && this.$options.onCheck.call(this, item, target.checked, this._hidden.getItemIndex(target), e);
+	                this.$event(this, 'onCheck', item, target.checked, this._hidden.getItemIndex(target), e);
 	            },
 	            checkAll: () => {
 	                findAll('.is-checker', this.$el).forEach((c) => {
@@ -40215,7 +40209,7 @@
 	                else if (!item.icon && !hasClass(target, 'is-open')) {
 	                    replaceClass(find('i', target), 'fa-folder-open', 'fa-folder');
 	                }
-	                this.$options.onToggle && this.$options.onToggle.call(this, item, hasClass(target, 'is-open') ? 'expanded' : 'collapsed', this._hidden.getItemIndex(target), e);
+	                this.$event(this, 'onToggle', item, hasClass(target, 'is-open') ? 'expanded' : 'collapsed', this._hidden.getItemIndex(target), e);
 	            },
 	            renderTree: (data) => {
 	                return (createElement$1("ul", null, data.map((item) => {
