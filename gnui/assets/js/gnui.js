@@ -17150,7 +17150,7 @@
 	        // event manager를 이용해 해당 uid 이벤트 dispatch
 	        const eventManager = GNCoreEventManager.getInstance();
 	        // 호출 후
-	        eventManager.dispatch(uid, name);
+	        eventManager.dispatch(uid, name, '');
 	        // 이벤트 해제 - life cycle 은 컴포넌트 별로 한번씩만 존재하므로..
 	        eventManager.remove(uid, name);
 	    }
@@ -17177,7 +17177,7 @@
 	                    remove($('#' + attr(rm, 'data-gnui')));
 	                }
 	                const findComponent = closerThis._getComponent($(rm));
-	                if (findComponent && findComponent._uid && !findComponent.$el.parentNode) {
+	                if (findComponent && findComponent._uid && !findComponent.$el.parentNode && findComponent.$name !== 'modal') {
 	                    // state manager 에서 component 삭제
 	                    closerThis._removeComponent(rm);
 	                    // event manager 에서 unbind
