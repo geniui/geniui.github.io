@@ -38561,7 +38561,7 @@
 	                        })))),
 	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' }, data &&
 	                        data.map(d => (createElement$1("tr", null, keys.map(k => {
-	                            var _a;
+	                            var _a, _b;
 	                            const value = startsWith(k, '$') ? JsonPath.query(d, k)[0] : d[k];
 	                            let tooltipIndex = undefined;
 	                            if (schema && schema.Properties[k] && schema.Properties[k].$ref) {
@@ -38576,7 +38576,7 @@
 	                                this.subTooltips[tooltipIndex] = { defData, defSchema };
 	                            }
 	                            const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
-	                            const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_a = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _a === void 0 ? void 0 : _a.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
+	                            const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
 	                            return dataItem;
 	                        })))))));
 	            },
