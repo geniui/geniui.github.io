@@ -14370,7 +14370,24 @@
 	    });
 	    return dmustach.test(result) ? interpolateURL(result, source) : result;
 	}
+	function getPathProperty(object, path) {
+	    const properties = path.split('.');
+	    let current = object;
+	    for (const property of properties) {
+	        if (current === undefined) {
+	            return undefined;
+	        }
+	        current = current[property];
+	    }
+	    return current;
+	}
 	function interpolateCop(textCondition, data, parent, $) {
+	    const onlymustach = /^\{{2}[^{}]*\}{2}$/;
+	    if (onlymustach.test(textCondition)) {
+	        const path = textCondition.replace('{{', '').replace('}}', '');
+	        const result = getPathProperty({ data, parent, $ }, path);
+	        return result === undefined ? '' : result;
+	    }
 	    const dmustach = new RegExp(/\{{([^{}]*)}}/gm);
 	    const result = textCondition.replace(dmustach, (match) => {
 	        const conditionalOp = match.replace(/\{{|\}}/gm, '');
@@ -38633,7 +38650,7 @@
 	                        const Type = schema.Converter[1] || '';
 	                        const Value = schema.Converter[2] || '{{data}}';
 	                        if (Name) {
-	                            const escapeValue = interpolateURL(Value, { data, schema, parent, root: this.$options.data });
+	                            const escapeValue = interpolateCop(Value, data, parent, this.$options.data);
 	                            data = this.$options.convert(Name, Type, escapeValue);
 	                        }
 	                    }
