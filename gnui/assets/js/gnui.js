@@ -38576,26 +38576,29 @@
 	                                this._hidden.keyView(k, schema),
 	                                this._hidden.sortItem())) : (createElement$1("th", null, this._hidden.keyView(k, schema)));
 	                        })))),
-	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' }, data &&
-	                        data.map(d => (createElement$1("tr", null, keys.map(k => {
-	                            var _a, _b;
-	                            const value = startsWith(k, '$') ? JsonPath.query(d, k)[0] : d[k];
-	                            let tooltipIndex = undefined;
-	                            if (schema && schema.Properties[k] && schema.Properties[k].$ref) {
-	                                let defSchema = schema;
-	                                let defData = d;
-	                                const refPath = schema.Properties[k].$ref.split('/');
-	                                refPath.forEach((path) => {
-	                                    defSchema = path === '#' ? this.$options.schema : defSchema[path];
-	                                    defData = path === '#' || path === '$defs' ? defData : d[path];
-	                                });
-	                                tooltipIndex = Object.keys(this.subTooltips).length + 1;
-	                                this.subTooltips[tooltipIndex] = { defData, defSchema };
-	                            }
-	                            const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
-	                            const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
-	                            return dataItem;
-	                        })))))));
+	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' },
+	                        data &&
+	                            data.map(d => (createElement$1("tr", null, keys.map(k => {
+	                                var _a, _b;
+	                                const value = startsWith(k, '$') ? JsonPath.query(d, k)[0] : d[k];
+	                                let tooltipIndex = undefined;
+	                                if (schema && schema.Properties[k] && schema.Properties[k].$ref) {
+	                                    let defSchema = schema;
+	                                    let defData = d;
+	                                    const refPath = schema.Properties[k].$ref.split('/');
+	                                    refPath.forEach((path) => {
+	                                        defSchema = path === '#' ? this.$options.schema : defSchema[path];
+	                                        defData = path === '#' || path === '$defs' ? defData : d[path];
+	                                    });
+	                                    tooltipIndex = Object.keys(this.subTooltips).length + 1;
+	                                    this.subTooltips[tooltipIndex] = { defData, defSchema };
+	                                }
+	                                const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
+	                                const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
+	                                return dataItem;
+	                            })))),
+	                        !(data === null || data === void 0 ? void 0 : data.length) && (createElement$1("tr", null,
+	                            createElement$1("td", { colSpan: keys.length, className: "is-center" }, this.$options.textSets.noData))))));
 	            },
 	            objView: (obj, schema) => {
 	                // 오브젝트 형식인 경우 key-value 로 출력
@@ -38757,6 +38760,9 @@
 	        };
 	        this.config = {
 	            name: (this.$selector && this.$selector.name) || this._uid,
+	            textSets: {
+	                noData: 'No records available.'
+	            },
 	            defWidth: 'auto'
 	        };
 	        this.events = {
