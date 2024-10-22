@@ -13854,6 +13854,58 @@
 	function toJson(str) {
 	    return JSON.parse(str.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n').replace(/\t/gi, '\\t').replace(/\f/gi, '\\f'));
 	}
+	/**
+	 * Json Object, JsonArray 문자열 내에 다른 Json 객체형의 문자열이 포함될 경우 파싱 오류가 발생하여,
+	 * 중첩된 Json 객체형 문자열은 문자열 그대로 인식되도록 문자열 안의 key, value 를 이스케이프 처리시킨다.
+	 *
+	 * 파싱오류 : [{"SAML2_ATTRIBUTES_MAPPING_ADDITIONAL":"[{"column_key":"user_name","column_value":"{firstName} {lastName}"}]"}]
+	 * 이스케이프 처리후 파싱성공 : [{"SAML2_ATTRIBUTES_MAPPING_ADDITIONAL":"[{\"column_key\":\"user_name\",\"column_value\":\"{firstName} {lastName}\"}]"}]
+	 */
+	function escapeJsonString(str) {
+	    let result = '';
+	    let insideString = false;
+	    let insideNestedJson = false;
+	    for (let i = 0; i < str.length; i++) {
+	        let currentChar = str.charAt(i);
+	        // 현재 문자가 '\' 일 경우 그대로 result 에 추가.
+	        if (currentChar === '\\') {
+	            result += currentChar;
+	            if (i + 1 < str.length) {
+	                result += str.charAt(i + 1);
+	                i++;
+	            }
+	            continue;
+	        }
+	        // 이전 문자열이 Json 형 문자열이고, 따옴표가 검출되면 '\' 를 추가한다.
+	        if (currentChar === '"') {
+	            if (insideString) {
+	                if (insideNestedJson) {
+	                    result += '\\';
+	                }
+	                insideString = false;
+	            }
+	            else {
+	                insideString = true;
+	                if (insideNestedJson) {
+	                    result += '\\';
+	                }
+	            }
+	            result += currentChar;
+	            continue;
+	        }
+	        if (insideString) {
+	            // 문자열내에 중첩된 Json 형 문자열이 시작되면 flag 설정
+	            if (currentChar === '{' || currentChar === '[') {
+	                insideNestedJson = true;
+	            }
+	            else if (currentChar === '}' || currentChar === ']') {
+	                insideNestedJson = false;
+	            }
+	        }
+	        result += currentChar;
+	    }
+	    return result;
+	}
 	function isEqual(value, other) {
 	    return value === other || (isObject(value) && isObject(other) && Object.keys(value).length === Object.keys(other).length && each(value, (val, key) => val === other[key]));
 	}
@@ -15949,6 +16001,7 @@
 		escape: escape,
 		escapeEntity: escapeEntity,
 		escapeHTML: escapeHTML,
+		escapeJsonString: escapeJsonString,
 		extend: extend$2,
 		fadeout: fadeout,
 		filter: filter,
