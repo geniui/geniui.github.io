@@ -38548,6 +38548,7 @@
 	        this._hidden = {
 	            reRender: (data, schema) => {
 	                this.$template.reRender(find('.jsonview-contents', this.$el), createElement$1("div", { className: "jsonview-contents" }, schema ? this._hidden.render(data, schema) : this._hidden.renderRaw(data)));
+	                this.completed();
 	            },
 	            render: (data, schema, parent, key) => {
 	                return !!schema // 스키마가 있는경우만 처리
