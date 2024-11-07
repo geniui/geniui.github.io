@@ -38880,7 +38880,7 @@
 	                new Tooltip('tooltip', tooltip, {
 	                    template: this._hidden.render(this.subTooltips[tooltipIndex].defData, this.subTooltips[tooltipIndex].defSchema),
 	                    direction: 'bottom',
-	                    color: 'dark'
+	                    color: 'mono'
 	                });
 	            });
 	        }
