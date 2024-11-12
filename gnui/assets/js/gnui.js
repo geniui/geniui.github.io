@@ -14249,8 +14249,20 @@
 	        return args[0];
 	    }
 	}
+	function isValidJSON(jsonString) {
+	    try {
+	        JSON.parse(jsonString);
+	        return true;
+	    }
+	    catch (_a) {
+	        return false;
+	    }
+	}
 	function objClone(obj) {
-	    return JSON.parse(JSON.stringify(obj));
+	    return isValidJSON(JSON.stringify(obj)) ? JSON.parse(JSON.stringify(obj)) : assign$1({}, obj);
+	}
+	function arrClone(array) {
+	    return isValidJSON(JSON.stringify(array)) ? JSON.parse(JSON.stringify(array)) : [...array];
 	}
 	function findPath(obj, key) {
 	    for (const prop in obj) {
@@ -15969,6 +15981,7 @@
 		addClass: addClass,
 		after: after,
 		append: append,
+		arrClone: arrClone,
 		assign: assign$1,
 		attr: attr,
 		base64: base64,
@@ -16080,6 +16093,7 @@
 		isString: isString,
 		isTouch: isTouch,
 		isUndefined: isUndefined,
+		isValidJSON: isValidJSON,
 		isVisible: isVisible,
 		isVoidElement: isVoidElement,
 		isWindow: isWindow,
@@ -37420,7 +37434,7 @@
 	                    this.$options.headers = headers;
 	                    this.$options.hasCheck = hasCheck;
 	                    this.$template.reRender(find('.gn-datagrid-header-row', this.$el), this._hidden.renderHeader(this.$options.headers));
-	                    this._hidden.resetData(data ? data.slice() : this.$options.data);
+	                    this._hidden.resetData(data ? arrClone(data) : this.$options.data);
 	                    this.$render(this.$options);
 	                    isFunction(resolve) && resolve();
 	                });
@@ -37449,7 +37463,7 @@
 	            },
 	            resetData: (data) => {
 	                return new Promise(resolve => {
-	                    this.$options.data = data;
+	                    this.$options.data = arrClone(data);
 	                    Array.isArray(data) && data.some((d) => isArray$1(d[this.$options.childField])) ? addClass(this.$el, 'has-left-padding') : removeClass(this.$el, 'has-left-padding');
 	                    this.$template.reRender(find('.gn-datagrid-body', this.$el), this._hidden.renderBody(this.$options.data, this.$options.headers));
 	                    if (this.$options.fixHeader || this.$options.bodyHeight) {
@@ -37675,13 +37689,13 @@
 	                    this._hidden.asyncData();
 	                    return;
 	                }
-	                return this._hidden.resetData(data === null || data === void 0 ? void 0 : data.slice());
+	                return this._hidden.resetData(arrClone(data));
 	            },
 	            addChild(index, data) {
-	                this._hidden.addChild(index, data.slice());
+	                this._hidden.addChild(index, arrClone(data));
 	            },
 	            addRow(data) {
-	                this._hidden.addChild(null, data.slice());
+	                this._hidden.addChild(null, arrClone(data));
 	                this.$options.data = this.$options.data.concat(data);
 	            },
 	            expand(index) {
@@ -37736,7 +37750,7 @@
 	                (config.data.some((d) => isArray$1(d[this.$options.childField])) ? ' has-left-padding' : '') +
 	                (config.disabled ? ' is-disabled' : ''), style: styles },
 	            createElement$1("div", { className: "gn-datagrid-header" }, this._hidden.renderHeader(config.headers)),
-	            createElement$1("div", { className: "gn-datagrid-contents", style: { marginTop: this.$options.bodyTopMargin ? this.$options.bodyTopMargin : '0' } }, this._hidden.renderBody(config.data.slice(), config.headers)),
+	            createElement$1("div", { className: "gn-datagrid-contents", style: { marginTop: this.$options.bodyTopMargin ? this.$options.bodyTopMargin : '0' } }, this._hidden.renderBody(arrClone(config.data), config.headers)),
 	            config.paginator /* 페이지네이터 옵션 확인 */ && createElement$1("div", { className: "gn-datagrid-footer" })));
 	    }
 	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
