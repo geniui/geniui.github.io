@@ -15187,20 +15187,38 @@
 	    });
 	}
 	function monthData(locale) {
-	    return [
-	        { value: 1, text: '1월' }, //text: 'January'
-	        { value: 2, text: '2월' }, //text: 'February'
-	        { value: 3, text: '3월' }, //text: 'March'
-	        { value: 4, text: '4월' }, //text: 'April'
-	        { value: 5, text: '5월' }, //text: 'May'
-	        { value: 6, text: '6월' }, //text: 'June'
-	        { value: 7, text: '7월' }, //text: 'July'
-	        { value: 8, text: '8월' }, //text: 'August'
-	        { value: 9, text: '9월' }, //text: 'September'
-	        { value: 10, text: '10월' }, //text: 'October'
-	        { value: 11, text: '11월' }, //text: 'November'
-	        { value: 12, text: '12월' } //text: 'December'
-	    ];
+	    switch (locale) {
+	        case 'en':
+	            return [
+	                { value: 1, text: 'JAN' },
+	                { value: 2, text: 'FEB' },
+	                { value: 3, text: 'MAR' },
+	                { value: 4, text: 'APR' },
+	                { value: 5, text: 'MAY' },
+	                { value: 6, text: 'JUN' },
+	                { value: 7, text: 'JUL' },
+	                { value: 8, text: 'AUG' },
+	                { value: 9, text: 'SEP' },
+	                { value: 10, text: 'OCT' },
+	                { value: 11, text: 'NOV' },
+	                { value: 12, text: 'DEC' }
+	            ];
+	        default:
+	            return [
+	                { value: 1, text: '1월' },
+	                { value: 2, text: '2월' },
+	                { value: 3, text: '3월' },
+	                { value: 4, text: '4월' },
+	                { value: 5, text: '5월' },
+	                { value: 6, text: '6월' },
+	                { value: 7, text: '7월' },
+	                { value: 8, text: '8월' },
+	                { value: 9, text: '9월' },
+	                { value: 10, text: '10월' },
+	                { value: 11, text: '11월' },
+	                { value: 12, text: '12월' }
+	            ];
+	    }
 	}
 	function dateData(locale) {
 	    return ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
@@ -34069,6 +34087,7 @@
 	        this.config = {
 	            dateFormat: 'yyyy-MM-DD',
 	            timeFormat: 'hh:mm:ss',
+	            locale: 'ko',
 	            value: new Date(),
 	            delegates: {
 	                year: '.input-year',
@@ -34115,7 +34134,7 @@
 	                createElement$1("div", { className: "control-set gn-control is-small has-arrange" },
 	                    createElement$1("button", { className: "btn-month-decrease" }),
 	                    createElement$1("div", { className: "control-input" },
-	                        createElement$1("div", { className: "is-picker input-month" })),
+	                        createElement$1("div", { className: "is-picker is-medium has-text-center input-month" })),
 	                    createElement$1("button", { className: "btn-month-increase" }))),
 	            createElement$1("div", { className: "picker-panel" },
 	                createElement$1("div", { className: "picker-days" }, dateData().map((date) => (createElement$1("div", { className: "day-item" }, date)))),
@@ -34130,7 +34149,7 @@
 	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 	    $render(config) {
 	        this.$options.delegates.month = new Dropdown('dropdown', find('.input-month', this.$el), {
-	            data: monthData(),
+	            data: monthData(this.$options.locale),
 	            value: this.$options.parseDate.month,
 	            width: '50px',
 	            size: 'medium',
@@ -34487,7 +34506,6 @@
 
 	const DEFAULT_COLOR = '#ff0000';
 	const NONE_COLOR = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)';
-	const PICK_A_COLOR = 'pick a color';
 	const COLOR_VALUE_WIDTH = 180;
 	const COLOR_VALUE_HEIGHT = 150;
 	let palette;
@@ -34669,7 +34687,6 @@
 	        };
 	        return (createElement$1("div", { className: "gn-colorpicker", style: styles },
 	            createElement$1("div", { className: "color-header is-draggable" },
-	                PICK_A_COLOR,
 	                createElement$1("span", { className: "color-cancel gn-icon is-close ", id: this._uid + '_close', "on-click": this._hidden.hide },
 	                    createElement$1("i", { className: "fas fa-times" }))),
 	            createElement$1("div", { className: "color-controls" },
@@ -34784,6 +34801,9 @@
 	        this.config = {
 	            name: this.$selector.name || this._uid,
 	            direction: undefined,
+	            textSets: {
+	                placeholder: ''
+	            },
 	            delegates: {
 	                preview: '.color-preview',
 	                value: '.color-value'
@@ -34811,12 +34831,13 @@
 	        this.$init(this, options);
 	    }
 	    template(config) {
+	        var _a;
 	        return (createElement$1("div", { id: this._uid, className: 'gn-colorinput' + (config.size ? ' is-' + config.size : '') + (config.readonly ? ' is-readonly' : '') + (config.disabled ? ' is-disabled' : '') },
 	            createElement$1("div", { className: "gn-control has-icon-left has-icon-right" },
 	                createElement$1("button", { className: "color-preview", id: this._uid + '_preview', "on-click": this._hidden.show, style: {
 	                        background: config.value || NONE_COLOR
 	                    }, disabled: config.disabled }),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: PICK_A_COLOR, style: { width: '160px' }, value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.placeholder, style: { width: '160px' }, value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
 	                createElement$1("span", { className: "gn-icon is-cancel is-right color-remover", id: this._uid + '_remover', "on-click": this._hidden.removeColor },
 	                    createElement$1("i", { className: "fas fa-times" })))));
 	    }
@@ -34854,6 +34875,7 @@
 	                        pickPanel = new Calendar('calendar', '', {
 	                            parent: this,
 	                            type: 'picker',
+	                            locale: this.$options.locale,
 	                            dateType: this.$options.type,
 	                            min: this.$options.min || null,
 	                            max: this.$options.max || null,
@@ -34897,6 +34919,7 @@
 	                this.$options.picker.show({
 	                    value: isDate(this.$options.value) ? this.$options.value : '',
 	                    parent: this,
+	                    locale: this.$options.locale,
 	                    dateType: this.$options.type,
 	                    dateFormat: this.$options.dateFormat,
 	                    timeFormat: this.$options.timeFormat,
@@ -34927,7 +34950,10 @@
 	                date: '.date-value',
 	                time: '.time-value'
 	            },
-	            textSets: {},
+	            textSets: {
+	                placeholder: ''
+	            },
+	            locale: 'ko',
 	            hasIcon: true,
 	            type: 'date',
 	            dateFormat: 'yyyy-MM-DD',
@@ -34958,12 +34984,11 @@
 	        this.$init(this, options);
 	    }
 	    template(config) {
-	        var _a;
 	        return (createElement$1("div", { id: this._uid, className: 'gn-dateinput' + (config.size ? ' is-' + config.size : '') + (config.style ? ' is-' + config.style : '') + (config.readonly ? ' is-readonly' : '') + (config.disabled ? ' is-disabled' : '') },
 	            createElement$1("div", { className: 'gn-control has-icon-right' + (config.hasIcon ? ' has-icon-left' : '') },
 	                config.hasIcon ? (createElement$1("span", { className: "gn-icon is-left" },
 	                    createElement$1("i", { className: "fas fa-calendar" }))) : (''),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: true, placeholder: (_a = config.textSets.placeholder) !== null && _a !== void 0 ? _a : 'pick a date', style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: true, placeholder: this.$options.textSets.placeholder, style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
 	                        this._hidden.show.call(this, e);
 	                    } }),
 	                config.readonly ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", id: this._uid + '_remover', "on-click": this._hidden.removeDate },
