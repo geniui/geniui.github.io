@@ -8591,10 +8591,12 @@ Eu velit aliqua eiusmod eiusmod occaecat ullamco fugiat sunt occaecat excepteur.
 <div class="aigis-preview">
 
 <input type="text" class="new-datepicker" />
+<input type="text" class="new-datetimepicker-without-icon" />
 <input type="text" class="new-datetimepicker" />
 </div>
 
 <pre><code class="language-ejs"><span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>input</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>text<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-datepicker<span class="token punctuation" >"</span></span> <span class="token punctuation" >/></span></span>
+<span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>input</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>text<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-datetimepicker-without-icon<span class="token punctuation" >"</span></span> <span class="token punctuation" >/></span></span>
 <span class="token tag" ><span class="token tag" ><span class="token punctuation" >&lt;</span>input</span> <span class="token attr-name" >type</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>text<span class="token punctuation" >"</span></span> <span class="token attr-name" >class</span><span class="token attr-value" ><span class="token punctuation" >=</span><span class="token punctuation" >"</span>new-datetimepicker<span class="token punctuation" >"</span></span> <span class="token punctuation" >/></span></span>
 </code></pre>
 <pre><code>  Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'datepicker'</span><span class="token punctuation" >,</span> {
@@ -8606,10 +8608,17 @@ Eu velit aliqua eiusmod eiusmod occaecat ullamco fugiat sunt occaecat excepteur.
     type<span class="token punctuation" >:</span> <span class="token string" >'date'</span>
   }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
   Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'datepicker'</span><span class="token punctuation" >,</span> {
-    target<span class="token punctuation" >:</span> <span class="token string" >'.new-datetimepicker'</span><span class="token punctuation" >,</span>
+    target<span class="token punctuation" >:</span> <span class="token string" >'.new-datetimepicker-without-icon'</span><span class="token punctuation" >,</span>
     type<span class="token punctuation" >:</span> <span class="token string" >'datetime'</span><span class="token punctuation" >,</span>
     value<span class="token punctuation" >:</span> <span class="token string" >'2021-10-10 10:01:11'</span><span class="token punctuation" >,</span>
     hasIcon<span class="token punctuation" >:</span> <span class="token boolean" >false</span>
+  }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'datepicker'</span><span class="token punctuation" >,</span> {
+    target<span class="token punctuation" >:</span> <span class="token string" >'.new-datetimepicker'</span><span class="token punctuation" >,</span>
+    type<span class="token punctuation" >:</span> <span class="token string" >'datetime'</span><span class="token punctuation" >,</span>
+    textSets<span class="token punctuation" >:</span> {
+      placeholder<span class="token punctuation" >:</span> <span class="token string" >'pick a date'</span>
+    }
   }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
 </code></pre><table class="gn-table is-full is-border">
   <thead>
@@ -8659,7 +8668,7 @@ Eu velit aliqua eiusmod eiusmod occaecat ullamco fugiat sunt occaecat excepteur.
     <tr>
       <td colspan="2">width</td>
       <td>string</td>
-      <td>160px</td>
+      <td>165px</td>
       <td>입력 input 크기</td>
     </tr>
     <tr>
@@ -12520,7 +12529,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
 </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/11/14 14:44</footer>
+          <footer class="aigis-footer">Last update at 2024/11/20 10:47</footer>
         </div>
       </div>
     </div>

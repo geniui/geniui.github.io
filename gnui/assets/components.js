@@ -215,10 +215,17 @@ const components = {
       type: 'date'
     });
     Gn.create('datepicker', {
-      target: '.new-datetimepicker',
+      target: '.new-datetimepicker-without-icon',
       type: 'datetime',
       value: '2021-10-10 10:01:11',
       hasIcon: false
+    });
+    Gn.create('datepicker', {
+      target: '.new-datetimepicker',
+      type: 'datetime',
+      textSets: {
+        placeholder: 'pick a date'
+      }
     });
   },
   Dropdown: function () {

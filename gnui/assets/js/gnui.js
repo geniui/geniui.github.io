@@ -15176,7 +15176,7 @@
 	            case 'hh':
 	                return zf(date.getHours() + '', 2);
 	            case 'HH':
-	                return date.getHours();
+	                return zf(date.getHours() + '', 2);
 	            case 'mm':
 	                return zf(date.getMinutes() + '', 2);
 	            case 'ss':
@@ -34870,12 +34870,14 @@
 	                if (this.$options.disabled || this.$options.readonly) {
 	                    return;
 	                }
+	                const defaultDataTime = dateFormat(new Date(), 'yyyy-MM-dd') + ' 00:00:00';
 	                if (!this.$options.picker) {
 	                    if (!pickPanel) {
 	                        pickPanel = new Calendar('calendar', '', {
 	                            parent: this,
 	                            type: 'picker',
 	                            locale: this.$options.locale,
+	                            value: defaultDataTime,
 	                            dateType: this.$options.type,
 	                            min: this.$options.min || null,
 	                            max: this.$options.max || null,
@@ -34917,7 +34919,7 @@
 	                    setPosition.left = posX || 0;
 	                }
 	                this.$options.picker.show({
-	                    value: isDate(this.$options.value) ? this.$options.value : '',
+	                    value: isDate(this.$options.value) ? this.$options.value : defaultDataTime,
 	                    parent: this,
 	                    locale: this.$options.locale,
 	                    dateType: this.$options.type,
@@ -34958,7 +34960,7 @@
 	            type: 'date',
 	            dateFormat: 'yyyy-MM-DD',
 	            timeFormat: 'hh:mm:ss',
-	            width: '160px'
+	            width: '165px'
 	        };
 	        this.events = {
 	            onChange: true
