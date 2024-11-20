@@ -34884,14 +34884,16 @@
 	                            onSelect: (date) => {
 	                                pickPanel.$options.parent.change(date);
 	                                pickPanel.hide();
+	                                this.$event(this, 'onClose');
 	                            }
 	                        });
 	                    }
 	                    this.$options.picker = pickPanel;
 	                    // 해당 컴포넌트 외 클릭 시 picker panel 숨김
 	                    this.$options._destroy = on(document.body, 'click', (e) => {
-	                        if (!parents(e.target, '#' + this.$options.picker._uid).length && !parents(e.target, '.gn-dateinput').length) {
+	                        if (!parents(e.target, '#' + this.$options.picker._uid).length && !parents(e.target, '.gn-dateinput').length && this.$options.picker.$el.className.includes('is-active')) {
 	                            this.$options.picker.hide();
+	                            this.$event(this, 'onClose');
 	                        }
 	                    });
 	                }
@@ -34963,7 +34965,8 @@
 	            width: '165px'
 	        };
 	        this.events = {
-	            onChange: true
+	            onChange: true,
+	            onClose: true
 	        };
 	        this.methods = {
 	            change(date) {
