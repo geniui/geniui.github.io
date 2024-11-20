@@ -218,7 +218,11 @@ const components = {
       target: '.new-datetimepicker-without-icon',
       type: 'datetime',
       value: '2021-10-10 10:01:11',
-      hasIcon: false
+      hasIcon: false,
+      writable: true,
+      onClose: function () {
+        console.log('창이 닫힙니다.');
+      }
     });
     Gn.create('datepicker', {
       target: '.new-datetimepicker',

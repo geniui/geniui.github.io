@@ -34843,7 +34843,6 @@
 	    }
 	}
 
-	let pickPanel;
 	class Datepicker extends GNCoreInstance {
 	    constructor(name, selector, options = {}) {
 	        super(name, selector, options);
@@ -34867,13 +34866,14 @@
 	                    : '';
 	            },
 	            show: (e) => {
+	                var _a;
 	                if (this.$options.disabled || this.$options.readonly) {
 	                    return;
 	                }
 	                const defaultDataTime = dateFormat(new Date(), 'yyyy-MM-dd') + ' 00:00:00';
 	                if (!this.$options.picker) {
-	                    if (!pickPanel) {
-	                        pickPanel = new Calendar('calendar', '', {
+	                    if (!this.pickPanel) {
+	                        this.pickPanel = new Calendar('calendar', '', {
 	                            parent: this,
 	                            type: 'picker',
 	                            locale: this.$options.locale,
@@ -34882,16 +34882,16 @@
 	                            min: this.$options.min || null,
 	                            max: this.$options.max || null,
 	                            onSelect: (date) => {
-	                                pickPanel.$options.parent.change(date);
-	                                pickPanel.hide();
+	                                this.pickPanel.$options.parent.change(date);
+	                                this.pickPanel.hide();
 	                                this.$event(this, 'onClose');
 	                            }
 	                        });
 	                    }
-	                    this.$options.picker = pickPanel;
+	                    this.$options.picker = this.pickPanel;
 	                    // 해당 컴포넌트 외 클릭 시 picker panel 숨김
 	                    this.$options._destroy = on(document.body, 'click', (e) => {
-	                        if (!parents(e.target, '#' + this.$options.picker._uid).length && !parents(e.target, '.gn-dateinput').length && this.$options.picker.$el.className.includes('is-active')) {
+	                        if (!parents(e.target, '#' + this.$options.picker._uid).length && !parents(e.target, '.gn-dateinput').length && hasClass(this.pickPanel.$el, 'is-active')) {
 	                            this.$options.picker.hide();
 	                            this.$event(this, 'onClose');
 	                        }
@@ -34920,6 +34920,7 @@
 	                else {
 	                    setPosition.left = posX || 0;
 	                }
+	                (_a = findAll('.is-picker')) === null || _a === void 0 ? void 0 : _a.map((e) => removeClass(e, 'is-active'));
 	                this.$options.picker.show({
 	                    value: isDate(this.$options.value) ? this.$options.value : defaultDataTime,
 	                    parent: this,
@@ -34993,7 +34994,7 @@
 	            createElement$1("div", { className: 'gn-control has-icon-right' + (config.hasIcon ? ' has-icon-left' : '') },
 	                config.hasIcon ? (createElement$1("span", { className: "gn-icon is-left" },
 	                    createElement$1("i", { className: "fas fa-calendar" }))) : (''),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: true, placeholder: this.$options.textSets.placeholder, style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: !config.writable, placeholder: this.$options.textSets.placeholder, style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
 	                        this._hidden.show.call(this, e);
 	                    } }),
 	                config.readonly ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", id: this._uid + '_remover', "on-click": this._hidden.removeDate },
