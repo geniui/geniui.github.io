@@ -38663,8 +38663,8 @@
 	                            return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : schema && schema.SortItems && schema.SortItems.includes(k) ? (createElement$1("th", { "on-click": (e) => {
 	                                    this._hidden.onSort.call(this, k, schema, e);
 	                                }, className: "is-sortable" },
-	                                this._hidden.keyView(k, schema),
-	                                this._hidden.sortItem(k))) : (createElement$1("th", null, this._hidden.keyView(k, schema)));
+	                                this._hidden.keyView(k, 'array', schema),
+	                                this._hidden.sortItem(k))) : (createElement$1("th", null, this._hidden.keyView(k, 'array', schema)));
 	                        })))),
 	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' },
 	                        data &&
@@ -38697,7 +38697,7 @@
 	                    const value = startsWith(k, '$') ? JsonPath.query(obj, k)[0] : obj[k];
 	                    const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
 	                    return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : (createElement$1("tr", null,
-	                        createElement$1("th", { style: { width: this.$options.defWidth } }, this._hidden.keyView(k, schema)),
+	                        createElement$1("th", { style: { width: this.$options.defWidth } }, this._hidden.keyView(k, 'object', schema)),
 	                        createElement$1("td", { "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, obj) }, schema ? this._hidden.render(value, schema.Properties[k], obj, k) : this._hidden.renderRaw(value))));
 	                })));
 	            },
@@ -38713,7 +38713,7 @@
 	                }
 	                return dataArr;
 	            },
-	            keyView: (key, schema) => {
+	            keyView: (key, parentType = 'array', schema) => {
 	                let keySchema = schema ? schema.Properties[key] : undefined;
 	                if (schema && keySchema && !keySchema.Type && keySchema.$ref) {
 	                    (keySchema.$ref || keySchema.Items.$ref).split('/').forEach((path) => {
@@ -38721,6 +38721,8 @@
 	                    });
 	                }
 	                return (createElement$1("span", { className: schema && keySchema && keySchema.Type === 'number' ? 'is-type-number' : '' },
+	                    schema && keySchema && parentType === 'array' && keySchema.Type === 'checkbox' ? (createElement$1("label", { class: "gn-checkbox" },
+	                        createElement$1("input", { type: "checkbox", id: this._uid + '_checkAll', "on-click": (e) => this._hidden.checkedAll(e) }))) : (''),
 	                    schema && keySchema && keySchema.Disp !== null && keySchema.Disp !== undefined ? keySchema.Disp : key,
 	                    schema && keySchema && keySchema.Description ? (createElement$1("span", { className: "gn-icon is-small is-help", title: keySchema.Description },
 	                        createElement$1("i", { className: "fas fa-question-circle" }))) : (''),
@@ -38850,6 +38852,10 @@
 	                    return checker.checked;
 	                })
 	                    .map((checker) => this.subCheckboxs[checker.dataset.check]);
+	            },
+	            checkedAll: (e) => {
+	                const isChecked = e.target.checked;
+	                findAll('input[type=checkbox]', this.$el).forEach((checker) => (checker.checked = isChecked));
 	            }
 	        };
 	        this.config = {
