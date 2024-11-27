@@ -38664,7 +38664,7 @@
 	                                    this._hidden.onSort.call(this, k, schema, e);
 	                                }, className: "is-sortable" },
 	                                this._hidden.keyView(k, 'array', schema),
-	                                this._hidden.sortItem(k))) : (createElement$1("th", null, this._hidden.keyView(k, 'array', schema)));
+	                                this._hidden.sortItem(k))) : (createElement$1("th", { className: schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' ? 'has-text-center' : '' }, this._hidden.keyView(k, 'array', schema)));
 	                        })))),
 	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' },
 	                        data &&
@@ -38684,7 +38684,7 @@
 	                                    this.subTooltips[tooltipIndex] = { defData, defSchema };
 	                                }
 	                                const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
-	                                const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
+	                                const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: (isSelectable ? 'is-selectable' : '') + (schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' ? 'has-text-center' : ''), "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
 	                                return dataItem;
 	                            })))),
 	                        !(data === null || data === void 0 ? void 0 : data.length) && (createElement$1("tr", null,
@@ -38721,7 +38721,7 @@
 	                    });
 	                }
 	                return (createElement$1("span", { className: schema && keySchema && keySchema.Type === 'number' ? 'is-type-number' : '' },
-	                    schema && keySchema && parentType === 'array' && keySchema.Type === 'checkbox' ? (createElement$1("label", { class: "gn-checkbox" },
+	                    schema && keySchema && parentType === 'array' && keySchema.Type === 'checkbox' ? (createElement$1("label", { className: "gn-checkbox" },
 	                        createElement$1("input", { type: "checkbox", id: this._uid + '_checkAll', "on-click": (e) => this._hidden.checkedAll(e) }))) : (''),
 	                    schema && keySchema && keySchema.Disp !== null && keySchema.Disp !== undefined ? keySchema.Disp : key,
 	                    schema && keySchema && keySchema.Description ? (createElement$1("span", { className: "gn-icon is-small is-help", title: keySchema.Description },
@@ -38767,7 +38767,8 @@
 	                        const checkIndex = Object.keys(this.subCheckboxs).length;
 	                        this.subCheckboxs[checkIndex] = parent !== null && parent !== void 0 ? parent : data;
 	                        valueNode =
-	                            isPlainObject$1(data) && hiddenChecks ? ('') : (createElement$1("input", { type: "checkbox", className: "gn-checkbox-input", name: 'gn-checkbox-' + ((_a = key !== null && key !== void 0 ? key : schema.Disp) !== null && _a !== void 0 ? _a : 'value'), value: isPlainObject$1(data) ? data.value : data, checked: isPlainObject$1(data) ? data.checked : false, "data-check": checkIndex }));
+	                            isPlainObject$1(data) && hiddenChecks ? ('') : (createElement$1("label", { className: "gn-checkbox" },
+	                                createElement$1("input", { type: "checkbox", className: "gn-checkbox-input", name: 'gn-checkbox-' + ((_a = key !== null && key !== void 0 ? key : schema.Disp) !== null && _a !== void 0 ? _a : 'value'), value: isPlainObject$1(data) ? data.value : data, checked: isPlainObject$1(data) ? data.checked : false, "data-check": checkIndex })));
 	                    }
 	                    else if (schema.Type === 'html' || (isArray$1(schema.Type) && schema.Type.includes('html') && data && data.indexOf('<') > -1 && data.indexOf('>') > -1)) {
 	                        valueMode = 'html';
