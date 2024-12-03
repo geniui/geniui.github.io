@@ -17409,6 +17409,7 @@
 	    $mount(component, selector) {
 	        if (component.template) {
 	            let tmpDataset;
+	            let tmpRole = selector.getAttribute('role');
 	            if (!isEmpty(selector.dataset)) {
 	                tmpDataset = objClone(selector.dataset);
 	            }
@@ -17422,6 +17423,9 @@
 	                each(tmpDataset, (value, field) => {
 	                    attr(this.$el, `data-${field}`, value);
 	                });
+	            }
+	            if (tmpRole) {
+	                attr(this.$el, 'role', tmpRole);
 	            }
 	            // inherit selector class
 	            selector.className && addClass(this.$el, selector.className);
@@ -34961,6 +34965,7 @@
 	            locale: 'ko',
 	            hasIcon: true,
 	            type: 'date',
+	            value: this.$selector ? this.$selector.value : '',
 	            dateFormat: 'yyyy-MM-DD',
 	            timeFormat: 'hh:mm:ss',
 	            width: '165px'
