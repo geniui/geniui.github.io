@@ -193,7 +193,7 @@ const components = {
     });
     Gn.create('colorpicker', {
       target: '.colorPicker3',
-      readonly: false,
+      readonly: true,
       value: '#aed2ff',
       onChange: color => {
         console.log('color', color);
@@ -202,6 +202,7 @@ const components = {
     Gn.create('colorpicker', {
       target: '.colorPicker4',
       value: '#e4f1ff',
+      disabled: true,
       size: 'small'
     });
   },

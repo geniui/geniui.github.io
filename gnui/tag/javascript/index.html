@@ -6377,14 +6377,29 @@ Eu velit aliqua eiusmod eiusmod occaecat ullamco fugiat sunt occaecat excepteur.
 <pre><code>  Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'colorpicker'</span><span class="token punctuation" >,</span> {
     target<span class="token punctuation" >:</span> <span class="token string" >'.colorPicker'</span><span class="token punctuation" >,</span>
     size<span class="token punctuation" >:</span> <span class="token string" >'large'</span><span class="token punctuation" >,</span>
-    readonly<span class="token punctuation" >:</span> <span class="token boolean" >false</span><span class="token punctuation" >,</span>
+    editable<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
     onChange<span class="token punctuation" >:</span> color <span class="token operator" >=</span><span class="token operator" >></span> {
       console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'color'</span><span class="token punctuation" >,</span> color<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
     }
   }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
   Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'colorpicker'</span><span class="token punctuation" >,</span> {
     target<span class="token punctuation" >:</span> <span class="token string" >'.colorPicker2'</span><span class="token punctuation" >,</span>
-    value<span class="token punctuation" >:</span> <span class="token string" >'#27290e'</span>
+    value<span class="token punctuation" >:</span> <span class="token string" >'#27005d'</span><span class="token punctuation" >,</span>
+    size<span class="token punctuation" >:</span> <span class="token string" >'medium'</span>
+  }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'colorpicker'</span><span class="token punctuation" >,</span> {
+    target<span class="token punctuation" >:</span> <span class="token string" >'.colorPicker3'</span><span class="token punctuation" >,</span>
+    readonly<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
+    value<span class="token punctuation" >:</span> <span class="token string" >'#aed2ff'</span><span class="token punctuation" >,</span>
+    onChange<span class="token punctuation" >:</span> color <span class="token operator" >=</span><span class="token operator" >></span> {
+      console<span class="token punctuation" >.</span><span class="token function" >log</span><span class="token punctuation" >(</span><span class="token string" >'color'</span><span class="token punctuation" >,</span> color<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+    }
+  }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
+  Gn<span class="token punctuation" >.</span><span class="token function" >create</span><span class="token punctuation" >(</span><span class="token string" >'colorpicker'</span><span class="token punctuation" >,</span> {
+    target<span class="token punctuation" >:</span> <span class="token string" >'.colorPicker4'</span><span class="token punctuation" >,</span>
+    value<span class="token punctuation" >:</span> <span class="token string" >'#e4f1ff'</span><span class="token punctuation" >,</span>
+    disabled<span class="token punctuation" >:</span> <span class="token boolean" >true</span><span class="token punctuation" >,</span>
+    size<span class="token punctuation" >:</span> <span class="token string" >'small'</span>
   }<span class="token punctuation" >)</span><span class="token comment" spellcheck="true">;</span>
 </code></pre><table class="gn-table is-full is-border">
   <thead>
@@ -7519,7 +7534,7 @@ Gn<span class="token punctuation" >.</span><span class="token function" >create<
 </div>
 
  
-          <footer class="aigis-footer">Last update at 2024/12/05 09:38</footer>
+          <footer class="aigis-footer">Last update at 2024/12/05 14:32</footer>
         </div>
       </div>
     </div>

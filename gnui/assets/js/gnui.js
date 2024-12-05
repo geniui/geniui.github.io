@@ -34512,7 +34512,6 @@
 	const NONE_COLOR = 'url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==)';
 	const COLOR_VALUE_WIDTH = 180;
 	const COLOR_VALUE_HEIGHT = 150;
-	let palette;
 	class Colorpalette extends GNCoreInstance {
 	    constructor(name, selector, options = {}) {
 	        super(name, selector, options);
@@ -34689,7 +34688,7 @@
 	            top: config.y + 'px',
 	            left: config.x + 'px'
 	        };
-	        return (createElement$1("div", { className: "gn-colorpicker", style: styles },
+	        return (createElement$1("div", { className: "gn-colorpicker", style: styles, id: this._uid },
 	            createElement$1("div", { className: "color-header is-draggable" },
 	                createElement$1("span", { className: "color-cancel gn-icon is-close ", id: this._uid + '_close', "on-click": this._hidden.hide },
 	                    createElement$1("i", { className: "fas fa-times" }))),
@@ -34749,13 +34748,13 @@
 	                if (this.$options.readonly) {
 	                    return;
 	                }
-	                if (!palette) {
-	                    palette = new Colorpalette('colorpalette', '', {
+	                if (!this.pickPanel) {
+	                    this.pickPanel = new Colorpalette('colorpalette', '', {
 	                        parent: this
 	                    });
 	                }
 	                if (!this.$options.palette) {
-	                    this.$options.palette = palette;
+	                    this.$options.palette = this.pickPanel;
 	                }
 	                if (!isHexPattern(this.$options.value)) {
 	                    this.$options.value = DEFAULT_COLOR;
@@ -34765,6 +34764,13 @@
 	                    y: e.pageY,
 	                    color: this._hidden.convertToSixDigitHex(this.$options.value),
 	                    parent: this
+	                });
+	                // 해당 컴포넌트 외 클릭 시 picker panel 숨김
+	                this.$options._destroy = on(document.body, 'click', (e) => {
+	                    if (!parents(e.target, '#' + this.$options.palette._uid).length && !parents(e.target, '.gn-colorinput').length && hasClass(this.pickPanel.$el, 'is-active')) {
+	                        this.$options.palette.hide();
+	                        this.$event(this, 'onClose');
+	                    }
 	                });
 	            },
 	            removeColor: () => {
@@ -34841,7 +34847,7 @@
 	                createElement$1("button", { className: "color-preview", id: this._uid + '_preview', "on-click": this._hidden.show, style: {
 	                        background: config.value || NONE_COLOR
 	                    }, disabled: config.disabled }),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.placeholder, style: { width: '160px' }, value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.placeholder, style: Object.assign({ width: '160px' }, (!config.readonly ? { backgroundColor: 'inherit' } : {})), value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
 	                createElement$1("span", { className: "gn-icon is-cancel is-right color-remover", id: this._uid + '_remover', "on-click": this._hidden.removeColor },
 	                    createElement$1("i", { className: "fas fa-times" })))));
 	    }
