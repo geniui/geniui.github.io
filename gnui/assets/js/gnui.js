@@ -17410,7 +17410,7 @@
 	        if (component.template) {
 	            let tmpDataset;
 	            let tmpRole = selector ? selector.getAttribute('role') : null;
-	            if (!isEmpty(selector.dataset)) {
+	            if (selector && !isEmpty(selector.dataset)) {
 	                tmpDataset = objClone(selector.dataset);
 	            }
 	            // template 가 있는 경우에만
