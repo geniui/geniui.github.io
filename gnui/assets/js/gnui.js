@@ -17409,7 +17409,7 @@
 	    $mount(component, selector) {
 	        if (component.template) {
 	            let tmpDataset;
-	            let tmpRole = selector.getAttribute('role');
+	            let tmpRole = selector ? selector.getAttribute('role') : null;
 	            if (!isEmpty(selector.dataset)) {
 	                tmpDataset = objClone(selector.dataset);
 	            }
