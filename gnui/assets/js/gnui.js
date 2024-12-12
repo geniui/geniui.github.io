@@ -38420,14 +38420,29 @@
 	        super(name, selector, options);
 	        this._hidden = {
 	            show: () => {
+	                this._hidden.clearDelay();
 	                this._hidden.setPosition();
 	                addClass(this.$el, 'is-active');
 	            },
 	            hide: () => {
-	                removeClass(this.$el, 'is-active');
+	                if (this.$options.delay > 0) {
+	                    let target = this.$el;
+	                    this.eventTimer = setTimeout(function () {
+	                        removeClass(target, 'is-active');
+	                    }, this.$options.delay);
+	                }
+	                else {
+	                    removeClass(this.$el, 'is-active');
+	                }
 	            },
 	            toggle: () => {
 	                hasClass(this.$el, 'is-active') ? this._hidden.hide() : this._hidden.show();
+	            },
+	            clearDelay: () => {
+	                if (this.$options.delay > 0 && this.eventTimer) {
+	                    clearTimeout(this.eventTimer);
+	                    this.eventTimer = undefined;
+	                }
 	            },
 	            setPosition: () => {
 	                if (this.$options.position) {
@@ -38516,6 +38531,7 @@
 	            delegates: {
 	                trigger: undefined
 	            },
+	            delay: 0,
 	            type: 'hover'
 	        };
 	        this.methods = {
@@ -38537,7 +38553,7 @@
 	        if (config.width) {
 	            styles.width = getUnit('width', config.width);
 	        }
-	        return config.template ? (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles }, config.template)) : (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles, innerHTML: config.contents }));
+	        return config.template ? (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles }, config.template)) : (createElement$1("div", { id: this._uid, "on-mouseenter": this._hidden.show, "on-mouseleave": this._hidden.hide, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles, innerHTML: config.contents }));
 	    }
 	    beforeMount() {
 	        const popper = $(`<div id="${this._uid}"></div>`);

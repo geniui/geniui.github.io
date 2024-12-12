@@ -1600,7 +1600,8 @@ const components = {
     Gn.create('tooltip', {
       target: '.has-tooltip8',
       contents: '<br/>right bottom 툴팁<br/>',
-      direction: 'right-bottom'
+      direction: 'right-bottom',
+      delay: 500
     });
   },
   Time: function () {
