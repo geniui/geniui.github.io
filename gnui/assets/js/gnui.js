@@ -38553,7 +38553,11 @@
 	        if (config.width) {
 	            styles.width = getUnit('width', config.width);
 	        }
-	        return config.template ? (createElement$1("div", { id: this._uid, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles }, config.template)) : (createElement$1("div", { id: this._uid, "on-mouseenter": this._hidden.show, "on-mouseleave": this._hidden.hide, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles, innerHTML: config.contents }));
+	        return config.template ? (createElement$1("div", { id: this._uid, "on-mouseenter": this._hidden.show, "on-mouseleave": () => {
+	                this.$options.type === 'hover' ? this._hidden.hide() : void 0;
+	            }, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles }, config.template)) : (createElement$1("div", { id: this._uid, "on-mouseenter": this._hidden.show, "on-mouseleave": () => {
+	                this.$options.type === 'hover' ? this._hidden.hide() : void 0;
+	            }, className: 'gn-tooltip' + (' is-' + config.direction) + (config.color ? ' is-' + config.color : ''), style: styles, innerHTML: config.contents }));
 	    }
 	    beforeMount() {
 	        const popper = $(`<div id="${this._uid}"></div>`);
