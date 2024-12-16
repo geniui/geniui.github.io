@@ -34847,7 +34847,7 @@
 	                createElement$1("button", { className: "color-preview", id: this._uid + '_preview', "on-click": this._hidden.show, style: {
 	                        background: config.value || NONE_COLOR
 	                    }, disabled: config.disabled }),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.placeholder, style: Object.assign({ width: '160px' }, (!config.readonly ? { backgroundColor: 'inherit' } : {})), value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input color-value' + (config.size ? ' is-' + config.size : ''), id: this._uid + '_value', placeholder: (_a = this.$options.textSets) === null || _a === void 0 ? void 0 : _a.placeholder, style: Object.assign({ width: '160px' }, (!config.readonly ? { backgroundColor: '#FFFFFF' } : {})), value: config.value, readOnly: !config.editable || config.readonly, disabled: config.disabled, "on-keyup": this._hidden.typeColor }),
 	                createElement$1("span", { className: "gn-icon is-cancel is-right color-remover", id: this._uid + '_remover', "on-click": this._hidden.removeColor },
 	                    createElement$1("i", { className: "fas fa-times" })))));
 	    }
