@@ -39844,7 +39844,7 @@
 	                const attr = this.$options.orientation === 'vertical' ? 'width' : 'height';
 	                const pos = this.$options.orientation === 'vertical' ? 'x' : 'y';
 	                css$1(this.$options.panel[0], attr, position[pos] - 1);
-	                css$1(this.$options.panel[1], attr, getNumber(css$1(this.$el, attr)) - position[pos] - (attr === 'height' ? 7 : 5));
+	                css$1(this.$options.panel[1], attr, getNumber(css$1(this.$el, attr)) - position[pos] - (attr === 'height' ? 12 : 10));
 	                trigger(window.document, 'resize');
 	                e && this.$event(this, 'onDrag');
 	            },
@@ -39856,7 +39856,7 @@
 	                const containerSize = offset(this.$el)[attrStr];
 	                const panelWidth = offset(this.$options.delegates.panel1)[attrStr];
 	                css$1(this.$options.delegates.panel1, attrStr, (panelWidth / containerSize) * 100 + '%');
-	                css$1(this.$options.delegates.panel2, attrStr, 100 - (panelWidth / containerSize) * 100 - (5 / containerSize) * 100 + '%');
+	                css$1(this.$options.delegates.panel2, attrStr, 100 - (panelWidth / containerSize) * 100 - (10 / containerSize) * 100 + '%');
 	                css$1(this.$options.delegates.handle, this.$options.splitStr[0], (panelWidth / containerSize) * 100 + '%');
 	                (typeof isMounted !== 'boolean' || !isMounted) && this.$event(this, 'onDragEnd', offset(this.$options.delegates.handle));
 	            }
@@ -39893,7 +39893,7 @@
 	                config.position = config.position + 'px';
 	            }
 	            css$1(handle, config.splitStr[0], config.position);
-	            css$1(handle, config.splitStr[0], `calc(${config.position} - 5px)`);
+	            css$1(handle, config.splitStr[0], `calc(${config.position} - 10px)`);
 	        }
 	        dragLayout(handle, boundary, this._hidden);
 	        addClass(this.$el, 'gn-splitter');
