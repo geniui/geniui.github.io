@@ -15795,7 +15795,7 @@
 	        evtMouseMove = on(document, 'mousemove', elementDrag);
 	        events.dragStart && events.dragStart(e);
 	    }
-	    on(element, 'mousedown', dragMouseDown);
+	    return on(element, 'mousedown', dragMouseDown);
 	}
 	/*
 	  대상객체를 리사이징 할 수 있도록 변경
