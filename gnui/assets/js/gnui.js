@@ -37281,7 +37281,7 @@
 	                    return (createElement$1("div", { className: 'gn-datagrid-body-cell ' +
 	                            (col.bodyClass ? col.bodyClass : col.className ? col.className : '') +
 	                            (isFunction(col.onSelect) ? ' is-selectable' : '') +
-	                            (col.isHidden ? ' is-unvisible' : ''), style: cellStyle, "on-click": (e) => {
+	                            (col.isHidden ? ' is-unvisible' : ''), "data-key": col.key, style: cellStyle, "on-click": (e) => {
 	                            !this.$options.disabled && this._hidden.selectCell.call(this, col, row, _index, e);
 	                        }, "on-mouseenter": (e) => {
 	                            !this.$options.disabled && this._hidden.hoverCell.call(this, col, row, _index, e);
