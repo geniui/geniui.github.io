@@ -34750,7 +34750,8 @@
 	                }
 	                if (!this.pickPanel) {
 	                    this.pickPanel = new Colorpalette('colorpalette', '', {
-	                        parent: this
+	                        parent: this,
+	                        id: this._uid + '_picker'
 	                    });
 	                }
 	                if (!this.$options.palette) {
@@ -34887,6 +34888,7 @@
 	                            parent: this,
 	                            type: 'picker',
 	                            locale: this.$options.locale,
+	                            id: this._uid + '_picker',
 	                            value: defaultDataTime,
 	                            dateType: this.$options.type,
 	                            min: this.$options.min || null,
