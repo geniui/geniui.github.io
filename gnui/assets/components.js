@@ -220,7 +220,6 @@ const components = {
       type: 'datetime',
       value: '2021-10-10 10:01:11',
       hasIcon: false,
-      writable: true,
       onClose: function () {
         console.log('창이 닫힙니다.');
       }
@@ -228,6 +227,7 @@ const components = {
     Gn.create('datepicker', {
       target: '.new-datetimepicker',
       type: 'datetime',
+      writable: false,
       textSets: {
         placeholder: 'pick a date'
       }

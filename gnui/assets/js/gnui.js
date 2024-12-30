@@ -34876,6 +34876,17 @@
 	                        : dateFormat(toDate(this.$options.value), this.$options.dateFormat + ' ' + this.$options.timeFormat)
 	                    : '';
 	            },
+	            input: (e) => {
+	                const val = $(e.target).value;
+	                if (this.$options.type === 'datetime' && val.length === this.$options.dateFormat.length + this.$options.timeFormat.length + 1) {
+	                    this._hidden.change(dateFormat(toDate(val), this.$options.dateFormat + ' ' + this.$options.timeFormat));
+	                    this.pickPanel && hasClass(this.pickPanel.$el, 'is-active') && this.pickPanel.setDate(val);
+	                }
+	                else if (val.length === this.$options.dateFormat.length) {
+	                    this._hidden.change(dateFormat(toDate(val), this.$options.dateFormat));
+	                    this.pickPanel && hasClass(this.pickPanel.$el, 'is-active') && this.pickPanel.setDate(val);
+	                }
+	            },
 	            show: (e) => {
 	                var _a;
 	                if (this.$options.disabled || this.$options.readonly) {
@@ -34976,7 +34987,8 @@
 	            value: this.$selector ? this.$selector.value : '',
 	            dateFormat: 'yyyy-MM-DD',
 	            timeFormat: 'hh:mm:ss',
-	            width: '165px'
+	            width: '165px',
+	            writable: true
 	        };
 	        this.events = {
 	            onChange: true,
@@ -35007,7 +35019,9 @@
 	            createElement$1("div", { className: 'gn-control has-icon-right' + (config.hasIcon ? ' has-icon-left' : '') },
 	                config.hasIcon ? (createElement$1("span", { className: "gn-icon is-left" },
 	                    createElement$1("i", { className: "fas fa-calendar" }))) : (''),
-	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : '') + (config.writable ? ' is-text' : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: !config.writable, placeholder: this.$options.textSets.placeholder, style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-click": (e) => {
+	                createElement$1("input", { type: "text", name: config.name, className: 'gn-input date-value is-borderless' + (config.size ? ' is-' + config.size : '') + (config.writable ? ' is-text' : ''), id: this._uid + '_value', disabled: config.disabled, readOnly: !config.writable, placeholder: this.$options.textSets.placeholder, style: { width: getUnit('width', config.width) }, value: config.value ? dateFormat(toDate(config.value), config.type === 'datetime' ? config.dateFormat + ' ' + config.timeFormat : config.dateFormat) : '', "on-input": (e) => {
+	                        this._hidden.input.call(this, e);
+	                    }, "on-click": (e) => {
 	                        this._hidden.show.call(this, e);
 	                    } }),
 	                config.readonly || config.writable ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", id: this._uid + '_remover', "on-click": this._hidden.removeDate },
