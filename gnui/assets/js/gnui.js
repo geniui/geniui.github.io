@@ -34878,13 +34878,17 @@
 	            },
 	            input: (e) => {
 	                const val = $(e.target).value;
-	                if (this.$options.type === 'datetime' && val.length === this.$options.dateFormat.length + this.$options.timeFormat.length + 1) {
-	                    this._hidden.change(dateFormat(toDate(val), this.$options.dateFormat + ' ' + this.$options.timeFormat));
-	                    this.pickPanel && hasClass(this.pickPanel.$el, 'is-active') && this.pickPanel.setDate(val);
+	                const handleChange = (format) => {
+	                    this._hidden.change(dateFormat(toDate(val), format));
+	                    if (this.pickPanel && hasClass(this.pickPanel.$el, 'is-active')) {
+	                        this.pickPanel.setDate(val);
+	                    }
+	                };
+	                if (this.$options.type === 'datetime' && toDate(val) && val.length === `${this.$options.dateFormat} ${this.$options.timeFormat}`.length) {
+	                    handleChange(`${this.$options.dateFormat} ${this.$options.timeFormat}`);
 	                }
-	                else if (val.length === this.$options.dateFormat.length) {
-	                    this._hidden.change(dateFormat(toDate(val), this.$options.dateFormat));
-	                    this.pickPanel && hasClass(this.pickPanel.$el, 'is-active') && this.pickPanel.setDate(val);
+	                else if (this.$options.type === 'date' && toDate(val) && val.length === this.$options.dateFormat.length) {
+	                    handleChange(this.$options.dateFormat);
 	                }
 	            },
 	            show: (e) => {
