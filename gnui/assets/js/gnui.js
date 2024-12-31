@@ -37218,7 +37218,7 @@
 	                    idx === 0 && this.$options.hasCheck && renderCheck(),
 	                    createElement$1("span", { className: "gn-datagrid-cell" }, column.label),
 	                    column.sortable && createElement$1("span", { className: "is-sortDir" }),
-	                    column.draggable && createElement$1("span", { className: "is-handle", "data-index": idx })));
+	                    column.draggable && (this.$options.headers ? idx < this.$options.headers.length - 1 : true) && createElement$1("span", { className: "is-handle", "data-index": idx })));
 	            },
 	            renderBody: (data, columns) => {
 	                rowIdx$1 = 0;
