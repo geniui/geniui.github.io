@@ -237,6 +237,8 @@ const components = {
     Gn.create('dropdown', {
       target: '.new-dropdown0',
       onChange: function (val, txt, values) {
+        console.log('val, txt, values', val, txt, values);
+        console.log('this', this);
         console.log('선택된 값은 [ ' + val + ' ]입니다.');
       },
       width: '150px',
@@ -298,8 +300,9 @@ const components = {
     });
     Gn.create('dropdown', {
       target: '.new-dropdown4',
-      onChange: function (val, txt) {
+      onChange: function (val, txt, values) {
         console.log('선택된 항목은 [ ' + txt + ' ]입니다.');
+        console.log('선택된 항목의 data : ', values);
       },
       textSets: {
         selectText: '골라라'

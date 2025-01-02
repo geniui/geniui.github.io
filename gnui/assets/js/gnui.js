@@ -33676,7 +33676,7 @@
 	            name: this.$selector.name || this._uid,
 	            data: (() => {
 	                return findAll('option', this.$selector).map((option) => {
-	                    return { value: option.value, text: option.textContent };
+	                    return Object.keys(option.dataset).length ? extend$2({ value: option.value, text: option.textContent }, option.dataset) : { value: option.value, text: option.textContent };
 	                });
 	            })(),
 	            textSets: {
