@@ -37183,15 +37183,10 @@
 	                if (column.style) {
 	                    each(column.style, (value, key) => {
 	                        if (key === 'width') {
-	                            if (this._isSystemAddedColumn(column.key) || column.draggable) {
-	                                headerStyle['min-width'] = value;
-	                                headerStyle['max-width'] = value;
-	                                headerStyle.width = value;
-	                            }
-	                            else {
-	                                headerStyle['flex-basis'] = value;
-	                                headerStyle.width = value;
-	                            }
+	                            headerStyle['flex-basis'] = value;
+	                            headerStyle.width = value;
+	                            headerStyle['flex-grow'] = '0';
+	                            headerStyle['flex-shrink'] = '0';
 	                        }
 	                        else {
 	                            headerStyle[key] = value;
@@ -37248,15 +37243,10 @@
 	                    if (col.style) {
 	                        each(col.style, (value, key) => {
 	                            if (key === 'width') {
-	                                if (this._isSystemAddedColumn(col.key) || col.draggable) {
-	                                    cellStyle['min-width'] = value;
-	                                    cellStyle['max-width'] = value;
-	                                    cellStyle.width = value;
-	                                }
-	                                else {
-	                                    cellStyle['flex-basis'] = value;
-	                                    cellStyle.width = value;
-	                                }
+	                                cellStyle['flex-basis'] = value;
+	                                cellStyle.width = value;
+	                                cellStyle['flex-grow'] = '0';
+	                                cellStyle['flex-shrink'] = '0';
 	                            }
 	                            else {
 	                                cellStyle[key] = value;
