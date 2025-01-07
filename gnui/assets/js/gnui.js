@@ -37658,8 +37658,8 @@
 	            },
 	            columnDragEvents: {
 	                drag: (e, position, handle) => {
-	                    const target = parents(handle, '.gn-datagrid-header-cell');
-	                    const rowCells = findAll(`.gn-datagrid-body-row:not(.is-nodata) .gn-datagrid-body-cell:nth-child(${data(handle, 'index') * 1 + 1})`, this.$el);
+	                    const target = parents(handle, '.gn-datagrid-header-cell'); // 헤더셀
+	                    const rowCells = findAll(`.gn-datagrid-body-row:not(.is-nodata) .gn-datagrid-body-cell:nth-child(${data(handle, 'index') * 1 + 1})`, this.$el); // 바디셀
 	                    target &&
 	                        styles$3(target[0], {
 	                            'min-width': getUnit('minWidth', position.x + 5),
@@ -37808,11 +37808,32 @@
 	    // eslint-disable-next-line @typescript-eslint/no-unused-vars
 	    $render(config) {
 	        const handles = findAll('.is-handle', this.$el);
-	        handles.forEach((handle) => {
-	            dragLayout(handle, [0, 30, 0, window.innerWidth], this._hidden.columnDragEvents);
-	        });
-	        if (isIE) {
-	            css$1(handles, 'display', 'none');
+	        if (handles.length) {
+	            handles.forEach((handle) => {
+	                dragLayout(handle, [0, 30, 0, window.innerWidth], this._hidden.columnDragEvents);
+	            });
+	            if (isIE) {
+	                css$1(handles, 'display', 'none');
+	            }
+	            const headerCells = findAll('.gn-datagrid-header-cell', this.$el);
+	            const cellWidths = headerCells.map((cell) => cell.clientWidth);
+	            headerCells.forEach((cell, index) => {
+	                styles$3(cell, {
+	                    width: cellWidths[index] + 'px',
+	                    flex: `0 0 ${cellWidths[index]}px`
+	                });
+	            });
+	            const bodyRows = findAll('.gn-datagrid-body-row:not(.is-nodata)', this.$el);
+	            bodyRows.forEach((row) => {
+	                const bodyCells = findAll('.gn-datagrid-body-cell', row);
+	                bodyCells.forEach((cell, index) => {
+	                    styles$3(cell, {
+	                        width: cellWidths[index] + 'px',
+	                        flex: `0 0 ${cellWidths[index]}px`
+	                    });
+	                });
+	            });
+	            addClass(this.$el, 'is-state-rendered');
 	        }
 	        if (this.$options.onDoubleClick && this.$options.onSelect) {
 	            console.warn('It is not desirable to bind handlers to both click events and dblick events for the same element.');
