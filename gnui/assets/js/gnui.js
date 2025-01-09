@@ -38722,11 +38722,19 @@
 	                return (createElement$1("table", { className: "gn-table is-full is-schema-grid" },
 	                    hasHeader && (createElement$1("thead", null,
 	                        createElement$1("tr", null, keys.map(k => {
+	                            const bodyStyle = (schema && schema.Properties[k] && schema.Properties[k].Style && styleToVNodeStyle(schema.Properties[k].Style)) || {};
+	                            const headStyle = {};
+	                            if (bodyStyle.width) {
+	                                headStyle.width = bodyStyle.width;
+	                            }
+	                            if (schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' && !headStyle.width) {
+	                                headStyle.width = '10px';
+	                            }
 	                            return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : schema && schema.SortItems && schema.SortItems.includes(k) ? (createElement$1("th", { "on-click": (e) => {
 	                                    this._hidden.onSort.call(this, k, schema, e);
-	                                }, className: "is-sortable" },
+	                                }, style: headStyle, className: "is-sortable" },
 	                                this._hidden.keyView(k, 'array', schema),
-	                                this._hidden.sortItem(k))) : (createElement$1("th", { className: schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' ? 'has-text-center' : '', style: schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' ? { width: '10px' } : {} }, this._hidden.keyView(k, 'array', schema)));
+	                                this._hidden.sortItem(k))) : (createElement$1("th", { className: schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' ? 'has-text-center' : '', style: headStyle }, this._hidden.keyView(k, 'array', schema)));
 	                        })))),
 	                    createElement$1("tbody", { className: !hasHeader ? 'is-headless' : '' },
 	                        data &&
@@ -38746,7 +38754,31 @@
 	                                    this.subTooltips[tooltipIndex] = { defData, defSchema };
 	                                }
 	                                const isSelectable = (!schema || !schema.Disabled || !schema.Disabled.includes(k)) && (!schema || schema.Properties[k].Type !== 'checkbox') && isFunction(this.$options.onSelect);
-	                                const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: isSelectable ? 'is-selectable' : '', "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: (isSelectable ? 'is-selectable' : '') + (schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' ? 'has-text-center' : ''), "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, schema.Properties[k], d, k) : this._hidden.renderRaw(value)));
+	                                // gridview 인 경우, schema에 설정된 Style, StyleClass 를 td 에 적용하도록 변경한다.
+	                                let cellStyle = {};
+	                                const cellStyleClass = [];
+	                                if (isSelectable) {
+	                                    cellStyleClass.push('is-selectable');
+	                                }
+	                                if (schema && schema.Properties[k]) {
+	                                    if (schema.Properties[k].Type === 'checkbox') {
+	                                        cellStyleClass.push('has-text-center');
+	                                    }
+	                                    if (schema.Properties[k].StyleClass) {
+	                                        cellStyleClass.push(schema.Properties[k].StyleClass);
+	                                    }
+	                                    if (schema.Properties[k].Style) {
+	                                        cellStyle = styleToVNodeStyle(schema.Properties[k].Style);
+	                                    }
+	                                }
+	                                let valueSchema = objClone(schema.Properties[k]);
+	                                if (valueSchema.Style) {
+	                                    delete valueSchema.Style;
+	                                }
+	                                if (valueSchema.StyleClass) {
+	                                    delete valueSchema.StyleClass;
+	                                }
+	                                const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: cellStyleClass.join(' '), style: cellStyle, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, valueSchema, d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: cellStyleClass.join(' '), style: cellStyle, "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, valueSchema, d, k) : this._hidden.renderRaw(value)));
 	                                return dataItem;
 	                            })))),
 	                        !(data === null || data === void 0 ? void 0 : data.length) && (createElement$1("tr", null,
