@@ -38728,7 +38728,7 @@
 	                                headStyle.width = bodyStyle.width;
 	                            }
 	                            if (schema && schema.Properties[k] && schema.Properties[k].Type === 'checkbox' && !headStyle.width) {
-	                                headStyle.width = '10px';
+	                                headStyle.width = '32px';
 	                            }
 	                            return schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : schema && schema.SortItems && schema.SortItems.includes(k) ? (createElement$1("th", { "on-click": (e) => {
 	                                    this._hidden.onSort.call(this, k, schema, e);
