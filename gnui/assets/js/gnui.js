@@ -38771,11 +38771,11 @@
 	                                        cellStyle = styleToVNodeStyle(schema.Properties[k].Style);
 	                                    }
 	                                }
-	                                let valueSchema = objClone(schema.Properties[k]);
-	                                if (valueSchema.Style) {
+	                                let valueSchema = (schema === null || schema === void 0 ? void 0 : schema.Properties[k]) ? objClone(schema.Properties[k]) : null;
+	                                if (valueSchema === null || valueSchema === void 0 ? void 0 : valueSchema.Style) {
 	                                    delete valueSchema.Style;
 	                                }
-	                                if (valueSchema.StyleClass) {
+	                                if (valueSchema === null || valueSchema === void 0 ? void 0 : valueSchema.StyleClass) {
 	                                    delete valueSchema.StyleClass;
 	                                }
 	                                const dataItem = schema && schema.Hidden && schema.Hidden.includes(k) ? ('') : tooltipIndex && ((_a = this.subTooltips[tooltipIndex]) === null || _a === void 0 ? void 0 : _a.defData) ? (createElement$1("td", { className: cellStyleClass.join(' '), style: cellStyle, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d), "data-tooltip": tooltipIndex }, schema ? this._hidden.render(value, valueSchema, d, k) : this._hidden.renderRaw(value))) : (createElement$1("td", { className: cellStyleClass.join(' '), style: cellStyle, "data-type": (_b = schema === null || schema === void 0 ? void 0 : schema.Properties[k]) === null || _b === void 0 ? void 0 : _b.Type, "on-click": isSelectable && this._hidden.onSelect.bind(this, value, k, d) }, schema ? this._hidden.render(value, valueSchema, d, k) : this._hidden.renderRaw(value)));
