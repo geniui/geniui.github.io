@@ -35028,7 +35028,7 @@
 	                    }, "on-click": (e) => {
 	                        this._hidden.show.call(this, e);
 	                    } }),
-	                config.readonly || config.writable ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", id: this._uid + '_remover', "on-click": this._hidden.removeDate },
+	                config.readonly ? ('') : (createElement$1("span", { className: "gn-icon is-cancel is-right date-remover", id: this._uid + '_remover', "on-click": this._hidden.removeDate },
 	                    createElement$1("i", { className: "fas fa-times" }))))));
 	    }
 	    destroyed() {
